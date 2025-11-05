@@ -15,7 +15,7 @@ const { success, notFound, error, validationError } = require('../utils/response
  */
 exports.getCategories = async (req, res, next) => {
   try {
-    const categories = Category.getWithCounts();
+    const categories = await Category.getWithCounts();
 
     return success(res, categories);
   } catch (err) {
@@ -29,7 +29,7 @@ exports.getCategories = async (req, res, next) => {
  */
 exports.getCategoryTree = async (req, res, next) => {
   try {
-    const tree = Category.getTree();
+    const tree = await Category.getTree();
 
     return success(res, tree);
   } catch (err) {
@@ -43,7 +43,7 @@ exports.getCategoryTree = async (req, res, next) => {
  */
 exports.getCategory = async (req, res, next) => {
   try {
-    const category = Category.getById(req.params.id);
+    const category = await Category.getById(req.params.id);
 
     if (!category) {
       return notFound(res, 'Category');

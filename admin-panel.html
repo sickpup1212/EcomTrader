@@ -1381,6 +1381,13 @@
           this.sections[sectionName].classList.add('active');
           this.currentSection = sectionName;
           this.updateActiveLink(sectionName);
+
+          // Load section-specific data
+          if (sectionName === 'products') {
+            console.log('Loading products...');
+            loadProducts();
+            loadCategories(); // Load categories for product form
+          }
         }
       }
 
@@ -1524,6 +1531,39 @@
     setupFilter('stock-filter', 'products-table-body', 'tr', (item) => {
       const statusElement = item.querySelector('.status-badge');
       return statusElement ? statusElement.textContent : '';
+    });
+
+    // Product action button event listeners (using event delegation)
+    document.addEventListener('click', function(e) {
+      // Handle edit button clicks
+      if (e.target.closest('.product-edit-btn')) {
+        const button = e.target.closest('.product-edit-btn');
+        const productId = button.dataset.productId;
+        if (productId) {
+          editProduct(productId);
+        }
+        e.preventDefault();
+      }
+
+      // Handle view button clicks
+      if (e.target.closest('.product-view-btn')) {
+        const button = e.target.closest('.product-view-btn');
+        const productId = button.dataset.productId;
+        if (productId) {
+          viewProduct(productId);
+        }
+        e.preventDefault();
+      }
+
+      // Handle delete button clicks
+      if (e.target.closest('.product-delete-btn')) {
+        const button = e.target.closest('.product-delete-btn');
+        const productId = button.dataset.productId;
+        if (productId) {
+          deleteProduct(productId);
+        }
+        e.preventDefault();
+      }
     });
 
     setupFilter('status-filter', 'orders-section', 'tr', (item) => {
@@ -1852,18 +1892,18 @@
           <td><span class="status-badge ${getStatusClass(product.status)}">${formatStatus(product.status)}</span></td>
           <td>
             <div class="action-buttons">
-              <button class="icon-button" onclick="editProduct('${product.id}')" title="Edit">
+              <button class="icon-button product-edit-btn" data-product-id="${product.id}" title="Edit">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </button>
-              <button class="icon-button" onclick="viewProduct('${product.id}')" title="View">
+              <button class="icon-button product-view-btn" data-product-id="${product.id}" title="View">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
                   <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
               </button>
-              <button class="icon-button icon-button--danger" onclick="deleteProduct('${product.id}')" title="Delete">
+              <button class="icon-button icon-button--danger product-delete-btn" data-product-id="${product.id}" title="Delete">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 4H13M5 4V3C5 2.5 5.5 2 6 2H10C10.5 2 11 2.5 11 3V4M6 7V11M10 7V11M4 4L5 13C5 13.5 5.5 14 6 14H10C10.5 14 11 13.5 11 13L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>

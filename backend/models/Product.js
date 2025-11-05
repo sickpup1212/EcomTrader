@@ -234,96 +234,69 @@ class Product {
     const updates = [];
     const params = [];
 
-    if (data.name !== undefined) {
-      updates.push('name = ?', 'slug = ?');
-      params.push(data.name, slugify(data.name));
+    // Map camelCase fields to snake_case database columns
+    const fieldMapping = {
+      shortDescription: 'short_description',
+      categoryId: 'category_id',
+      isFeatured: 'is_featured'
+    };
+
+    for (const key in data) {
+      if (key === 'id') continue;
+
+      let dbField = fieldMapping[key] || key;
+
+      // Handle nested objects
+      if (key === 'price' && typeof data[key] === 'object') {
+        if (data[key].amount !== undefined) {
+          updates.push('price_amount = ?');
+          params.push(data[key].amount);
+        }
+        if (data[key].currency) {
+          updates.push('price_currency = ?');
+          params.push(data[key].currency);
+        }
+        if (data[key].originalAmount !== undefined) {
+          updates.push('price_original_amount = ?');
+          params.push(data[key].originalAmount);
+        }
+      } else if (key === 'stock' && typeof data[key] === 'object') {
+        if (data[key].quantity !== undefined) {
+          updates.push('stock_quantity = ?');
+          params.push(data[key].quantity);
+        }
+        if (data[key].status) {
+          updates.push('stock_status = ?');
+          params.push(data[key].status);
+        }
+        if (data[key].lowStockThreshold !== undefined) {
+          updates.push('stock_low_threshold = ?');
+          params.push(data[key].lowStockThreshold);
+        }
+        if (data[key].reorderLevel !== undefined) {
+          updates.push('reorder_level = ?');
+          params.push(data[key].reorderLevel);
+        }
+      } else if (key === 'images' && Array.isArray(data[key])) {
+        updates.push('images = ?');
+        params.push(JSON.stringify(data[key]));
+      } else if (dbField === 'is_featured') {
+        updates.push(`${dbField} = ?`);
+        params.push(data[key] ? 1 : 0);
+      } else {
+        updates.push(`${dbField} = ?`);
+        params.push(data[key]);
+      }
     }
-    if (data.sku !== undefined) {
-      updates.push('sku = ?');
-      params.push(data.sku);
-    }
-    if (data.description !== undefined) {
-      updates.push('description = ?');
-      params.push(data.description);
-    }
-    if (data.shortDescription !== undefined) {
-      updates.push('short_description = ?');
-      params.push(data.shortDescription);
-    }
-    if (data.categoryId !== undefined) {
-      updates.push('category_id = ?');
-      params.push(data.categoryId);
-    }
-    if (data.price?.amount !== undefined) {
-      updates.push('price_amount = ?');
-      params.push(data.price.amount);
-    }
-    if (data.price?.currency !== undefined) {
-      updates.push('price_currency = ?');
-      params.push(data.price.currency);
-    }
-    if (data.price?.originalAmount !== undefined) {
-      updates.push('price_original_amount = ?');
-      params.push(data.price.originalAmount);
-    }
-    if (data.price?.discount?.percentage !== undefined) {
-      updates.push('discount_percentage = ?');
-      params.push(data.price.discount.percentage);
-    }
-    if (data.price?.discount?.amount !== undefined) {
-      updates.push('discount_amount = ?');
-      params.push(data.price.discount.amount);
-    }
-    if (data.stock?.quantity !== undefined) {
-      const stockStatus = calculateStockStatus(data.stock.quantity, data.stock.lowStockThreshold);
-      updates.push('stock_quantity = ?', 'stock_status = ?');
-      params.push(data.stock.quantity, stockStatus);
-    }
-    if (data.stock?.lowStockThreshold !== undefined) {
-      updates.push('stock_low_threshold = ?');
-      params.push(data.stock.lowStockThreshold);
-    }
-    if (data.isActive !== undefined) {
-      updates.push('is_active = ?');
-      params.push(data.isActive ? 1 : 0);
-    }
-    if (data.isFeatured !== undefined) {
-      updates.push('is_featured = ?');
-      params.push(data.isFeatured ? 1 : 0);
-    }
+
+    params.push(id);
 
     if (updates.length === 0) {
       return this.getById(id);
     }
 
-    updates.push('updated_at = datetime(\'now\')');
-    params.push(id);
-
-    const stmt = db.prepare(`
-      UPDATE products 
-      SET ${updates.join(', ')}
-      WHERE id = ?
-    `);
-
-    stmt.run(...params);
-
-    // Update related data if provided
-    if (data.images) {
-      db.prepare('DELETE FROM product_images WHERE product_id = ?').run(id);
-      this.addImages(id, data.images);
-    }
-    if (data.variants) {
-      db.prepare('DELETE FROM product_variants WHERE product_id = ?').run(id);
-      this.addVariants(id, data.variants);
-    }
-    if (data.features) {
-      db.prepare('DELETE FROM product_features WHERE product_id = ?').run(id);
-      this.addFeatures(id, data.features);
-    }
-    if (data.specifications) {
-      db.prepare('DELETE FROM product_specifications WHERE product_id = ?').run(id);
-      this.addSpecifications(id, data.specifications);
-    }
+    const stmt = db.prepare(`UPDATE products SET ${updates.join(', ')} WHERE id = ?`);
+    stmt.run(params);
 
     return this.getById(id);
   }
@@ -369,63 +342,7 @@ class Product {
   }
 
   /**
-   * Add variants to product
-   */
-  static addVariants(productId, variants) {
-    const stmt = db.prepare(`
-      INSERT INTO product_variants (id, product_id, type, name, value, metadata)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-
-    variants.forEach(variant => {
-      stmt.run(
-        generateId('var'),
-        productId,
-        variant.type,
-        variant.name,
-        variant.value,
-        variant.metadata ? JSON.stringify(variant.metadata) : null
-      );
-    });
-  }
-
-  /**
-   * Add features to product
-   */
-  static addFeatures(productId, features) {
-    const stmt = db.prepare(`
-      INSERT INTO product_features (id, product_id, icon, title, description, display_order)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-
-    features.forEach((feature, index) => {
-      stmt.run(
-        generateId('feat'),
-        productId,
-        feature.icon,
-        feature.title,
-        feature.description,
-        index
-      );
-    });
-  }
-
-  /**
-   * Add specifications to product
-   */
-  static addSpecifications(productId, specifications) {
-    const stmt = db.prepare(`
-      INSERT INTO product_specifications (id, product_id, spec_key, spec_value)
-      VALUES (?, ?, ?, ?)
-    `);
-
-    Object.entries(specifications).forEach(([key, value]) => {
-      stmt.run(generateId('spec'), productId, key, value);
-    });
-  }
-
-  /**
-   * Format full product object
+   * Format product from DB
    */
   static formatProduct(product) {
     // Get images
@@ -570,7 +487,7 @@ class Product {
    */
   static getStats() {
     const stats = db.prepare(`
-      SELECT 
+      SELECT
         COUNT(*) as total_products,
         SUM(CASE WHEN stock_status = 'low_stock' THEN 1 ELSE 0 END) as low_stock,
         SUM(CASE WHEN stock_status = 'out_of_stock' THEN 1 ELSE 0 END) as out_of_stock,

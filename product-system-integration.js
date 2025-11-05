@@ -44,12 +44,7 @@ class ProductSystemIntegration {
             const response = await this.request('/products/categories');
 
             // Handle different response structures
-            let categories = response.data;
-
-            // If response.data contains a categories property, use that
-            if (categories && typeof categories === 'object' && categories.categories) {
-                categories = categories.categories;
-            }
+            let categories = response.data?.categories || [];
 
             // Update category filter dropdown
             const categoryFilter = document.querySelector('.filter-select[aria-label="Category filter"]');
@@ -61,8 +56,8 @@ class ProductSystemIntegration {
                     categories.forEach(category => {
                         const option = document.createElement('option');
                         const categoryName = String(category.name || 'Unknown Category');
-                        const productCount = String(category.product_count || 0);
-                        option.value = categoryName;
+                        const productCount = String(category.productCount || 0);
+                        option.value = category.id;
                         option.textContent = `${categoryName} (${productCount})`;
                         categoryFilter.appendChild(option);
                     });
@@ -85,15 +80,8 @@ class ProductSystemIntegration {
             const queryString = new URLSearchParams(filters).toString();
             const response = await this.request(`/products?${queryString}`);
 
-            // Handle different response structures
-            let products = [];
-            if (response && response.data) {
-                if (Array.isArray(response.data)) {
-                    products = response.data;
-                } else if (response.data.products && Array.isArray(response.data.products)) {
-                    products = response.data.products;
-                }
-            }
+// The API returns an object with a 'data.products' array
+            let products = response.data?.products || [];
 
             console.log('Loaded products:', products); // Debug log
 
@@ -350,8 +338,9 @@ class ProductSystemIntegration {
         }
 
         const response = await this.request(`/products/${productId}`);
-        this.cache.set(`product_${productId}`, response.data);
-        return response.data;
+        const product = response.data?.product || response.data;
+        this.cache.set(`product_${productId}`, product);
+        return product;
     }
 
     /**

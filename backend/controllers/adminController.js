@@ -15,7 +15,7 @@ const { parsePagination, parseSort, sanitizeSearch } = require('../utils/helpers
  */
 exports.getStats = async (req, res, next) => {
   try {
-    const stats = Product.getStats();
+    const stats = await Product.getStats();
     return success(res, stats);
   } catch (err) {
     next(err);
@@ -42,10 +42,10 @@ exports.listProducts = async (req, res, next) => {
       order
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     // Get filter options
-    const categories = Category.getWithCounts();
+    const categories = await Category.getWithCounts();
     const statuses = [
       { value: 'in_stock', count: products.filter(p => p.stock_status === 'in_stock').length },
       { value: 'low_stock', count: products.filter(p => p.stock_status === 'low_stock').length },
@@ -85,7 +85,7 @@ exports.listProducts = async (req, res, next) => {
  */
 exports.getProduct = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -103,7 +103,7 @@ exports.getProduct = async (req, res, next) => {
  */
 exports.createProduct = async (req, res, next) => {
   try {
-    const product = Product.create(req.body);
+    const product = await Product.create(req.body);
     return created(res, product, 'Product created successfully');
   } catch (err) {
     next(err);
@@ -116,7 +116,7 @@ exports.createProduct = async (req, res, next) => {
  */
 exports.updateProduct = async (req, res, next) => {
   try {
-    const product = Product.update(req.params.id, req.body);
+    const product = await Product.update(req.params.id, req.body);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -134,7 +134,7 @@ exports.updateProduct = async (req, res, next) => {
  */
 exports.deleteProduct = async (req, res, next) => {
   try {
-    const deleted = Product.delete(req.params.id);
+    const deleted = await Product.delete(req.params.id);
 
     if (!deleted) {
       return notFound(res, 'Product');
@@ -164,7 +164,7 @@ exports.bulkDeleteProducts = async (req, res, next) => {
       });
     }
 
-    const deleted = Product.bulkDelete(productIds);
+    const deleted = await Product.bulkDelete(productIds);
 
     return success(res, { deleted }, `${deleted} products deleted successfully`);
   } catch (err) {

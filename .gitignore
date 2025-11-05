@@ -41,3 +41,6 @@ test-integration.html
 ./backend./SETUP-INSTRUCTIONS.md
 ./backend/test-api.sh
 ./backend/setup.sh
+
+./backend/database/trader.db-shm
+./backend/database/trader.db-wal
