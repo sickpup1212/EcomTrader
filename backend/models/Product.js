@@ -264,7 +264,6 @@ class Product {
       isFeatured: !!product.is_featured,
     };
   }
-}
 
   static async getStats() {
     return new Promise((resolve, reject) => {
