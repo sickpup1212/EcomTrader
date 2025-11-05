@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Product System - Complete Integration Example</title>
+  <meta name="description" content="Complete e-commerce product display system with enhanced catalog, product details, and full accessibility support">
+  <meta name="keywords" content="e-commerce, products, catalog, accessibility, performance">
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="design-tokens.css" as="style">
+  <link rel="preload" href="enhanced-catalog.css" as="style">
+  <link rel="preload" href="enhanced-product-display.css" as="style">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="enhanced-catalog.css">
+  <link rel="stylesheet" href="enhanced-product-display.css">
+
+  <!-- Resource hints -->
+  <link rel="dns-prefetch" href="//images.unsplash.com">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="preconnect" href="//fonts.googleapis.com" crossorigin>
+
+  <style>
+    /* Integration-specific styles */
+    .integration-demo {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+
+    .demo-title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .demo-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-8);
+    }
+
+    .demo-controls {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-primary-600);
+      color: var(--color-neutral-0);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .demo-btn:hover {
+      background: var(--color-primary-700);
+      transform: translateY(-1px);
+    }
+
+    .demo-section {
+      margin-bottom: var(--space-16);
+    }
+
+    .demo-section-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-6);
+      border-bottom: 2px solid var(--color-primary-200);
+      padding-bottom: var(--space-3);
+    }
+
+    .demo-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    .stat-card {
+      background: var(--color-neutral-0);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-neutral-200);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-600);
+    }
+
+    .stat-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      margin-top: var(--space-2);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    .feature-card {
+      background: var(--color-neutral-0);
+      padding: var(--space-6);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-neutral-200);
+      transition: all var(--transition-base);
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary-300);
+    }
+
+    .feature-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .feature-description {
+      font-size: var(--font-size-base);
+      color: var(--color-neutral-700);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .code-example {
+      background: var(--color-neutral-900);
+      color: var(--color-neutral-100);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .integration-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .integration-status--success {
+      background: var(--color-success-100);
+      color: var(--color-success-700);
+    }
+
+    .integration-status--warning {
+      background: var(--color-warning-100);
+      color: var(--color-warning-700);
+    }
+
+    .integration-status--error {
+      background: var(--color-error-100);
+      color: var(--color-error-700);
+    }
+
+    @media (max-width: 768px) {
+      .integration-demo {
+        padding: var(--space-6) var(--space-4);
+      }
+
+      .demo-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip Links for Accessibility -->
+  <div class="skip-links">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#demo-controls" class="skip-link">Skip to controls</a>
+    <a href="#features" class="skip-link">Skip to features</a>
+  </div>
+
+  <!-- Integration Demo Header -->
+  <header class="header">
+    <div class="header__container">
+      <a href="#" class="header__logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16L15 19L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Enhanced Trader
+      </a>
+
+      <nav class="header__nav">
+        <a href="#catalog" class="header__nav-link">Catalog Demo</a>
+        <a href="#product" class="header__nav-link">Product Demo</a>
+        <a href="#features" class="header__nav-link">Features</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="header__action-btn" onclick="toggleAccessibilityPanel()" title="Accessibility Options">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 6V10M10 14H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <a href="#performance" class="header__action-btn" title="Performance Metrics">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M18 20V10M13 20V4M8 20V14M3 20V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="integration-demo">
+    <!-- Demo Header -->
+    <div class="demo-header">
+      <h1 class="demo-title">Enhanced Product Display System</h1>
+      <p class="demo-subtitle">
+        Complete e-commerce solution with responsive catalog, detailed product pages, real-time API integration,
+        and comprehensive accessibility support. Built with zen design principles and modern web technologies.
+      </p>
+
+      <!-- Integration Status -->
+      <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; margin-bottom: var(--space-6);">
+        <div class="integration-status integration-status--success">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M13 2L5 10L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Design System Active
+        </div>
+        <div class="integration-status integration-status--success">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M13 2L5 10L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          APIs Connected
+        </div>
+        <div class="integration-status integration-status--success">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M13 2L5 10L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Accessibility Enabled
+        </div>
+        <div class="integration-status integration-status--success">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M13 2L5 10L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Performance Optimized
+        </div>
+      </div>
+
+      <!-- Demo Controls -->
+      <div id="demo-controls" class="demo-controls">
+        <button class="demo-btn" onclick="loadCatalogDemo()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" stroke="currentColor" stroke-width="2"/>
+            <rect x="7" y="7" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Load Catalog Demo
+        </button>
+        <button class="demo-btn" onclick="loadProductDemo()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Load Product Demo
+        </button>
+        <button class="demo-btn" onclick="runAccessibilityTest()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M2 12L7 7L12 12L17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Test Accessibility
+        </button>
+        <button class="demo-btn" onclick="showPerformanceMetrics()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M18 20V10M13 20V4M8 20V14M3 20V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Performance Metrics
+        </button>
+      </div>
+    </div>
+
+    <!-- Performance Stats -->
+    <div class="demo-stats">
+      <div class="stat-card">
+        <div class="stat-value" id="lcp-metric">--</div>
+        <div class="stat-label">Largest Contentful Paint</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="fid-metric">--</div>
+        <div class="stat-label">First Input Delay</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="cls-metric">--</div>
+        <div class="stat-label">Cumulative Layout Shift</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="accessibility-score">--</div>
+        <div class="stat-label">Accessibility Score</div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="demo-section">
+      <h2 class="demo-section-title">Enhanced Features</h2>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <path d="M4 6L2 7V17L4 18M4 6L20 6M4 6L4 18M20 6L22 7V17L20 18M20 6L20 18" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Responsive Grid System
+          </h3>
+          <p class="feature-description">
+            Adaptive grid layouts that work seamlessly across all device sizes.
+            Mobile-first design with touch-friendly interactions and optimized breakpoints.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Real-Time API Integration
+          </h3>
+          <p class="feature-description">
+            Dynamic content loading with intelligent caching, retry logic, and real-time stock updates.
+            Optimized for performance with lazy loading and preloading strategies.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            Advanced Interactions
+          </h3>
+          <p class="feature-description">
+            Smooth animations, particle effects, and micro-interactions that enhance user experience
+            while maintaining performance and respecting motion preferences.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Performance Monitoring
+          </h3>
+          <p class="feature-description">
+            Real-time Core Web Vitals monitoring, resource optimization, and intelligent caching.
+            Built-in performance analytics and optimization recommendations.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 1V6M12 18V23M4.22 4.22L7.76 7.76M16.24 16.24L19.78 19.78M1 12H6M18 12H23M4.22 19.78L7.76 16.24M16.24 7.76L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Comprehensive Accessibility
+          </h3>
+          <p class="feature-description">
+            WCAG 2.1 AA compliance with screen reader support, keyboard navigation,
+            and assistive technology optimization. Includes automated testing tools.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h3 class="feature-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="color: var(--color-primary-600);">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+              <line x1="9" y1="9" x2="15" y2="9" stroke="currentColor" stroke-width="2"/>
+              <line x1="9" y1="15" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Zen Design System
+          </h3>
+          <p class="feature-description">
+            Harmonious design tokens based on natural proportions. Consistent spacing,
+            typography, and color palettes that create peaceful user experiences.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code Example Section -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Quick Integration</h2>
+      <div class="code-example">
+// Initialize the enhanced product system
+import { ProductDisplayManager, AccessibilityManager } from './modules';
+
+// Create product display instance
+const productDisplay = new ProductDisplayManager();
+
+// Initialize catalog
+await productDisplay.initializeCatalog({
+  category: 'electronics',
+  limit: 24,
+  sort: 'featured'
+});
+
+// Load product details
+await productDisplay.initializeProductDisplay(123);
+
+// Setup accessibility
+const accessibility = new AccessibilityManager();
+
+// Test accessibility compliance
+const issues = accessibility.testAccessibility();
+console.log('Accessibility issues:', issues);
+
+// Monitor performance
+const performance = new PerformanceManager();
+performance.observeLCP();
+performance.observeFID();
+performance.observeCLS();
+      </div>
+    </section>
+
+    <!-- Demo Content Sections -->
+    <section id="catalog" class="demo-section">
+      <h2 class="demo-section-title">Catalog Demo</h2>
+      <div id="catalog-demo-content">
+        <!-- Catalog content will be loaded here -->
+        <p style="text-align: center; color: var(--color-neutral-600); padding: var(--space-8);">
+          Click "Load Catalog Demo" to see the enhanced catalog in action
+        </p>
+      </div>
+    </section>
+
+    <section id="product" class="demo-section">
+      <h2 class="demo-section-title">Product Demo</h2>
+      <div id="product-demo-content">
+        <!-- Product content will be loaded here -->
+        <p style="text-align: center; color: var(--color-neutral-600); padding: var(--space-8);">
+          Click "Load Product Demo" to see the enhanced product display in action
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__container">
+      <p class="footer__text">
+        Enhanced Product Display System •
+        Crafted with zen precision by <strong>Yuki "Interface"</strong> •
+        Powered by <strong>Vesper "Surge" Voltage</strong>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="interactions.js"></script>
+  <script src="product-api.js"></script>
+  <script src="accessibility-performance.js"></script>
+
+  <script>
+    // Integration Demo Controller
+    class IntegrationDemo {
+      constructor() {
+        this.productAPI = new ProductAPI();
+        this.accessibilityManager = new AccessibilityManager();
+        this.performanceManager = new PerformanceManager();
+
+        this.init();
+      }
+
+      init() {
+        this.setupPerformanceMonitoring();
+        this.setupKeyboardShortcuts();
+        this.updateMetrics();
+      }
+
+      setupPerformanceMonitoring() {
+        // Monitor Core Web Vitals
+        const updateMetrics = () => {
+          // Update LCP
+          const lcpElement = document.getElementById('lcp-metric');
+          if (lcpElement && this.performanceManager.metrics.has('LCP')) {
+            lcpElement.textContent = `${Math.round(this.performanceManager.metrics.get('LCP'))}ms`;
+          }
+
+          // Update FID
+          const fidElement = document.getElementById('fid-metric');
+          if (fidElement && this.performanceManager.metrics.has('FID')) {
+            fidElement.textContent = `${Math.round(this.performanceManager.metrics.get('FID'))}ms`;
+          }
+
+          // Update CLS
+          const clsElement = document.getElementById('cls-metric');
+          if (clsElement && this.performanceManager.metrics.has('CLS')) {
+            clsElement.textContent = this.performanceManager.metrics.get('CLS').toFixed(3);
+          }
+        };
+
+        // Update metrics periodically
+        setInterval(updateMetrics, 1000);
+
+        // Initial update
+        setTimeout(updateMetrics, 2000);
+      }
+
+      setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+          // Demo shortcuts
+          if (e.ctrlKey || e.metaKey) {
+            switch (e.key) {
+              case '1':
+                e.preventDefault();
+                this.loadCatalogDemo();
+                break;
+              case '2':
+                e.preventDefault();
+                this.loadProductDemo();
+                break;
+              case '3':
+                e.preventDefault();
+                this.runAccessibilityTest();
+                break;
+              case '4':
+                e.preventDefault();
+                this.showPerformanceMetrics();
+                break;
+            }
+          }
+        });
+      }
+
+      updateMetrics() {
+        // Update accessibility score
+        const accessibilityElement = document.getElementById('accessibility-score');
+        if (accessibilityElement) {
+          const issues = this.accessibilityManager.testAccessibility();
+          const score = Math.max(0, 100 - (issues.length * 5));
+          accessibilityElement.textContent = `${score}%`;
+          accessibilityElement.style.color = score >= 90 ? 'var(--color-success-600)' :
+                                          score >= 70 ? 'var(--color-warning-600)' :
+                                          'var(--color-error-600)';
+        }
+      }
+
+      async loadCatalogDemo() {
+        const content = document.getElementById('catalog-demo-content');
+
+        // Show loading
+        content.innerHTML = `
+          <div style="text-align: center; padding: var(--space-12);">
+            <div style="display: inline-block; width: 48px; height: 48px; border: 3px solid var(--color-primary-200); border-top-color: var(--color-primary-600); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: var(--space-4); color: var(--color-neutral-600);">Loading catalog...</p>
+          </div>
+        `;
+
+        try {
+          // Simulate API call
+          const products = await this.productAPI.getProducts({ limit: 8 });
+
+          // Create sample catalog HTML
+          content.innerHTML = `
+            <div class="product-grid--enhanced" style="margin-bottom: var(--space-8);">
+              ${products.data.map(product => this.createProductCard(product)).join('')}
+            </div>
+            <div style="text-align: center;">
+              <button class="btn-enhanced btn-enhanced--primary" onclick="integrationDemo.loadMoreProducts()">
+                Load More Products
+              </button>
+            </div>
+          `;
+
+          // Announce to screen readers
+          this.accessibilityManager.announce('Catalog loaded successfully');
+
+        } catch (error) {
+          content.innerHTML = `
+            <div style="text-align: center; padding: var(--space-8); color: var(--color-error-600);">
+              <h3>Failed to load catalog</h3>
+              <p>${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      async loadProductDemo() {
+        const content = document.getElementById('product-demo-content');
+
+        // Show loading
+        content.innerHTML = `
+          <div style="text-align: center; padding: var(--space-12);">
+            <div style="display: inline-block; width: 48px; height: 48px; border: 3px solid var(--color-primary-200); border-top-color: var(--color-primary-600); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: var(--space-4); color: var(--color-neutral-600);">Loading product details...</p>
+          </div>
+        `;
+
+        try {
+          // Simulate API call
+          const product = await this.productAPI.getProduct(1);
+
+          // Create sample product HTML
+          content.innerHTML = this.createProductDisplay(product);
+
+          // Announce to screen readers
+          this.accessibilityManager.announce('Product details loaded successfully');
+
+        } catch (error) {
+          content.innerHTML = `
+            <div style="text-align: center; padding: var(--space-8); color: var(--color-error-600);">
+              <h3>Failed to load product</h3>
+              <p>${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      createProductCard(product) {
+        const price = product.price || Math.floor(Math.random() * 200) + 20;
+        const rating = product.rating || (Math.random() * 2 + 3).toFixed(1);
+        const inStock = product.inStock !== false;
+
+        return `
+          <article class="product-card--enhanced" style="animation: fadeInUp 0.5s ease;">
+            <div class="product-card__image-container">
+              <img
+                src="https://images.unsplash.com/photo-${1505740420928 + product.id}?w=400&h=400&fit=crop"
+                alt="${product.name}"
+                class="product-card__image"
+                loading="lazy"
+              >
+              <span class="product-card__badge product-card__badge--new">New</span>
+            </div>
+            <div class="product-card__content-enhanced">
+              <div class="product-card__header">
+                <span class="product-card__category">${product.category || 'Electronics'}</span>
+                <span class="product-card__sku">SKU: ${product.sku || `PRD-${product.id}`}</span>
+              </div>
+              <h2 class="product-card__title">${product.name}</h2>
+              <div class="product-card__rating-enhanced">
+                <div class="rating-stars">${this.generateStars(rating)}</div>
+                <span class="rating-info">${rating} (${Math.floor(Math.random() * 500) + 10} reviews)</span>
+              </div>
+              <div class="product-card__price-enhanced">
+                <span class="price-current">$${price}</span>
+              </div>
+              <div class="product-card__stock">
+                <span class="stock-indicator ${inStock ? 'stock-indicator--in-stock' : 'stock-indicator--out-of-stock'}"></span>
+                <span>${inStock ? 'In Stock' : 'Out of Stock'}</span>
+              </div>
+              <div class="product-card__actions-enhanced">
+                <button class="btn-enhanced btn-enhanced--primary" onclick="integrationDemo.addToCart(${product.id})" ${!inStock ? 'disabled' : ''}>
+                  Add to Cart
+                </button>
+                <a href="#" class="btn-enhanced btn-enhanced--secondary">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      createProductDisplay(product) {
+        return `
+          <div class="product-layout">
+            <div class="gallery-enhanced">
+              <div class="gallery-enhanced__main">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="${product.name}" class="gallery-enhanced__image">
+              </div>
+              <div class="gallery-enhanced__thumbnails">
+                ${[1, 2, 3, 4].map(i => `
+                  <button class="gallery-enhanced__thumbnail ${i === 1 ? 'gallery-enhanced__thumbnail--active' : ''}">
+                    <img src="https://images.unsplash.com/photo-${1505740420928 + i}?w=200&h=200&fit=crop" alt="View ${i}">
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="product-info-enhanced">
+              <div class="stock-status-banner stock-status-banner--in-stock">
+                <span>In Stock - Ships today</span>
+              </div>
+
+              <h1 class="product-title-enhanced">${product.name}</h1>
+
+              <div class="rating-enhanced">
+                <div class="rating-stars-enhanced">${this.generateStars(4.5)}</div>
+                <div class="rating-enhanced__info">
+                  <span class="rating-enhanced__count">4.5</span>
+                  <span>(124 reviews)</span>
+                </div>
+              </div>
+
+              <div class="price-enhanced">
+                <span class="price-current-enhanced">$${product.price || 129.99}</span>
+                <span class="price-original-enhanced">$199.99</span>
+                <span class="price-savings-enhanced">Save 35%</span>
+              </div>
+
+              <div class="product-actions-enhanced">
+                <button class="button-enhanced button-enhanced--primary" onclick="integrationDemo.addToCart(${product.id})">
+                  Add to Cart
+                </button>
+                <button class="button-enhanced button-enhanced--secondary">
+                  Add to Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      generateStars(rating) {
+        const fullStars = Math.floor(rating);
+        const hasHalfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+        let stars = '';
+        for (let i = 0; i < fullStars; i++) {
+          stars += '<span class="rating-star">★</span>';
+        }
+        if (hasHalfStar) {
+          stars += '<span class="rating-star rating-star--half">★</span>';
+        }
+        for (let i = 0; i < emptyStars; i++) {
+          stars += '<span class="rating-star rating-star--empty">★</span>';
+        }
+
+        return stars;
+      }
+
+      addToCart(productId) {
+        if (window.Voltage && window.Voltage.toast) {
+          window.Voltage.toast.show(`Product ${productId} added to cart!`, 'success');
+        }
+
+        // Update cart badge
+        const cartBadge = document.getElementById('cart-count');
+        if (cartBadge) {
+          const currentCount = parseInt(cartBadge.textContent) || 0;
+          cartBadge.textContent = currentCount + 1;
+        }
+      }
+
+      async loadMoreProducts() {
+        try {
+          const products = await this.productAPI.getProducts({ limit: 4, page: 2 });
+          const grid = document.querySelector('#catalog-demo-content .product-grid--enhanced');
+
+          if (grid) {
+            products.data.forEach(product => {
+              const card = document.createElement('div');
+              card.innerHTML = this.createProductCard(product);
+              grid.appendChild(card.firstElementChild);
+            });
+          }
+        } catch (error) {
+          console.error('Failed to load more products:', error);
+        }
+      }
+
+      runAccessibilityTest() {
+        const issues = this.accessibilityManager.testAccessibility();
+
+        if (window.Voltage && window.Voltage.toast) {
+          if (issues.length === 0) {
+            window.Voltage.toast.show('✅ No accessibility issues found!', 'success');
+          } else {
+            window.Voltage.toast.show(`⚠️ Found ${issues.length} accessibility issues`, 'warning');
+          }
+        }
+
+        // Log details to console
+        console.group('🔍 Accessibility Test Results:');
+        if (issues.length === 0) {
+          console.log('✅ All accessibility tests passed!');
+        } else {
+          issues.forEach((issue, index) => {
+            console.warn(`${index + 1}. ${issue}`);
+          });
+        }
+        console.groupEnd();
+
+        this.updateMetrics();
+      }
+
+      showPerformanceMetrics() {
+        const metrics = this.performanceManager.metrics;
+
+        if (window.Voltage && window.Voltage.toast) {
+          window.Voltage.toast.show('📊 Performance metrics logged to console', 'info');
+        }
+
+        // Log detailed metrics
+        console.group('📊 Performance Metrics:');
+        console.log('Core Web Vitals:');
+        console.log(`  LCP: ${metrics.get('LCP') || 'N/A'}ms (Target: <2500ms)`);
+        console.log(`  FID: ${metrics.get('FID') || 'N/A'}ms (Target: <100ms)`);
+        console.log(`  CLS: ${metrics.get('CLS') || 'N/A'} (Target: <0.1)`);
+
+        console.log('Other Metrics:');
+        console.log(`  Page Load: ${metrics.get('PageLoad') || 'N/A'}ms`);
+        console.log(`  Time to First Click: ${metrics.get('TimeToFirstClick') || 'N/A'}ms`);
+        console.log(`  User Interactions: ${metrics.get('UserInteractions') || 0}`);
+        console.groupEnd();
+
+        this.performanceManager.reportMetrics();
+      }
+    }
+
+    // Global functions for demo buttons
+    window.loadCatalogDemo = () => window.integrationDemo.loadCatalogDemo();
+    window.loadProductDemo = () => window.integrationDemo.loadProductDemo();
+    window.runAccessibilityTest = () => window.integrationDemo.runAccessibilityTest();
+    window.showPerformanceMetrics = () => window.integrationDemo.showPerformanceMetrics();
+    window.toggleAccessibilityPanel = () => {
+      if (window.Voltage && window.Voltage.toast) {
+        window.Voltage.toast.show('Accessibility panel toggle', 'info');
+      }
+    };
+
+    // Initialize demo
+    window.integrationDemo = new IntegrationDemo();
+
+    // Add animation styles
+    const animationStyles = document.createElement('style');
+    animationStyles.textContent = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(animationStyles);
+
+    // Announce page load
+    setTimeout(() => {
+      if (window.integrationDemo.accessibilityManager) {
+        window.integrationDemo.accessibilityManager.announce('Enhanced Product Display System demo loaded');
+      }
+    }, 1000);
+
+    console.log('🎉 Enhanced Product Display System initialized successfully!');
+    console.log('📚 Available modules: ProductAPI, AccessibilityManager, PerformanceManager');
+    console.log('⌨️  Keyboard shortcuts: Ctrl+1 (Catalog), Ctrl+2 (Product), Ctrl+3 (A11y Test), Ctrl+4 (Metrics)');
+  </script>
+</body>
+</html>

@@ -1,0 +1,2631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trader Admin - Complete Management System</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="admin-panel.css">
+</head>
+<body>
+  <div class="admin">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar__header">
+        <div class="sidebar__logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 16L15 19L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sidebar__brand">Trader Admin</span>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="#dashboard" class="sidebar__link sidebar__link--active">
+          <svg class="sidebar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 4H7V8H3V4Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M13 4H17V8H13V4Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M3 12H7V16H3V12Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M13 12H17V16H13V12Z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="#products" class="sidebar__link">
+          <svg class="sidebar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 7L10 3L17 7M3 7L10 11M3 7V13L10 17M17 7L10 11M17 7V13L10 17M10 11V17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          Products
+        </a>
+        <a href="#inventory" class="sidebar__link">
+          <svg class="sidebar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 3V17M13 3V17M3 10H17" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Inventory
+        </a>
+        <a href="#orders" class="sidebar__link">
+          <svg class="sidebar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8" cy="17" r="1" fill="currentColor"/>
+            <circle cx="14" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          Orders
+        </a>
+        <a href="#settings" class="sidebar__link">
+          <svg class="sidebar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 2V4M10 16V18M18 10H16M4 10H2M15.5 4.5L14 6M6 14L4.5 15.5M15.5 15.5L14 14M6 6L4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <div class="sidebar__user">
+          <div class="sidebar__avatar">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="7" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M4 17C4 14 6.5 12 10 12C13.5 12 16 14 16 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="sidebar__user-info">
+            <div class="sidebar__user-name">Admin User</div>
+            <div class="sidebar__user-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin__main">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="content-section">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <h1 class="topbar__title">Dashboard</h1>
+          <div class="topbar__actions">
+            <button class="button button--secondary" id="refresh-dashboard">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M1 8a7 7 0 1 0 7-7M1 8V5m0 3h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Refresh
+            </button>
+            <button class="button button--primary" id="generate-report">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 2v12h10V7.5l-4.5-4.5H3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M8.5 2V7.5H14" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Revenue</span>
+              <div class="stat-card__icon stat-card__icon--success">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2V22M17 5H9.5C8.5 5 7 5.5 7 7C7 8.5 8.5 9 9.5 9H14.5C15.5 9 17 9.5 17 11C17 12.5 15.5 13 14.5 13H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">$48,572</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +15% from last month
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Orders</span>
+              <div class="stat-card__icon stat-card__icon--primary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="8" cy="17" r="1" fill="currentColor"/>
+                  <circle cx="14" cy="17" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">342</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +8% from last month
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Active Products</span>
+              <div class="stat-card__icon stat-card__icon--info">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 7L12 3L21 7M3 7L12 11M3 7V17L12 21M21 7L12 11M21 7V17L12 21M12 11V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">1,247</div>
+            <div class="stat-card__change stat-card__change--neutral">
+              No change
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Conversion Rate</span>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">3.2%</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +0.4% from last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+          <!-- Revenue Chart -->
+          <div class="chart-card">
+            <div class="chart-card__header">
+              <h3 class="chart-card__title">Revenue Trend</h3>
+              <select class="chart-period-select">
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+                <option>Last 3 months</option>
+                <option>Last year</option>
+              </select>
+            </div>
+            <div class="chart-container">
+              <svg class="chart" viewBox="0 0 400 200">
+                <defs>
+                  <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--color-primary-600);stop-opacity:0.3" />
+                    <stop offset="100%" style="stop-color:var(--color-primary-600);stop-opacity:0" />
+                  </linearGradient>
+                </defs>
+                <!-- Grid lines -->
+                <g class="chart-grid">
+                  <line x1="40" y1="20" x2="40" y2="160" stroke="var(--color-neutral-200)" stroke-width="1"/>
+                  <line x1="40" y1="160" x2="380" y2="160" stroke="var(--color-neutral-200)" stroke-width="1"/>
+                </g>
+                <!-- Chart path -->
+                <path d="M 40 140 L 100 120 L 160 100 L 220 110 L 280 80 L 340 60 L 340 160 L 40 160 Z"
+                      fill="url(#revenueGradient)"/>
+                <path d="M 40 140 L 100 120 L 160 100 L 220 110 L 280 80 L 340 60"
+                      stroke="var(--color-primary-600)" stroke-width="2" fill="none"/>
+                <!-- Data points -->
+                <circle cx="40" cy="140" r="4" fill="var(--color-primary-600)"/>
+                <circle cx="100" cy="120" r="4" fill="var(--color-primary-600)"/>
+                <circle cx="160" cy="100" r="4" fill="var(--color-primary-600)"/>
+                <circle cx="220" cy="110" r="4" fill="var(--color-primary-600)"/>
+                <circle cx="280" cy="80" r="4" fill="var(--color-primary-600)"/>
+                <circle cx="340" cy="60" r="4" fill="var(--color-primary-600)"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Category Distribution -->
+          <div class="chart-card">
+            <div class="chart-card__header">
+              <h3 class="chart-card__title">Sales by Category</h3>
+            </div>
+            <div class="chart-container">
+              <div class="donut-chart">
+                <svg class="donut" viewBox="0 0 200 200">
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="var(--color-neutral-200)" stroke-width="40"/>
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="var(--color-primary-500)" stroke-width="40"
+                          stroke-dasharray="94 283" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="var(--color-secondary-500)" stroke-width="40"
+                          stroke-dasharray="47 283" stroke-dashoffset="-94" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="var(--color-accent-500)" stroke-width="40"
+                          stroke-dasharray="75 283" stroke-dashoffset="-141" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="60" fill="none" stroke="var(--color-success)" stroke-width="40"
+                          stroke-dasharray="67 283" stroke-dashoffset="-216" transform="rotate(-90 100 100)"/>
+                </svg>
+                <div class="donut-center">
+                  <div class="donut-value">100%</div>
+                  <div class="donut-label">Total</div>
+                </div>
+              </div>
+              <div class="legend">
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: var(--color-primary-500);"></div>
+                  <span class="legend-label">Electronics (33%)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: var(--color-secondary-500);"></div>
+                  <span class="legend-label">Clothing (17%)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: var(--color-accent-500);"></div>
+                  <span class="legend-label">Home (26%)</span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-color" style="background-color: var(--color-success);"></div>
+                  <span class="legend-label">Books (24%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+          <div class="section-header">
+            <h2 class="section-title">Recent Activity</h2>
+            <button class="button button--secondary button--small">View All</button>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--success">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 8L7 11L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">New order #1234 received</div>
+                <div class="activity-time">2 minutes ago</div>
+              </div>
+              <div class="activity-amount">$142.50</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--warning">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 4V8M8 12H8.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M2 8C2 8 3.5 4 8 4C12.5 4 14 8 14 8C14 8 12.5 12 8 12C3.5 12 2 8 2 8Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Low stock alert: Wireless Headphones</div>
+                <div class="activity-time">15 minutes ago</div>
+              </div>
+              <div class="activity-badge">Warning</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--info">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v6m0 4h.01M3 8a5 5 0 1 0 10 0 5 5 0 0 0-10 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Product updated: Organic Cotton T-Shirt</div>
+                <div class="activity-time">1 hour ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--success">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 8L7 11L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Payment received for order #1232</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+              <div class="activity-amount">$89.99</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Section -->
+      <section id="products-section" class="content-section" style="display: none;">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <h1 class="topbar__title">Products Management</h1>
+          <div class="topbar__actions">
+            <button class="button button--secondary" id="export-products">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2V10M8 2L5 5M8 2L11 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 10V13C2 13.5 2.5 14 3 14H13C13.5 14 14 13.5 14 13V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Export
+            </button>
+            <button class="button button--primary" id="add-product-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Add Product
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Stats -->
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Products</span>
+              <div class="stat-card__icon stat-card__icon--primary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 7L12 3L21 7M3 7L12 11M3 7V17L12 21M21 7L12 11M21 7V17L12 21M12 11V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">1,247</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +12% from last month
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Low Stock Items</span>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L2 20H22L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M12 9V13M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">23</div>
+            <div class="stat-card__change stat-card__change--neutral">
+              Needs attention
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Out of Stock</span>
+              <div class="stat-card__icon stat-card__icon--error">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 8L16 16M16 8L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">7</div>
+            <div class="stat-card__change stat-card__change--negative">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 4V12M8 12L4 8M8 12L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              -3 from yesterday
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Value</span>
+              <div class="stat-card__icon stat-card__icon--success">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2V22M17 5H9.5C8.5 5 7 5.5 7 7C7 8.5 8.5 9 9.5 9H14.5C15.5 9 17 9.5 17 11C17 12.5 15.5 13 14.5 13H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">$284,392</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +8% from last month
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <div class="search-box">
+            <svg class="search-box__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 14L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="search-box__input" placeholder="Search products..." id="product-search">
+          </div>
+
+          <div class="filter-group">
+            <select class="select" id="category-filter">
+              <option>All Categories</option>
+              <option>Electronics</option>
+              <option>Clothing</option>
+              <option>Home & Garden</option>
+              <option>Books</option>
+              <option>Sports</option>
+            </select>
+
+            <select class="select" id="stock-filter">
+              <option>All Stock Levels</option>
+              <option>In Stock</option>
+              <option>Low Stock</option>
+              <option>Out of Stock</option>
+            </select>
+
+            <select class="select" id="sort-select">
+              <option>Sort by: Name</option>
+              <option>Sort by: Price</option>
+              <option>Sort by: Stock</option>
+              <option>Sort by: Date Added</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="checkbox" id="select-all-products"></th>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- Products will be loaded dynamically from API -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="pagination__button" disabled>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="pagination__button pagination__button--active">1</button>
+          <button class="pagination__button">2</button>
+          <button class="pagination__button">3</button>
+          <span class="pagination__ellipsis">...</span>
+          <button class="pagination__button">12</button>
+          <button class="pagination__button">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Inventory Section -->
+      <section id="inventory-section" class="content-section" style="display: none;">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <h1 class="topbar__title">Inventory Management</h1>
+          <div class="topbar__actions">
+            <button class="button button--secondary" id="export-inventory">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2V10M8 2L5 5M8 2L11 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 10V13C2 13.5 2.5 14 3 14H13C13.5 14 14 13.5 14 13V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Export Report
+            </button>
+            <button class="button button--primary" id="add-inventory">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Add Stock
+            </button>
+          </div>
+        </div>
+
+        <!-- Inventory Overview -->
+        <div class="inventory-stats">
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Items</span>
+              <div class="stat-card__icon stat-card__icon--primary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                  <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                  <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                  <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">8,453</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +342 this week
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Warehouse Capacity</span>
+              <div class="stat-card__icon stat-card__icon--info">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 21V7L12 3L21 7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">67%</div>
+            <div class="stat-card__change stat-card__change--neutral">
+              Optimal level
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Low Stock Alerts</span>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M10.29 3.86L1.82 18C1.42 18.68 1.82 19.5 2.66 19.5H21.34C22.18 19.5 22.58 18.68 22.18 18L13.71 3.86C13.31 3.18 12.69 3.18 12.29 3.86Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 9V13M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">47</div>
+            <div class="stat-card__change stat-card__change--warning">
+              Action required
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Value</span>
+              <div class="stat-card__icon stat-card__icon--success">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2V22M17 5H9.5C8.5 5 7 5.5 7 7C7 8.5 8.5 9 9.5 9H14.5C15.5 9 17 9.5 17 11C17 12.5 15.5 13 14.5 13H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">$1.2M</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +12% this month
+            </div>
+          </div>
+        </div>
+
+        <!-- Warehouse Grid -->
+        <div class="warehouse-grid">
+          <!-- Main Warehouse -->
+          <div class="warehouse-card">
+            <div class="warehouse-header">
+              <div>
+                <h3 class="warehouse-name">Main Warehouse</h3>
+                <div class="warehouse-capacity">Capacity: 4,234 / 6,000 items</div>
+              </div>
+              <div class="stat-card__icon stat-card__icon--primary">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 7L10 3L17 7M3 7L10 11M3 7V13L10 17M17 7L10 11M17 7V13L10 17M10 11V17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="inventory-grid">
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--success" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M13 2H3L4 12H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 12H5.5L6.5 16H9.5L10.5 12H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Electronics</div>
+                  <div class="inventory-item-quantity">1,234 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--info" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Clothing</div>
+                  <div class="inventory-item-quantity">2,156 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--warning" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 2L2 14H14L8 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M8 6V9M8 12H8.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Home & Garden</div>
+                  <div class="inventory-item-quantity">844 items</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Warehouse -->
+          <div class="warehouse-card">
+            <div class="warehouse-header">
+              <div>
+                <h3 class="warehouse-name">Secondary Warehouse</h3>
+                <div class="warehouse-capacity">Capacity: 2,145 / 4,000 items</div>
+              </div>
+              <div class="stat-card__icon stat-card__icon--secondary">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 7L10 3L17 7M3 7L10 11M3 7V13L10 17M17 7L10 11M17 7V13L10 17M10 11V17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="inventory-grid">
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--success" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M5 2v12M11 2v12M2 8h12" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Books</div>
+                  <div class="inventory-item-quantity">987 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--info" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                    <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Sports</div>
+                  <div class="inventory-item-quantity">654 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--warning" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 2h8l2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4l2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M8 8v4M8 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Toys</div>
+                  <div class="inventory-item-quantity">504 items</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Storage Facility -->
+          <div class="warehouse-card">
+            <div class="warehouse-header">
+              <div>
+                <h3 class="warehouse-name">Storage Facility</h3>
+                <div class="warehouse-capacity">Capacity: 2,074 / 3,000 items</div>
+              </div>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 7L10 3L17 7M3 7L10 11M3 7V13L10 17M17 7L10 11M17 7V13L10 17M10 11V17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="inventory-grid">
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--error" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M14 2H2l1 8h10l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 11v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Furniture</div>
+                  <div class="inventory-item-quantity">1,234 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--info" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="3" y="3" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M7 7h2M7 3v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Office Supplies</div>
+                  <div class="inventory-item-quantity">567 items</div>
+                </div>
+              </div>
+              <div class="inventory-item">
+                <div class="stat-card__icon stat-card__icon--warning" style="width: 24px; height: 24px;">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 6v4M8 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="inventory-item-info">
+                  <div class="inventory-item-name">Seasonal Items</div>
+                  <div class="inventory-item-quantity">273 items</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory Summary -->
+        <div class="inventory-summary">
+          <div class="section-header">
+            <h2 class="section-title">Stock Alerts</h2>
+            <button class="button button--secondary button--small">View All</button>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--warning">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 4V8M8 12H8.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M2 8C2 8 3.5 4 8 4C12.5 4 14 8 14 8C14 8 12.5 12 8 12C3.5 12 2 8 2 8Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Critical: Wireless Headphones (WH-2024-001)</div>
+                <div class="activity-time">Only 5 units remaining</div>
+              </div>
+              <div class="activity-badge">Critical</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--warning">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 4V8M8 12H8.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M2 8C2 8 3.5 4 8 4C12.5 4 14 8 14 8C14 8 12.5 12 8 12C3.5 12 2 8 2 8Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Low stock: Design Principles Guide (BK-2024-042)</div>
+                <div class="activity-time">18 units remaining</div>
+              </div>
+              <div class="activity-badge">Low Stock</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon activity-icon--error">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="activity-content">
+                <div class="activity-text">Out of stock: Organic Cotton T-Shirt (CL-2024-089)</div>
+                <div class="activity-time">Restock required</div>
+              </div>
+              <div class="activity-badge">Out of Stock</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Orders Section -->
+      <section id="orders-section" class="content-section" style="display: none;">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <h1 class="topbar__title">Orders Management</h1>
+          <div class="topbar__actions">
+            <button class="button button--secondary" id="export-orders">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2V10M8 2L5 5M8 2L11 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 10V13C2 13.5 2.5 14 3 14H13C13.5 14 14 13.5 14 13V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Export Orders
+            </button>
+            <button class="button button--primary" id="create-order">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Create Order
+            </button>
+          </div>
+        </div>
+
+        <!-- Order Stats -->
+        <div class="order-stats">
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Total Orders</span>
+              <div class="stat-card__icon stat-card__icon--primary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="8" cy="17" r="1" fill="currentColor"/>
+                  <circle cx="14" cy="17" r="1" fill="currentColor"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">1,847</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +18% from last month
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Pending Orders</span>
+              <div class="stat-card__icon stat-card__icon--warning">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">47</div>
+            <div class="stat-card__change stat-card__change--neutral">
+              Need processing
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Completed Today</span>
+              <div class="stat-card__icon stat-card__icon--success">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M22 4L12 14.01l-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">23</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +5 from yesterday
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card__header">
+              <span class="stat-card__title">Revenue Today</span>
+              <div class="stat-card__icon stat-card__icon--info">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2V22M17 5H9.5C8.5 5 7 5.5 7 7C7 8.5 8.5 9 9.5 9H14.5C15.5 9 17 9.5 17 11C17 12.5 15.5 13 14.5 13H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat-card__value">$3,247</div>
+            <div class="stat-card__change stat-card__change--positive">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              +12% from average
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Filters -->
+        <div class="order-filters">
+          <div class="search-box">
+            <svg class="search-box__icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+              <path d="M14 14L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="search-box__input" placeholder="Search orders..." id="order-search">
+          </div>
+
+          <div class="filter-group">
+            <select class="select" id="status-filter">
+              <option>All Status</option>
+              <option>Pending</option>
+              <option>Processing</option>
+              <option>Shipped</option>
+              <option>Delivered</option>
+              <option>Cancelled</option>
+            </select>
+
+            <select class="select" id="date-filter">
+              <option>All Time</option>
+              <option>Today</option>
+              <option>This Week</option>
+              <option>This Month</option>
+              <option>Last 3 Months</option>
+            </select>
+
+            <select class="select" id="sort-orders">
+              <option>Sort by: Date</option>
+              <option>Sort by: Customer</option>
+              <option>Sort by: Amount</option>
+              <option>Sort by: Status</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="table-container">
+          <table class="table order-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="order-cell">
+                    <div class="order-id">#ORD-2024-1234</div>
+                    <div class="order-date">Dec 3, 2024</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar">JD</div>
+                    <div class="customer-info">
+                      <div class="customer-name">John Doe</div>
+                      <div class="customer-email">john@example.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Dec 3, 2024</td>
+                <td>3 items</td>
+                <td><span class="price-value">$247.50</span></td>
+                <td><span class="order-status order-status--delivered">Delivered</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="icon-button" title="View Order">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </button>
+                    <button class="icon-button" title="Track">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 9l4-4 4 4 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="order-cell">
+                    <div class="order-id">#ORD-2024-1235</div>
+                    <div class="order-date">Dec 3, 2024</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar">SM</div>
+                    <div class="customer-info">
+                      <div class="customer-name">Sarah Miller</div>
+                      <div class="customer-email">sarah@example.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Dec 3, 2024</td>
+                <td>1 item</td>
+                <td><span class="price-value">$89.99</span></td>
+                <td><span class="order-status order-status--processing">Processing</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="icon-button" title="View Order">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </button>
+                    <button class="icon-button" title="Track">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 9l4-4 4 4 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="order-cell">
+                    <div class="order-id">#ORD-2024-1236</div>
+                    <div class="order-date">Dec 2, 2024</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar">RJ</div>
+                    <div class="customer-info">
+                      <div class="customer-name">Robert Johnson</div>
+                      <div class="customer-email">robert@example.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Dec 2, 2024</td>
+                <td>5 items</td>
+                <td><span class="price-value">$425.75</span></td>
+                <td><span class="order-status order-status--shipped">Shipped</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="icon-button" title="View Order">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </button>
+                    <button class="icon-button" title="Track">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 9l4-4 4 4 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div class="order-cell">
+                    <div class="order-id">#ORD-2024-1237</div>
+                    <div class="order-date">Dec 2, 2024</div>
+                  </div>
+                </td>
+                <td>
+                  <div class="customer-cell">
+                    <div class="customer-avatar">EW</div>
+                    <div class="customer-info">
+                      <div class="customer-name">Emily Wilson</div>
+                      <div class="customer-email">emily@example.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Dec 2, 2024</td>
+                <td>2 items</td>
+                <td><span class="price-value">$156.00</span></td>
+                <td><span class="order-status order-status--pending">Pending</span></td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="icon-button" title="View Order">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
+                      </svg>
+                    </button>
+                    <button class="icon-button" title="Track">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 9l4-4 4 4 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="pagination__button" disabled>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="pagination__button pagination__button--active">1</button>
+          <button class="pagination__button">2</button>
+          <button class="pagination__button">3</button>
+          <span class="pagination__ellipsis">...</span>
+          <button class="pagination__button">24</button>
+          <button class="pagination__button">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings-section" class="content-section" style="display: none;">
+        <!-- Top Bar -->
+        <div class="topbar">
+          <h1 class="topbar__title">Settings</h1>
+          <div class="topbar__actions">
+            <button class="button button--secondary" id="reset-settings">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M1 8a7 7 0 1 0 7-7M1 8V5m0 3h3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Reset to Default
+            </button>
+            <button class="button button--primary" id="save-settings">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 2v5l5.5 5.5L14 6l-5.5-5.5L2 7V2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M6.5 6.5L9.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Save Changes
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-panel">
+          <h2 class="settings-panel__title">General Settings</h2>
+
+          <!-- Store Information -->
+          <div class="settings-section">
+            <h3 class="settings-section__title">Store Information</h3>
+            <div class="form-group">
+              <label class="form-label" for="store-name">
+                Store Name
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 5v3M8 11h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </label>
+              <input type="text" class="input" id="store-name" value="Trader Admin" placeholder="Enter store name">
+              <span class="form-hint">This name will appear on invoices and reports</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="store-email">
+                Store Email
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M2 6l6 4 6-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </label>
+              <input type="email" class="input" id="store-email" value="admin@trader.com" placeholder="admin@example.com">
+              <span class="form-hint">Contact email for customer support</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="store-phone">
+                Store Phone
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M5 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 11h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </label>
+              <input type="tel" class="input" id="store-phone" value="+1 (555) 123-4567" placeholder="+1 (555) 000-0000">
+              <span class="form-hint">Customer service phone number</span>
+            </div>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="settings-section">
+            <h3 class="settings-section__title">Notification Preferences</h3>
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox" checked>
+                Email notifications for new orders
+              </label>
+              <span class="form-hint">Receive email alerts when new orders are placed</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox" checked>
+                Low stock alerts
+              </label>
+              <span class="form-hint">Get notified when inventory levels are low</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox">
+                Daily summary reports
+              </label>
+              <span class="form-hint">Receive daily performance summaries</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox" checked>
+                Customer notifications
+              </label>
+              <span class="form-hint">Send order status updates to customers</span>
+            </div>
+          </div>
+
+          <!-- Payment Settings -->
+          <div class="settings-section">
+            <h3 class="settings-section__title">Payment Configuration</h3>
+            <div class="form-group">
+              <label class="form-label" for="currency">
+                Default Currency
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 4v8M5 7h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </label>
+              <select class="select" id="currency">
+                <option value="USD" selected>USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+              </select>
+              <span class="form-hint">Select your default currency for pricing</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="tax-rate">
+                Tax Rate (%)
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2v6m0 4h.01M3 8a5 5 0 1 0 10 0 5 5 0 0 0-10 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </label>
+              <input type="number" class="input" id="tax-rate" value="8.5" step="0.1" min="0" max="100">
+              <span class="form-hint">Default tax rate applied to orders</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="payment-methods">
+                Accepted Payment Methods
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <path d="M4 8h8M6 6h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </label>
+              <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                <label style="display: flex; align-items: center; gap: var(--space-2);">
+                  <input type="checkbox" class="checkbox" checked>
+                  Credit/Debit Cards
+                </label>
+                <label style="display: flex; align-items: center; gap: var(--space-2);">
+                  <input type="checkbox" class="checkbox" checked>
+                  PayPal
+                </label>
+                <label style="display: flex; align-items: center; gap: var(--space-2);">
+                  <input type="checkbox" class="checkbox">
+                  Bank Transfer
+                </label>
+                <label style="display: flex; align-items: center; gap: var(--space-2);">
+                  <input type="checkbox" class="checkbox">
+                  Cash on Delivery
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Settings -->
+          <div class="settings-section">
+            <h3 class="settings-section__title">Security</h3>
+            <div class="form-group">
+              <label class="form-label" for="session-timeout">
+                Session Timeout (minutes)
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </label>
+              <input type="number" class="input" id="session-timeout" value="30" min="5" max="120">
+              <span class="form-hint">Automatically log out after period of inactivity</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox" checked>
+                Two-factor authentication
+              </label>
+              <span class="form-hint">Require 2FA for admin account access</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <input type="checkbox" class="checkbox">
+                IP address restriction
+              </label>
+              <span class="form-hint">Limit access to specific IP addresses</span>
+            </div>
+          </div>
+
+          <!-- Settings Actions -->
+          <div class="settings-actions">
+            <button class="button button--secondary">Cancel</button>
+            <button class="button button--primary">Save Settings</button>
+          </div>
+        </div>
+      </section>
+  </div>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script>
+    // Section Navigation System
+    class AdminNavigation {
+      constructor() {
+        this.sections = {
+          dashboard: document.getElementById('dashboard-section'),
+          products: document.getElementById('products-section'),
+          inventory: document.getElementById('inventory-section'),
+          orders: document.getElementById('orders-section'),
+          settings: document.getElementById('settings-section')
+        };
+
+        this.sidebarLinks = document.querySelectorAll('.sidebar__link');
+        this.currentSection = 'dashboard';
+
+        this.init();
+      }
+
+      init() {
+        // Setup navigation links
+        this.sidebarLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.getAttribute('href').replace('#', '');
+            this.switchSection(section);
+          });
+        });
+
+        // Show dashboard by default and set active state
+        this.switchSection('dashboard');
+      }
+
+      switchSection(sectionName) {
+        console.log(`Switching to section: ${sectionName}`);
+
+        if (!this.sections[sectionName]) {
+          console.error(`Section ${sectionName} not found!`);
+          return;
+        }
+
+        // Hide all sections
+        Object.values(this.sections).forEach(section => {
+          if (section) {
+            section.style.display = 'none';
+            section.classList.remove('active');
+          }
+        });
+
+        // Show selected section
+        if (this.sections[sectionName]) {
+          console.log(`Showing section: ${sectionName}`);
+          this.sections[sectionName].style.display = 'block';
+          this.sections[sectionName].classList.add('active');
+          this.currentSection = sectionName;
+          this.updateActiveLink(sectionName);
+        }
+      }
+
+      updateActiveLink(sectionName) {
+        this.sidebarLinks.forEach(link => {
+          link.classList.remove('sidebar__link--active');
+          if (link.getAttribute('href') === `#${sectionName}`) {
+            link.classList.add('sidebar__link--active');
+          }
+        });
+      }
+    }
+
+    // Initialize navigation
+    const adminNav = new AdminNavigation();
+
+    // Toast Notification System
+    function showToast(message, type = 'info') {
+      if (window.Voltage && window.Voltage.toast) {
+        window.Voltage.toast.show(message, type);
+      } else {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+      }
+    }
+
+    // Dashboard Interactions
+    document.getElementById('refresh-dashboard')?.addEventListener('click', () => {
+      showToast('Refreshing dashboard data...', 'info');
+      setTimeout(() => {
+        showToast('Dashboard updated successfully!', 'success');
+      }, 1000);
+    });
+
+    document.getElementById('generate-report')?.addEventListener('click', () => {
+      showToast('Generating report...', 'info');
+      setTimeout(() => {
+        showToast('Report generated successfully!', 'success');
+      }, 1500);
+    });
+
+    // Products Section Interactions
+    document.getElementById('add-product-btn')?.addEventListener('click', () => {
+      showProductModal();
+    });
+
+    document.getElementById('export-products')?.addEventListener('click', () => {
+      showToast('Exporting products data...', 'success');
+    });
+
+    // Select all checkbox for products
+    document.getElementById('select-all-products')?.addEventListener('change', function() {
+      const checkboxes = document.querySelectorAll('#products-table-body .checkbox');
+      checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+
+    // Inventory Section Interactions
+    document.getElementById('export-inventory')?.addEventListener('click', () => {
+      showToast('Exporting inventory report...', 'success');
+    });
+
+    document.getElementById('add-inventory')?.addEventListener('click', () => {
+      showToast('Add Stock feature coming soon!', 'info');
+    });
+
+    // Orders Section Interactions
+    document.getElementById('export-orders')?.addEventListener('click', () => {
+      showToast('Exporting orders data...', 'success');
+    });
+
+    document.getElementById('create-order')?.addEventListener('click', () => {
+      showToast('Create Order feature coming soon!', 'info');
+    });
+
+    // Settings Section Interactions
+    document.getElementById('reset-settings')?.addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset all settings to default?')) {
+        showToast('Settings reset to default', 'warning');
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      }
+    });
+
+    document.getElementById('save-settings')?.addEventListener('click', () => {
+      showToast('Saving settings...', 'info');
+      setTimeout(() => {
+        showToast('Settings saved successfully!', 'success');
+      }, 1000);
+    });
+
+    // Search functionality
+    function setupSearch(searchId, listId, itemSelector) {
+      const searchInput = document.getElementById(searchId);
+      const listContainer = document.getElementById(listId);
+
+      if (!searchInput || !listContainer) return;
+
+      searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const items = listContainer.querySelectorAll(itemSelector || 'tr');
+
+        items.forEach(item => {
+          const text = item.textContent.toLowerCase();
+          item.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+      });
+    }
+
+    // Initialize search functionality
+    setupSearch('product-search', 'products-table-body');
+    setupSearch('order-search', 'orders-section');
+
+    // Filter functionality
+    function setupFilter(selectId, listId, itemSelector, getDataFunction) {
+      const select = document.getElementById(selectId);
+      const listContainer = document.getElementById(listId);
+
+      if (!select || !listContainer) return;
+
+      select.addEventListener('change', (e) => {
+        const filterValue = e.target.value;
+        const items = listContainer.querySelectorAll(itemSelector || 'tr');
+
+        items.forEach(item => {
+          if (filterValue === 'All' || filterValue.includes('All')) {
+            item.style.display = '';
+          } else {
+            const itemData = getDataFunction ? getDataFunction(item) : item.textContent;
+            item.style.display = itemData.toLowerCase().includes(filterValue.toLowerCase()) ? '' : 'none';
+          }
+        });
+      });
+    }
+
+    // Initialize filters
+    setupFilter('category-filter', 'products-table-body', 'tr', (item) => {
+      const categoryElement = item.querySelector('.category-tag');
+      return categoryElement ? categoryElement.textContent : '';
+    });
+
+    setupFilter('stock-filter', 'products-table-body', 'tr', (item) => {
+      const statusElement = item.querySelector('.status-badge');
+      return statusElement ? statusElement.textContent : '';
+    });
+
+    setupFilter('status-filter', 'orders-section', 'tr', (item) => {
+      const statusElement = item.querySelector('.order-status');
+      return statusElement ? statusElement.textContent : '';
+    });
+
+    // Chart interactions
+    document.querySelectorAll('.chart-period-select').forEach(select => {
+      select.addEventListener('change', (e) => {
+        showToast(`Updating chart for ${e.target.value}...`, 'info');
+        setTimeout(() => {
+          showToast('Chart updated!', 'success');
+        }, 500);
+      });
+    });
+
+    // Activity item interactions
+    document.querySelectorAll('.activity-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const text = item.querySelector('.activity-text')?.textContent;
+        if (text) {
+          showToast(`Viewing: ${text}`, 'info');
+        }
+      });
+    });
+
+    // Action buttons
+    document.querySelectorAll('.icon-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const title = button.getAttribute('title');
+        if (title) {
+          showToast(`${title} feature coming soon!`, 'info');
+        }
+      });
+    });
+
+    // Pagination
+    document.querySelectorAll('.pagination__button:not([disabled])').forEach(button => {
+      button.addEventListener('click', () => {
+        const pageText = button.textContent;
+        if (pageText && !isNaN(pageText)) {
+          showToast(`Loading page ${pageText}...`, 'info');
+          // Update active state
+          document.querySelectorAll('.pagination__button').forEach(btn => {
+            btn.classList.remove('pagination__button--active');
+          });
+          button.classList.add('pagination__button--active');
+        }
+      });
+    });
+
+    // Form validation
+    function validateForm(form) {
+      const inputs = form.querySelectorAll('input[required], select[required]');
+      let isValid = true;
+
+      inputs.forEach(input => {
+        if (!input.value.trim()) {
+          isValid = false;
+          input.classList.add('input--error');
+        } else {
+          input.classList.remove('input--error');
+        }
+      });
+
+      return isValid;
+    }
+
+    // Add input error styles dynamically
+    const errorStyles = document.createElement('style');
+    errorStyles.textContent = `
+      .input--error {
+        border-color: var(--color-error) !important;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+      }
+    `;
+    document.head.appendChild(errorStyles);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + S to save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (adminNav.currentSection === 'settings') {
+          document.getElementById('save-settings')?.click();
+        }
+      }
+
+      // Ctrl/Cmd + E to export
+      if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        const exportButtons = {
+          dashboard: 'generate-report',
+          products: 'export-products',
+          inventory: 'export-inventory',
+          orders: 'export-orders'
+        };
+
+        const buttonId = exportButtons[adminNav.currentSection];
+        if (buttonId) {
+          document.getElementById(buttonId)?.click();
+        }
+      }
+
+      // Number keys for navigation (1-5)
+      if (e.key >= '1' && e.key <= '5' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const sections = ['dashboard', 'products', 'inventory', 'orders', 'settings'];
+        const sectionIndex = parseInt(e.key) - 1;
+        if (sections[sectionIndex]) {
+          adminNav.switchSection(sections[sectionIndex]);
+        }
+      }
+    });
+
+    // Auto-refresh simulation for dashboard
+    let autoRefreshInterval;
+
+    function startAutoRefresh() {
+      autoRefreshInterval = setInterval(() => {
+        if (adminNav.currentSection === 'dashboard') {
+          // Simulate data updates
+          const statValues = document.querySelectorAll('.stat-card__value');
+          statValues.forEach(stat => {
+            const currentValue = stat.textContent;
+            if (currentValue.includes('$')) {
+              const numValue = parseFloat(currentValue.replace(/[^0-9.]/g, ''));
+              const change = (Math.random() - 0.5) * 100;
+              const newValue = numValue + change;
+              stat.textContent = `$${newValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+            } else if (currentValue.includes('%')) {
+              const numValue = parseFloat(currentValue.replace(/[^0-9.]/g, ''));
+              const change = (Math.random() - 0.5) * 0.5;
+              const newValue = Math.max(0, Math.min(100, numValue + change));
+              stat.textContent = `${newValue.toFixed(1)}%`;
+            }
+          });
+        }
+      }, 30000); // Update every 30 seconds
+    }
+
+    function stopAutoRefresh() {
+      if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+      }
+    }
+
+    // Start auto-refresh
+    startAutoRefresh();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      stopAutoRefresh();
+    });
+
+    // Initialize tooltips
+    function initTooltips() {
+      const tooltipElements = document.querySelectorAll('[title]');
+      tooltipElements.forEach(element => {
+        element.addEventListener('mouseenter', (e) => {
+          const title = e.target.getAttribute('title');
+          if (title) {
+            e.target.setAttribute('data-tooltip', title);
+            e.target.removeAttribute('title');
+          }
+        });
+      });
+    }
+
+    initTooltips();
+
+    console.log('Admin panel initialized successfully');
+  </script>
+
+  <script>
+    /**
+     * Product Management System
+     * Complete admin panel product management functionality
+     */
+
+    // Global state
+    let productManagement = {
+      categories: [],
+      products: [],
+      currentImages: [],
+      currentVariants: [],
+      currentFeatures: [],
+      editingProductId: null
+    };
+
+    /**
+     * Initialize the product management system
+     */
+    async function initializeProductManagement() {
+      try {
+        // Load categories
+        await loadCategories();
+
+        // Load products
+        await loadProducts();
+
+        // Setup event listeners
+        setupProductFormListeners();
+
+        // Initialize modal handlers
+        setupModalHandlers();
+
+        console.log('Product management system initialized');
+      } catch (error) {
+        console.error('Failed to initialize product management:', error);
+        showToast('Failed to initialize product management system', 'error');
+      }
+    }
+
+    /**
+     * Load categories from API
+     */
+    async function loadCategories() {
+      try {
+        const response = await fetch('/api/admin/categories');
+        const result = await response.json();
+
+        if (result.success) {
+          productManagement.categories = result.data;
+          populateCategorySelect();
+        }
+      } catch (error) {
+        console.error('Failed to load categories:', error);
+        // Add default categories if API fails
+        productManagement.categories = [
+          { id: 'cat-electronics', name: 'Electronics' },
+          { id: 'cat-clothing', name: 'Clothing' },
+          { id: 'cat-books', name: 'Books' },
+          { id: 'cat-home', name: 'Home & Garden' },
+          { id: 'cat-sports', name: 'Sports' }
+        ];
+        populateCategorySelect();
+      }
+    }
+
+    /**
+     * Populate category dropdown
+     */
+    function populateCategorySelect() {
+      const select = document.getElementById('product-category');
+      if (!select) return;
+
+      // Clear existing options except the first one
+      select.innerHTML = '<option value="">Select a category</option>';
+
+      // Add categories
+      productManagement.categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.name;
+        select.appendChild(option);
+      });
+    }
+
+    /**
+     * Load products from API
+     */
+    async function loadProducts() {
+      try {
+        const response = await fetch('/api/admin/products');
+        const result = await response.json();
+
+        if (result.success) {
+          productManagement.products = result.data.products;
+          updateProductsTable();
+          updateProductStats();
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      }
+    }
+
+    /**
+     * Update products table with loaded data
+     */
+    function updateProductsTable() {
+      const tbody = document.getElementById('products-table-body');
+      if (!tbody) return;
+
+      if (productManagement.products.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--color-neutral-500);">
+              No products found. Click "Add Product" to create your first product.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = productManagement.products.map(product => `
+        <tr>
+          <td><input type="checkbox" class="checkbox" data-product-id="${product.id}"></td>
+          <td>
+            <div class="product-cell">
+              <div class="product-cell__image" style="background: var(--color-neutral-200); display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <rect x="4" y="6" width="16" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="product-cell__info">
+                <div class="product-cell__name">${product.name}</div>
+                <div class="product-cell__meta">${product.short_description || (product.description && product.description.substring(0, 60) + '...') || 'No description'}</div>
+              </div>
+            </div>
+          </td>
+          <td><code class="code">${product.sku}</code></td>
+          <td><span class="category-tag">${product.category_name || 'Uncategorized'}</span></td>
+          <td><span class="price-value">$${(product.price_amount || 0).toFixed(2)}</span></td>
+          <td>
+            <div class="stock-info">
+              <span class="stock-info__value">${product.stock_quantity || 0}</span>
+              <div class="stock-info__bar">
+                <div class="stock-info__fill ${getStockClass(product.stock_status)}"
+                     style="width: ${getStockPercentage(product.stock_quantity)}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td><span class="status-badge ${getStatusClass(product.status)}">${formatStatus(product.status)}</span></td>
+          <td>
+            <div class="action-buttons">
+              <button class="icon-button" onclick="editProduct('${product.id}')" title="Edit">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="icon-button" onclick="viewProduct('${product.id}')" title="View">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+              </button>
+              <button class="icon-button icon-button--danger" onclick="deleteProduct('${product.id}')" title="Delete">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 4H13M5 4V3C5 2.5 5.5 2 6 2H10C10.5 2 11 2.5 11 3V4M6 7V11M10 7V11M4 4L5 13C5 13.5 5.5 14 6 14H10C10.5 14 11 13.5 11 13L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    /**
+     * Update product statistics in dashboard
+     */
+    function updateProductStats() {
+      const totalProducts = productManagement.products.length;
+      const lowStockProducts = productManagement.products.filter(p =>
+        p.stock_status === 'low_stock'
+      ).length;
+      const outOfStockProducts = productManagement.products.filter(p =>
+        p.stock_status === 'out_of_stock'
+      ).length;
+
+      const totalValue = productManagement.products.reduce((sum, p) =>
+        sum + ((p.price_amount || 0) * (p.stock_quantity || 0)), 0
+      );
+
+      // Update stat cards (these are hardcoded in the HTML, so we'll update them)
+      const totalProductsEl = document.querySelector('.stat-card__value');
+      if (totalProductsEl) totalProductsEl.textContent = totalProducts.toLocaleString();
+
+      // You could update more stats here if needed
+    }
+
+    /**
+     * Show product creation modal
+     */
+    function showProductModal(productId = null) {
+      const modal = document.getElementById('product-modal');
+      const overlay = document.getElementById('overlay');
+      const title = document.getElementById('modal-title');
+      const submitBtn = document.getElementById('submit-btn-text');
+
+      if (productId) {
+        // Edit mode
+        title.textContent = 'Edit Product';
+        submitBtn.textContent = 'Update Product';
+        productManagement.editingProductId = productId;
+        loadProductForEdit(productId);
+      } else {
+        // Create mode
+        title.textContent = 'Add New Product';
+        submitBtn.textContent = 'Create Product';
+        productManagement.editingProductId = null;
+        resetProductForm();
+      }
+
+      modal.style.display = 'flex';
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    /**
+     * Hide product modal
+     */
+    function hideProductModal() {
+      const modal = document.getElementById('product-modal');
+      const overlay = document.getElementById('overlay');
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      resetProductForm();
+    }
+
+    /**
+     * Setup modal event handlers
+     */
+    function setupModalHandlers() {
+      // Close modal handlers
+      document.getElementById('close-modal')?.addEventListener('click', hideProductModal);
+      document.getElementById('cancel-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hideProductModal();
+      });
+
+      // Close on overlay click
+      document.getElementById('overlay')?.addEventListener('click', hideProductModal);
+
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hideProductModal();
+        }
+      });
+    }
+
+    /**
+     * Setup product form event listeners
+     */
+    function setupProductFormListeners() {
+      const form = document.getElementById('product-form');
+      if (!form) return;
+
+      // Form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveProduct();
+      });
+
+      // Image management
+      document.getElementById('add-image-btn')?.addEventListener('click', addImage);
+
+      // Allow Enter key to add image when in image URL field
+      document.getElementById('product-image-url')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addImage();
+        }
+      });
+    }
+
+    /**
+     * Add image to product
+     */
+    function addImage() {
+      const input = document.getElementById('product-image-url');
+      const url = input.value.trim();
+
+      if (!url) {
+        showToast('Please enter an image URL', 'warning');
+        return;
+      }
+
+      if (!isValidUrl(url)) {
+        showToast('Please enter a valid URL', 'warning');
+        return;
+      }
+
+      productManagement.currentImages.push({
+        url: url,
+        alt: '', // Could be made editable
+        order: productManagement.currentImages.length
+      });
+
+      updateImagesList();
+      input.value = '';
+      showToast('Image added', 'success');
+    }
+
+    /**
+     * Update images list display
+     */
+    function updateImagesList() {
+      const container = document.getElementById('images-list');
+      if (!container) return;
+
+      if (productManagement.currentImages.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = productManagement.currentImages.map((image, index) => `
+        <div class="image-item">
+          <div class="item-info">
+            <strong>Image ${index + 1}:</strong> ${image.url}
+          </div>
+          <button type="button" class="item-remove" onclick="removeImage(${index})">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    /**
+     * Remove image from product
+     */
+    function removeImage(index) {
+      productManagement.currentImages.splice(index, 1);
+      updateImagesList();
+    }
+
+    /**
+     * Save product (create or update)
+     */
+    async function saveProduct() {
+      const form = document.getElementById('product-form');
+      const formData = new FormData(form);
+
+      try {
+        // Build product object
+        const productData = {
+          name: formData.get('name'),
+          sku: formData.get('sku'),
+          description: formData.get('description'),
+          shortDescription: formData.get('shortDescription') || null,
+          categoryId: formData.get('categoryId'),
+          status: formData.get('status'),
+          price: {
+            amount: parseFloat(formData.get('price')),
+            currency: formData.get('currency'),
+            originalAmount: formData.get('originalAmount') ? parseFloat(formData.get('originalAmount')) : null
+          },
+          stock: {
+            quantity: parseInt(formData.get('quantity')),
+            lowStockThreshold: parseInt(formData.get('lowStockThreshold')),
+            reorderLevel: parseInt(formData.get('reorderLevel'))
+          },
+          images: productManagement.currentImages,
+          isFeatured: formData.has('isFeatured')
+        };
+
+        // Validate required fields
+        if (!productData.name || !productData.sku || !productData.description || !productData.categoryId) {
+          showToast('Please fill in all required fields', 'error');
+          return;
+        }
+
+        const isEditing = productManagement.editingProductId !== null;
+        const url = isEditing
+          ? `/api/admin/products/${productManagement.editingProductId}`
+          : '/api/admin/products';
+        const method = isEditing ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(productData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showToast(isEditing ? 'Product updated successfully!' : 'Product created successfully!', 'success');
+          hideProductModal();
+          await loadProducts(); // Reload products list
+        } else {
+          showToast(result.error?.message || 'Failed to save product', 'error');
+        }
+
+      } catch (error) {
+        console.error('Error saving product:', error);
+        showToast('Failed to save product. Please try again.', 'error');
+      }
+    }
+
+    /**
+     * Reset product form
+     */
+    function resetProductForm() {
+      const form = document.getElementById('product-form');
+      if (form) form.reset();
+
+      productManagement.currentImages = [];
+      productManagement.currentVariants = [];
+      productManagement.currentFeatures = [];
+      productManagement.editingProductId = null;
+
+      updateImagesList();
+    }
+
+    /**
+     * Load product for editing
+     */
+    async function loadProductForEdit(productId) {
+      try {
+        const response = await fetch(`/api/admin/products/${productId}`);
+        const result = await response.json();
+
+        if (result.success) {
+          const product = result.data;
+          const form = document.getElementById('product-form');
+
+          // Populate form fields
+          form.querySelector('#product-name').value = product.name;
+          form.querySelector('#product-sku').value = product.sku;
+          form.querySelector('#product-description').value = product.description;
+          form.querySelector('#product-short-description').value = product.shortDescription || '';
+          form.querySelector('#product-category').value = product.category?.id || '';
+          form.querySelector('#product-status').value = product.status;
+          form.querySelector('#product-price').value = product.price?.amount || '';
+          form.querySelector('#product-currency').value = product.price?.currency || 'USD';
+          form.querySelector('#product-original-price').value = product.price?.originalAmount || '';
+          form.querySelector('#product-quantity').value = product.stock?.quantity || 0;
+          form.querySelector('#product-low-threshold').value = product.stock?.lowStockThreshold || 20;
+          form.querySelector('#product-reorder-level').value = product.stock?.reorderLevel || 10;
+
+          if (product.isFeatured) {
+            form.querySelector('#product-featured').checked = true;
+          }
+
+          // Load images
+          productManagement.currentImages = product.images || [];
+          updateImagesList();
+
+        } else {
+          showToast('Failed to load product for editing', 'error');
+          hideProductModal();
+        }
+      } catch (error) {
+        console.error('Error loading product:', error);
+        showToast('Failed to load product', 'error');
+        hideProductModal();
+      }
+    }
+
+    /**
+     * Edit product
+     */
+    function editProduct(productId) {
+      showProductModal(productId);
+    }
+
+    /**
+     * View product
+     */
+    function viewProduct(productId) {
+      window.open(`/product/${productId}`, '_blank');
+    }
+
+    /**
+     * Delete product
+     */
+    async function deleteProduct(productId) {
+      if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/admin/products/${productId}`, {
+          method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showToast('Product deleted successfully', 'success');
+          await loadProducts(); // Reload products list
+        } else {
+          showToast(result.error?.message || 'Failed to delete product', 'error');
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showToast('Failed to delete product', 'error');
+      }
+    }
+
+    // Utility functions
+    function isValidUrl(string) {
+      try {
+        new URL(string);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function getStockClass(status) {
+      switch (status) {
+        case 'in_stock': return '';
+        case 'low_stock': return 'stock-info__fill--warning';
+        case 'out_of_stock': return 'stock-info__fill--error';
+        default: return '';
+      }
+    }
+
+    function getStockPercentage(quantity) {
+      if (quantity <= 0) return 0;
+      if (quantity >= 100) return 100;
+      return quantity;
+    }
+
+    function getStatusClass(status) {
+      switch (status) {
+        case 'active': return 'status-badge--success';
+        case 'inactive': return 'status-badge--warning';
+        case 'discontinued': return 'status-badge--error';
+        default: return '';
+      }
+    }
+
+    function formatStatus(status) {
+      return status.split('_').map(word =>
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+    }
+
+    // Initialize Product Management System
+    initializeProductManagement();
+  </script>
+
+  <!-- Product Creation Modal -->
+  <div id="overlay" class="modal-overlay" style="display: none;"></div>
+  <div id="product-modal" class="modal" style="display: none;">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modal-title">Add New Product</h2>
+        <button class="modal__close" id="close-modal">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <form id="product-form" class="form">
+        <!-- Basic Information -->
+        <div class="form__section">
+          <h3 class="form__section-title">Basic Information</h3>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label class="form__label" for="product-name">Product Name *</label>
+              <input type="text" id="product-name" name="name" class="form__input" required>
+              <span class="form__hint">Enter a descriptive product name</span>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="product-sku">SKU *</label>
+              <input type="text" id="product-sku" name="sku" class="form__input" required>
+              <span class="form__hint">Unique stock keeping unit</span>
+            </div>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="product-description">Description *</label>
+            <textarea id="product-description" name="description" class="form__textarea" rows="4" required></textarea>
+            <span class="form__hint">Detailed product description</span>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="product-short-description">Short Description</label>
+            <textarea id="product-short-description" name="shortDescription" class="form__textarea" rows="2"></textarea>
+            <span class="form__hint">Brief description for product listings (optional)</span>
+          </div>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label class="form__label" for="product-category">Category *</label>
+              <select id="product-category" name="categoryId" class="form__select" required>
+                <option value="">Select a category</option>
+              </select>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="product-status">Status</label>
+              <select id="product-status" name="status" class="form__select">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="discontinued">Discontinued</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="form__section">
+          <h3 class="form__section-title">Pricing</h3>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label class="form__label" for="product-price">Price *</label>
+              <div class="form__input-group">
+                <span class="form__input-prefix">$</span>
+                <input type="number" id="product-price" name="price" class="form__input" step="0.01" min="0" required>
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="product-original-price">Original Price</label>
+              <div class="form__input-group">
+                <span class="form__input-prefix">$</span>
+                <input type="number" id="product-original-price" name="originalAmount" class="form__input" step="0.01" min="0">
+              </div>
+              <span class="form__hint">For showing discounts</span>
+            </div>
+          </div>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label class="form__label" for="product-currency">Currency</label>
+              <select id="product-currency" name="currency" class="form__select">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+              </select>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label">
+                <input type="checkbox" id="product-featured" name="isFeatured" class="form__checkbox">
+                Featured Product
+              </label>
+              <span class="form__hint">Show in featured products section</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory -->
+        <div class="form__section">
+          <h3 class="form__section-title">Inventory</h3>
+
+          <div class="form__row">
+            <div class="form__group">
+              <label class="form__label" for="product-quantity">Stock Quantity *</label>
+              <input type="number" id="product-quantity" name="quantity" class="form__input" min="0" required>
+            </div>
+
+            <div class="form__group">
+              <label class="form__label" for="product-low-threshold">Low Stock Threshold</label>
+              <input type="number" id="product-low-threshold" name="lowStockThreshold" class="form__input" min="0" value="20">
+              <span class="form__hint">Alert when stock falls below this level</span>
+            </div>
+          </div>
+
+          <div class="form__group">
+            <label class="form__label" for="product-reorder-level">Reorder Level</label>
+            <input type="number" id="product-reorder-level" name="reorderLevel" class="form__input" min="0" value="10">
+            <span class="form__hint">Automatically suggest reorder at this level</span>
+          </div>
+        </div>
+
+        <!-- Product Images -->
+        <div class="form__section">
+          <h3 class="form__section-title">Product Images</h3>
+
+          <div id="product-images-container">
+            <div class="form__group">
+              <label class="form__label">Image URL</label>
+              <div class="form__input-group">
+                <input type="url" id="product-image-url" class="form__input" placeholder="https://example.com/image.jpg">
+                <button type="button" id="add-image-btn" class="button button--secondary">Add</button>
+              </div>
+              <span class="form__hint">Add product images. First image will be the main product image.</span>
+            </div>
+
+            <div id="images-list" class="images-list"></div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form__actions">
+          <button type="button" id="cancel-btn" class="button button--secondary">Cancel</button>
+          <button type="submit" class="button button--primary">
+            <span id="submit-btn-text">Create Product</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal__content {
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-6);
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .modal__title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin: 0;
+    }
+
+    .modal__close {
+      background: none;
+      border: none;
+      padding: var(--space-2);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-neutral-500);
+      transition: all var(--transition-base);
+    }
+
+    .modal__close:hover {
+      background: var(--color-neutral-100);
+      color: var(--color-neutral-700);
+    }
+
+    /* Form Styles */
+    .form {
+      padding: var(--space-6);
+    }
+
+    .form__section {
+      margin-bottom: var(--space-8);
+    }
+
+    .form__section:last-child {
+      margin-bottom: 0;
+    }
+
+    .form__section-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: 2px solid var(--color-primary-100);
+    }
+
+    .form__row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .form__group {
+      margin-bottom: var(--space-4);
+    }
+
+    .form__label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-neutral-700);
+      margin-bottom: var(--space-2);
+    }
+
+    .form__input,
+    .form__textarea,
+    .form__select {
+      width: 100%;
+      padding: var(--space-3);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-base);
+      transition: all var(--transition-base);
+    }
+
+    .form__input:focus,
+    .form__textarea:focus,
+    .form__select:focus {
+      outline: none;
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px var(--color-primary-100);
+    }
+
+    .form__hint {
+      display: block;
+      font-size: var(--font-size-xs);
+      color: var(--color-neutral-500);
+      margin-top: var(--space-1);
+    }
+
+    .form__input-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .form__input-prefix {
+      padding: var(--space-3);
+      background: var(--color-neutral-100);
+      border: 1px solid var(--color-neutral-300);
+      border-right: none;
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+    }
+
+    .form__input-group .form__input {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      flex: 1;
+    }
+
+    .form__checkbox {
+      margin-right: var(--space-2);
+    }
+
+    .form__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-3);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    .images-list,
+    .variants-list,
+    .features-list {
+      margin-top: var(--space-4);
+    }
+
+    .image-item,
+    .variant-item,
+    .feature-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3);
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+    }
+
+    .item-info {
+      flex: 1;
+      font-size: var(--font-size-sm);
+    }
+
+    .item-remove {
+      background: var(--color-error-100);
+      color: var(--color-error-600);
+      border: none;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-xs);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .item-remove:hover {
+      background: var(--color-error-200);
+      color: var(--color-error-700);
+    }
+
+    @media (max-width: 768px) {
+      .form__row {
+        grid-template-columns: 1fr;
+      }
+
+      .modal__content {
+        width: 95%;
+        max-height: 95vh;
+      }
+    }
+  </style>
+</body>
+</html>

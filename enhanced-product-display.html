@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Wireless Headphones - Enhanced Trader</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="enhanced-product-display.css">
+  <style>
+    /* Base styles that extend design tokens */
+    body {
+      font-family: var(--font-family-base);
+      background: var(--color-neutral-50);
+      color: var(--color-neutral-900);
+      line-height: var(--line-height-normal);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-neutral-0);
+      border-bottom: 1px solid var(--color-neutral-200);
+      padding: var(--space-4) 0;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-6);
+    }
+
+    .header__logo {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .header__nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+    }
+
+    .header__nav-link {
+      color: var(--color-neutral-700);
+      text-decoration: none;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+      transition: color var(--transition-fast);
+    }
+
+    .header__nav-link:hover {
+      color: var(--color-primary-600);
+    }
+
+    .header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .header__action-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--color-neutral-100);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      color: var(--color-neutral-700);
+    }
+
+    .header__action-btn:hover {
+      background: var(--color-primary-100);
+      border-color: var(--color-primary-300);
+      color: var(--color-primary-700);
+    }
+
+    .header__action-btn--primary {
+      background: var(--color-primary-600);
+      border-color: var(--color-primary-600);
+      color: var(--color-neutral-0);
+    }
+
+    .header__action-btn--primary:hover {
+      background: var(--color-primary-700);
+      border-color: var(--color-primary-700);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--color-error-500);
+      color: var(--color-neutral-0);
+      width: 20px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: var(--font-weight-bold);
+      border: 2px solid var(--color-neutral-0);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--color-neutral-900);
+      color: var(--color-neutral-300);
+      padding: var(--space-12) 0;
+      margin-top: var(--space-16);
+    }
+
+    .footer__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      text-align: center;
+    }
+
+    .footer__text {
+      font-size: var(--font-size-sm);
+      opacity: 0.8;
+    }
+
+    .footer__text strong {
+      color: var(--color-neutral-0);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .header__container {
+        padding: 0 var(--space-4);
+      }
+
+      .header__nav {
+        display: none;
+      }
+
+      .header__actions {
+        gap: var(--space-2);
+      }
+
+      .header__action-btn {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__container">
+      <a href="index.html" class="header__logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <path d="M9 12L11 14L15 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Trader
+      </a>
+
+      <nav class="header__nav">
+        <a href="catalog.html" class="header__nav-link">Shop</a>
+        <a href="#" class="header__nav-link">Categories</a>
+        <a href="#" class="header__nav-link">Deals</a>
+        <a href="#" class="header__nav-link">About</a>
+      </nav>
+
+      <div class="header__actions">
+        <a href="auth.html" class="header__action-btn" title="Sign In">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </a>
+
+        <button class="header__action-btn" title="Search">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+            <path d="M14 14L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <button class="header__action-btn" title="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17L3 10C1 8 1 5 3 3C5 1 8 1 10 3C12 1 15 1 17 3C19 5 19 8 17 10L10 17Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <a href="checkout.html" class="header__action-btn header__action-btn--primary" title="Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8" cy="17" r="1" fill="currentColor"/>
+            <circle cx="14" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          <span class="cart-badge" id="cart-count">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Product Display -->
+  <main class="product-display-container">
+    <!-- Enhanced Breadcrumb -->
+    <nav class="breadcrumb-enhanced" aria-label="Breadcrumb">
+      <ol class="breadcrumb-enhanced__list">
+        <li class="breadcrumb-enhanced__item">
+          <a href="index.html" class="breadcrumb-enhanced__link">Home</a>
+        </li>
+        <li class="breadcrumb-enhanced__separator">/</li>
+        <li class="breadcrumb-enhanced__item">
+          <a href="catalog.html" class="breadcrumb-enhanced__link">Electronics</a>
+        </li>
+        <li class="breadcrumb-enhanced__separator">/</li>
+        <li class="breadcrumb-enhanced__item">
+          <a href="catalog.html" class="breadcrumb-enhanced__link">Audio</a>
+        </li>
+        <li class="breadcrumb-enhanced__separator">/</li>
+        <li class="breadcrumb-enhanced__current">Premium Wireless Headphones</li>
+      </ol>
+    </nav>
+
+    <!-- Product Layout -->
+    <div class="product-layout">
+      <!-- Gallery Section -->
+      <div class="gallery-enhanced">
+        <!-- Main Image -->
+        <div class="gallery-enhanced__main">
+          <img
+            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop"
+            alt="Premium Wireless Headphones"
+            class="gallery-enhanced__image"
+            id="main-image"
+            loading="eager"
+          >
+          <div class="gallery-enhanced__loading" style="display: none;"></div>
+
+          <!-- Gallery Controls -->
+          <div class="gallery-enhanced__controls">
+            <button class="gallery-control" id="prev-image" aria-label="Previous image">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button class="gallery-control" id="next-image" aria-label="Next image">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="gallery-enhanced__thumbnails" id="thumbnails">
+          <button class="gallery-enhanced__thumbnail gallery-enhanced__thumbnail--active" data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="Front view">
+          </button>
+          <button class="gallery-enhanced__thumbnail" data-image="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop">
+            <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=200&h=200&fit=crop" alt="Side view">
+          </button>
+          <button class="gallery-enhanced__thumbnail" data-image="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&h=800&fit=crop">
+            <img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=200&h=200&fit=crop" alt="Detail view">
+          </button>
+          <button class="gallery-enhanced__thumbnail" data-image="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&h=800&fit=crop">
+            <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=200&h=200&fit=crop" alt="In use">
+          </button>
+        </div>
+      </div>
+
+      <!-- Product Info Section -->
+      <div class="product-info-enhanced">
+        <!-- Stock Status Banner -->
+        <div class="stock-status-banner stock-status-banner--in-stock">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 10L9 12L13 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>In Stock - Ships today</span>
+        </div>
+
+        <!-- Product Header -->
+        <div class="product-header-enhanced">
+          <h1 class="product-title-enhanced">Premium Wireless Headphones with Active Noise Cancellation</h1>
+          <p class="product-subtitle">Industry-leading sound quality with 30-hour battery life and premium comfort</p>
+
+          <!-- Badges -->
+          <div class="product-badges-enhanced">
+            <span class="product-badge-enhanced product-badge-enhanced--eco">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 2L10 6L14 7L11 10L12 14L8 12L4 14L5 10L2 7L6 6L8 2Z" stroke="currentColor" stroke-width="1" fill="none"/>
+              </svg>
+              Eco-Friendly
+            </span>
+            <span class="product-badge-enhanced product-badge-enhanced--new">New</span>
+            <span class="product-badge-enhanced product-badge-enhanced--exclusive">Exclusive</span>
+          </div>
+
+          <!-- Rating -->
+          <div class="rating-enhanced">
+            <div class="rating-stars-enhanced" id="rating-display">
+              <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+              <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+              <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+              <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+              <span class="rating-star-enhanced rating-star-enhanced--half">★</span>
+            </div>
+            <div class="rating-enhanced__info">
+              <span class="rating-enhanced__count">4.5</span>
+              <span>(124 reviews)</span>
+              <a href="#reviews" class="rating-enhanced__reviews">See all reviews</a>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="price-enhanced">
+            <span class="price-current-enhanced">$129.99</span>
+            <span class="price-original-enhanced">$199.99</span>
+            <span class="price-savings-enhanced">Save 35%</span>
+          </div>
+
+          <div class="price-info">
+            <svg class="price-info__icon" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1 6L8 1L15 6M3 8V14H13V8" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <span>Free shipping on orders over $50</span>
+          </div>
+        </div>
+
+        <!-- Product Options -->
+        <div class="product-options-enhanced">
+          <!-- Color Selection -->
+          <div class="option-group-enhanced">
+            <label class="option-group-enhanced__label">
+              Color
+              <span class="option-group-enhanced__selected" id="selected-color">Midnight Black</span>
+            </label>
+            <div class="color-selector-enhanced" id="color-selector">
+              <button class="color-option-enhanced color-option-enhanced--selected"
+                      style="background-color: #1a1a1a;"
+                      data-color="Midnight Black"
+                      aria-label="Midnight Black">
+                <span class="color-option-enhanced__tooltip">Midnight Black</span>
+              </button>
+              <button class="color-option-enhanced"
+                      style="background-color: #e8e8e8;"
+                      data-color="Cloud White"
+                      aria-label="Cloud White">
+                <span class="color-option-enhanced__tooltip">Cloud White</span>
+              </button>
+              <button class="color-option-enhanced"
+                      style="background-color: #c0c0c0;"
+                      data-color="Silver"
+                      aria-label="Silver">
+                <span class="color-option-enhanced__tooltip">Silver</span>
+              </button>
+              <button class="color-option-enhanced"
+                      style="background-color: #8b4513;"
+                      data-color="Saddle Brown"
+                      aria-label="Saddle Brown">
+                <span class="color-option-enhanced__tooltip">Saddle Brown</span>
+              </button>
+              <button class="color-option-enhanced"
+                      style="background-color: #4169e1;"
+                      data-color="Royal Blue"
+                      aria-label="Royal Blue">
+                <span class="color-option-enhanced__tooltip">Royal Blue</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Size Selection (for items with sizes) -->
+          <!-- Commented out for headphones but kept for reference
+          <div class="option-group-enhanced">
+            <label class="option-group-enhanced__label">
+              Size
+              <span class="option-group-enhanced__selected" id="selected-size">One Size</span>
+            </label>
+            <div class="size-selector-enhanced" id="size-selector">
+              <button class="size-option-enhanced size-option-enhanced--selected" data-size="one-size">One Size</button>
+            </div>
+          </div>
+          -->
+
+          <!-- Quantity Selection -->
+          <div class="option-group-enhanced">
+            <label class="option-group-enhanced__label" for="quantity">Quantity</label>
+            <div class="quantity-selector-enhanced">
+              <button class="quantity-selector-enhanced__button" id="qty-decrease" aria-label="Decrease quantity">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+              <input type="number"
+                     class="quantity-selector-enhanced__input"
+                     id="quantity"
+                     value="1"
+                     min="1"
+                     max="10"
+                     aria-label="Quantity">
+              <button class="quantity-selector-enhanced__button" id="qty-increase" aria-label="Increase quantity">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 5V15M5 10H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <span class="quantity-enhanced__info">Only 8 left in stock</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="product-actions-enhanced">
+          <button class="button-enhanced button-enhanced--primary" id="add-to-cart">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M3 3H5L6.5 13H17.5L19 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="19" r="1.5" fill="currentColor"/>
+              <circle cx="17" cy="19" r="1.5" fill="currentColor"/>
+            </svg>
+            Add to Cart
+          </button>
+          <button class="button-enhanced button-enhanced--secondary" id="add-to-wishlist">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M20.84 4.61C19.35 3.12 17.15 2.62 15.14 3.31C13.89 3.71 12.85 4.59 12.21 5.71C11.57 4.59 10.53 3.71 9.28 3.31C7.27 2.62 5.07 3.12 3.58 4.61C2.09 6.1 1.59 8.3 2.28 10.31C2.68 11.56 3.56 12.6 4.68 13.24L12 21L19.32 13.24C20.44 12.6 21.32 11.56 21.72 10.31C22.41 8.3 21.91 6.1 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            Save
+          </button>
+        </div>
+
+        <!-- Features -->
+        <div class="product-features-enhanced">
+          <div class="feature-enhanced">
+            <svg class="feature-enhanced__icon" viewBox="0 0 24 24" fill="none">
+              <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <div class="feature-enhanced__content">
+              <div class="feature-enhanced__title">30-Hour Battery Life</div>
+              <div class="feature-enhanced__description">Extended playtime on a single charge</div>
+            </div>
+          </div>
+          <div class="feature-enhanced">
+            <svg class="feature-enhanced__icon" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <div class="feature-enhanced__content">
+              <div class="feature-enhanced__title">2-Year Warranty</div>
+              <div class="feature-enhanced__description">Full coverage and support</div>
+            </div>
+          </div>
+          <div class="feature-enhanced">
+            <svg class="feature-enhanced__icon" viewBox="0 0 24 24" fill="none">
+              <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <div class="feature-enhanced__content">
+              <div class="feature-enhanced__title">Free Shipping</div>
+              <div class="feature-enhanced__description">On orders over $50</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details Tabs -->
+    <div class="tabs-enhanced">
+      <div class="tabs-enhanced__list" role="tablist">
+        <button class="tabs-enhanced__tab tabs-enhanced__tab--active"
+                role="tab"
+                aria-selected="true"
+                aria-controls="panel-details"
+                id="tab-details">
+          Details
+        </button>
+        <button class="tabs-enhanced__tab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-specs"
+                id="tab-specs">
+          Specifications
+        </button>
+        <button class="tabs-enhanced__tab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-reviews"
+                id="tab-reviews">
+          Reviews <span class="tabs-enhanced__count">(124)</span>
+        </button>
+        <button class="tabs-enhanced__tab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-shipping"
+                id="tab-shipping">
+          Shipping & Returns
+        </button>
+      </div>
+
+      <div class="tabs-enhanced__panels">
+        <!-- Details Panel -->
+        <div class="tabs-enhanced__panel tabs-enhanced__panel--active"
+             role="tabpanel"
+             id="panel-details"
+             aria-labelledby="tab-details">
+          <div class="content-section-enhanced">
+            <h2 class="content-section-enhanced__title">Product Details</h2>
+            <div class="content-section-enhanced__content">
+              <p class="content-section-enhanced__text">
+                Immerse yourself in studio-quality sound with our Premium Wireless Headphones.
+                Engineered with precision and crafted for comfort, these headphones deliver
+                an unparalleled audio experience that will transform the way you listen to music.
+              </p>
+              <p class="content-section-enhanced__text">
+                The advanced active noise cancellation technology adapts to your environment,
+                intelligently blocking out distractions so you can focus on what matters most.
+                Whether you're commuting through the city, working in a busy office, or relaxing
+                at home, enjoy crystal-clear audio in any setting.
+              </p>
+              <p class="content-section-enhanced__text">
+                Premium materials and thoughtful ergonomic design ensure all-day comfort.
+                The memory foam ear cushions and adjustable headband provide a perfect fit
+                for extended listening sessions, while the lightweight construction prevents
+                fatigue during long-term use.
+              </p>
+              <p class="content-section-enhanced__text">
+                With seamless Bluetooth 5.2 connectivity, multipoint pairing, and intuitive
+                touch controls, these headphones offer the perfect balance of cutting-edge
+                technology and user-friendly design. Experience music the way it was meant
+                to be heard.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Specifications Panel -->
+        <div class="tabs-enhanced__panel"
+             role="tabpanel"
+             id="panel-specs"
+             aria-labelledby="tab-specs">
+          <div class="content-section-enhanced">
+            <h2 class="content-section-enhanced__title">Technical Specifications</h2>
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-item__label">Driver Size</span>
+                <span class="spec-item__value">40mm dynamic drivers</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Frequency Response</span>
+                <span class="spec-item__value">20Hz - 20kHz</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Impedance</span>
+                <span class="spec-item__value">32 Ohms</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Bluetooth Version</span>
+                <span class="spec-item__value">5.2</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Battery Life</span>
+                <span class="spec-item__value">30 hours (ANC on), 40 hours (ANC off)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Charging Time</span>
+                <span class="spec-item__value">2 hours (USB-C fast charging)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Weight</span>
+                <span class="spec-item__value">250g</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Included Accessories</span>
+                <span class="spec-item__value">USB-C cable, 3.5mm audio cable, carrying case</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Noise Cancellation</span>
+                <span class="spec-item__value">Active (ANC) with transparency mode</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Audio Codecs</span>
+                <span class="spec-item__value">SBC, AAC, aptX HD</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Water Resistance</span>
+                <span class="spec-item__value">IPX4 (splash resistant)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-item__label">Warranty</span>
+                <span class="spec-item__value">2 years manufacturer warranty</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews Panel -->
+        <div class="tabs-enhanced__panel"
+             role="tabpanel"
+             id="panel-reviews"
+             aria-labelledby="tab-reviews">
+          <div class="content-section-enhanced">
+            <h2 class="content-section-enhanced__title">Customer Reviews</h2>
+
+            <!-- Review Summary -->
+            <div class="review-summary">
+              <div class="review-summary__rating">
+                <div class="review-summary__score">4.5</div>
+                <div class="review-summary__stars">
+                  <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                  <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                  <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                  <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                  <span class="rating-star-enhanced rating-star-enhanced--half">★</span>
+                </div>
+                <div class="review-summary__count">Based on 124 reviews</div>
+              </div>
+
+              <div class="review-summary__distribution">
+                <div class="rating-bar">
+                  <span class="rating-bar__label">5★</span>
+                  <div class="rating-bar__track">
+                    <div class="rating-bar__fill" style="width: 65%"></div>
+                  </div>
+                  <span class="rating-bar__count">81</span>
+                </div>
+                <div class="rating-bar">
+                  <span class="rating-bar__label">4★</span>
+                  <div class="rating-bar__track">
+                    <div class="rating-bar__fill" style="width: 20%"></div>
+                  </div>
+                  <span class="rating-bar__count">25</span>
+                </div>
+                <div class="rating-bar">
+                  <span class="rating-bar__label">3★</span>
+                  <div class="rating-bar__track">
+                    <div class="rating-bar__fill" style="width: 10%"></div>
+                  </div>
+                  <span class="rating-bar__count">12</span>
+                </div>
+                <div class="rating-bar">
+                  <span class="rating-bar__label">2★</span>
+                  <div class="rating-bar__track">
+                    <div class="rating-bar__fill" style="width: 3%"></div>
+                  </div>
+                  <span class="rating-bar__count">4</span>
+                </div>
+                <div class="rating-bar">
+                  <span class="rating-bar__label">1★</span>
+                  <div class="rating-bar__track">
+                    <div class="rating-bar__fill" style="width: 2%"></div>
+                  </div>
+                  <span class="rating-bar__count">2</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Individual Reviews -->
+            <div class="reviews-enhanced">
+              <article class="review-card">
+                <div class="review-card__header">
+                  <div class="review-card__author">
+                    <span class="review-card__name">Sarah Mitchell</span>
+                    <div class="review-card__verified">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                        <path d="M7 0L9 5L14 6L10 10L11 14L7 12L3 14L4 10L0 6L5 5L7 0Z" stroke="currentColor" stroke-width="1" fill="none"/>
+                      </svg>
+                      Verified Purchase
+                    </div>
+                  </div>
+                  <time class="review-card__date">2 weeks ago</time>
+                </div>
+                <div class="review-card__content">
+                  <div class="rating-stars-enhanced">
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                  </div>
+                  <p class="review-card__text">
+                    Absolutely love these headphones! The sound quality is incredible and the
+                    noise cancellation works perfectly. I use them for my daily commute and
+                    they completely block out the train noise. Battery life is exactly as
+                    advertised - I charge them once a week. Worth every penny!
+                  </p>
+                  <div class="review-card__helpful">
+                    <span class="review-card__helpful-text">Was this helpful?</span>
+                    <div class="review-card__helpful-buttons">
+                      <button class="review-card__helpful-btn">Yes (23)</button>
+                      <button class="review-card__helpful-btn">No (1)</button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="review-card">
+                <div class="review-card__header">
+                  <div class="review-card__author">
+                    <span class="review-card__name">James Kim</span>
+                    <div class="review-card__verified">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                        <path d="M7 0L9 5L14 6L10 10L11 14L7 12L3 14L4 10L0 6L5 5L7 0Z" stroke="currentColor" stroke-width="1" fill="none"/>
+                      </svg>
+                      Verified Purchase
+                    </div>
+                  </div>
+                  <time class="review-card__date">1 month ago</time>
+                </div>
+                <div class="review-card__content">
+                  <div class="rating-stars-enhanced">
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced rating-star-enhanced--filled">★</span>
+                    <span class="rating-star-enhanced">★</span>
+                  </div>
+                  <p class="review-card__text">
+                    Great headphones for the price. Very comfortable for long wear, and the
+                    sound quality is excellent. The only minor issue is they're a bit bulky
+                    for travel, but the included carrying case helps. The ANC is effective
+                    but not as good as the premium brands that cost twice as much.
+                  </p>
+                  <div class="review-card__helpful">
+                    <span class="review-card__helpful-text">Was this helpful?</span>
+                    <div class="review-card__helpful-buttons">
+                      <button class="review-card__helpful-btn">Yes (15)</button>
+                      <button class="review-card__helpful-btn">No (3)</button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping & Returns Panel -->
+        <div class="tabs-enhanced__panel"
+             role="tabpanel"
+             id="panel-shipping"
+             aria-labelledby="tab-shipping">
+          <div class="content-section-enhanced">
+            <h2 class="content-section-enhanced__title">Shipping & Returns</h2>
+            <div class="content-section-enhanced__content">
+              <h3 style="font-size: var(--font-size-lg); margin-bottom: var(--space-3);">Shipping</h3>
+              <p class="content-section-enhanced__text">
+                Free standard shipping on all orders over $50. Express shipping available at checkout.
+                Orders are typically processed within 1-2 business days and delivered within 3-5 business days.
+              </p>
+
+              <h3 style="font-size: var(--font-size-lg); margin-bottom: var(--space-3); margin-top: var(--space-6);">Returns</h3>
+              <p class="content-section-enhanced__text">
+                30-day return policy for unused items in original packaging. Simply contact our
+                customer service team to initiate a return. Refunds are processed within 5-7 business days
+                after we receive the returned item.
+              </p>
+
+              <h3 style="font-size: var(--font-size-lg); margin-bottom: var(--space-3); margin-top: var(--space-6);">Warranty</h3>
+              <p class="content-section-enhanced__text">
+                All products come with a manufacturer's warranty. This product includes a 2-year warranty
+                covering defects in materials and workmanship. Extended warranty options available at purchase.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <section class="related-products">
+      <div class="related-products__header">
+        <h2 class="related-products__title">You Might Also Like</h2>
+        <a href="catalog.html" class="related-products__view-all">View All Products →</a>
+      </div>
+
+      <div class="related-products__grid">
+        <!-- Related Product 1 -->
+        <div class="product-card--enhanced">
+          <div class="product-card__image-container">
+            <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=400&fit=crop" alt="Premium Earbuds" class="product-card__image" loading="lazy">
+            <span class="product-card__badge product-card__badge--new">New</span>
+          </div>
+          <div class="product-card__content-enhanced">
+            <h3 class="product-card__title">Premium Wireless Earbuds</h3>
+            <div class="product-card__price-enhanced">
+              <span class="price-current">$89.99</span>
+            </div>
+            <a href="#" class="btn-enhanced btn-enhanced--secondary" style="width: 100%;">View Details</a>
+          </div>
+        </div>
+
+        <!-- Related Product 2 -->
+        <div class="product-card--enhanced">
+          <div class="product-card__image-container">
+            <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop" alt="Audio Cable" class="product-card__image" loading="lazy">
+          </div>
+          <div class="product-card__content-enhanced">
+            <h3 class="product-card__title">Premium Audio Cable</h3>
+            <div class="product-card__price-enhanced">
+              <span class="price-current">$24.99</span>
+            </div>
+            <a href="#" class="btn-enhanced btn-enhanced--secondary" style="width: 100%;">View Details</a>
+          </div>
+        </div>
+
+        <!-- Related Product 3 -->
+        <div class="product-card--enhanced">
+          <div class="product-card__image-container">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop" alt="Headphone Stand" class="product-card__image" loading="lazy">
+          </div>
+          <div class="product-card__content-enhanced">
+            <h3 class="product-card__title">Wooden Headphone Stand</h3>
+            <div class="product-card__price-enhanced">
+              <span class="price-current">$34.99</span>
+            </div>
+            <a href="#" class="btn-enhanced btn-enhanced--secondary" style="width: 100%;">View Details</a>
+          </div>
+        </div>
+
+        <!-- Related Product 4 -->
+        <div class="product-card--enhanced">
+          <div class="product-card__image-container">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop" alt="Portable Charger" class="product-card__image" loading="lazy">
+          </div>
+          <div class="product-card__content-enhanced">
+            <h3 class="product-card__title">Portable Charger</h3>
+            <div class="product-card__price-enhanced">
+              <span class="price-current">$49.99</span>
+            </div>
+            <a href="#" class="btn-enhanced btn-enhanced--secondary" style="width: 100%;">View Details</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__container">
+      <p class="footer__text">
+        Crafted with zen precision by <strong>Yuki "Interface"</strong> •
+        Powered by <strong>Vesper "Surge" Voltage</strong>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script src="enhanced-product-display-integrated.js"></script>
+</body>
+</html>

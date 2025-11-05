@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Products - Enhanced Trader Catalog</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="enhanced-catalog.css">
+  <style>
+    /* Base styles that extend design tokens */
+    body {
+      font-family: var(--font-family-base);
+      background: var(--color-neutral-50);
+      color: var(--color-neutral-900);
+      line-height: var(--line-height-normal);
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header - Breathing space at the top */
+    .header {
+      background: var(--color-neutral-0);
+      border-bottom: 1px solid var(--color-neutral-200);
+      padding: var(--space-6) 0;
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-6);
+    }
+
+    .header__logo {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .header__search {
+      flex: 1;
+      max-width: 480px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      transition: all var(--transition-base);
+      background: var(--color-neutral-50);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-primary-500);
+      background: var(--color-neutral-0);
+      box-shadow: 0 0 0 3px var(--color-primary-100);
+    }
+
+    .header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .header__action-btn {
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-neutral-100);
+      color: var(--color-neutral-700);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: var(--touch-target-min);
+    }
+
+    .header__action-btn:hover {
+      background: var(--color-primary-100);
+      color: var(--color-primary-700);
+      border-color: var(--color-primary-300);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header__action-btn--primary {
+      background: var(--color-primary-600);
+      color: var(--color-neutral-0);
+      border-color: var(--color-primary-600);
+    }
+
+    .header__action-btn--primary:hover {
+      background: var(--color-primary-700);
+      border-color: var(--color-primary-700);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--color-error-500);
+      color: var(--color-neutral-0);
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      border: 2px solid var(--color-neutral-0);
+    }
+
+    /* Main Layout */
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--space-8);
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      margin-bottom: var(--space-6);
+    }
+
+    .breadcrumb__list {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: var(--font-size-sm);
+    }
+
+    .breadcrumb__link {
+      color: var(--color-neutral-600);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .breadcrumb__link:hover {
+      color: var(--color-primary-600);
+    }
+
+    .breadcrumb__current {
+      color: var(--color-neutral-900);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .breadcrumb__separator {
+      color: var(--color-neutral-400);
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: var(--space-8);
+    }
+
+    .page-header__title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .page-header__subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-neutral-600);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* Mobile Layout */
+    @media (max-width: 1024px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .catalog-sidebar {
+        position: static;
+        order: 2;
+      }
+
+      .catalog-main {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header__container {
+        flex-wrap: wrap;
+        padding: var(--space-4);
+      }
+
+      .header__search {
+        order: 3;
+        flex-basis: 100%;
+        max-width: none;
+        margin-top: var(--space-4);
+      }
+
+      .catalog-layout {
+        padding: var(--space-6) var(--space-4);
+      }
+
+      .page-header__title {
+        font-size: var(--font-size-3xl);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header__actions {
+        gap: var(--space-2);
+      }
+
+      .header__action-btn {
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--font-size-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with search and cart -->
+  <header class="header">
+    <div class="header__container">
+      <a href="index.html" class="header__logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16L15 19L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Trader
+      </a>
+
+      <div class="header__search">
+        <input
+          type="search"
+          class="search-input"
+          placeholder="Search products..."
+          aria-label="Search products"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="header__actions">
+        <a href="auth.html" class="header__action-btn" title="Sign In">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <span class="header__action-text">Sign In</span>
+        </a>
+
+        <a href="checkout.html" class="header__action-btn header__action-btn--primary" title="Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8" cy="17" r="1" fill="currentColor"/>
+            <circle cx="14" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          <span class="header__action-text">Cart</span>
+          <span class="cart-badge" id="cart-count">3</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Catalog Layout -->
+  <div class="catalog-layout">
+    <!-- Sidebar Filters -->
+    <aside class="catalog-sidebar" role="complementary" aria-label="Product filters">
+      <!-- Categories -->
+      <div class="filter-section">
+        <h3 class="filter-title">Categories</h3>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" name="category" value="electronics">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Electronics</span>
+            <span class="filter-count">24</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="category" value="clothing">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Clothing</span>
+            <span class="filter-count">18</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="category" value="home">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Home & Garden</span>
+            <span class="filter-count">31</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="category" value="books">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Books</span>
+            <span class="filter-count">45</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="category" value="sports">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Sports</span>
+            <span class="filter-count">12</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Price Range -->
+      <div class="filter-section">
+        <h3 class="filter-title">Price Range</h3>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" name="price" value="0-25">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Under $25</span>
+            <span class="filter-count">38</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="price" value="25-50">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">$25 - $50</span>
+            <span class="filter-count">42</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="price" value="50-100">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">$50 - $100</span>
+            <span class="filter-count">29</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="price" value="100+">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Over $100</span>
+            <span class="filter-count">21</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="filter-section">
+        <h3 class="filter-title">Features</h3>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" name="feature" value="free-shipping">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Free Shipping</span>
+            <span class="filter-count">67</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="feature" value="eco-friendly">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">Eco-Friendly</span>
+            <span class="filter-count">23</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="feature" value="sale">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">On Sale</span>
+            <span class="filter-count">15</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="feature" value="new">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">New Arrivals</span>
+            <span class="filter-count">18</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Rating -->
+      <div class="filter-section">
+        <h3 class="filter-title">Customer Rating</h3>
+        <div class="filter-options">
+          <label class="filter-option">
+            <input type="checkbox" name="rating" value="4">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">★★★★☆ & Up</span>
+            <span class="filter-count">54</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="rating" value="3">
+            <span class="filter-checkbox"></span>
+            <span class="filter-label">★★★☆☆ & Up</span>
+            <span class="filter-count">89</span>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="catalog-main">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="index.html" class="breadcrumb__link">Home</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__separator">/</span>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">All Products</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-header__title">Browse Products</h1>
+        <p class="page-header__subtitle">
+          Discover our curated collection of quality items from trusted brands
+        </p>
+      </div>
+
+      <!-- Results Header -->
+      <div class="results-header">
+        <div class="results-count">
+          Showing <strong>24</strong> of <strong>130</strong> products
+        </div>
+        <div class="results-controls">
+          <select class="filter-select" aria-label="Sort products">
+            <option>Featured</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest First</option>
+            <option>Best Rating</option>
+            <option>Most Popular</option>
+          </select>
+          <div class="view-toggle" role="group" aria-label="View options">
+            <button class="view-btn view-btn--active" aria-label="Grid view" title="Grid view">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <rect x="3" y="3" width="6" height="6"/>
+                <rect x="11" y="3" width="6" height="6"/>
+                <rect x="3" y="11" width="6" height="6"/>
+                <rect x="11" y="11" width="6" height="6"/>
+              </svg>
+            </button>
+            <button class="view-btn" aria-label="List view" title="List view">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <rect x="3" y="4" width="14" height="2"/>
+                <rect x="3" y="9" width="14" height="2"/>
+                <rect x="3" y="14" width="14" height="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Product Grid -->
+      <div class="product-grid--enhanced" id="product-grid">
+        <!-- Product Card 1 - Enhanced -->
+        <article class="product-card--enhanced" data-product-id="1">
+          <!-- Compare Checkbox -->
+          <div class="product-card__compare">
+            <label class="compare-checkbox" title="Add to compare">
+              <input type="checkbox" class="visually-hidden">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <rect x="2" y="2" width="12" height="12" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <rect x="6" y="6" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+            </label>
+          </div>
+
+          <!-- Badges -->
+          <div class="product-card__badges">
+            <span class="product-card__badge product-card__badge--new">New</span>
+            <span class="product-card__badge product-card__badge--eco">Eco</span>
+          </div>
+
+          <!-- Image Container -->
+          <div class="product-card__image-container">
+            <div class="image-skeleton"></div>
+            <img
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&auto=format"
+              alt="Premium Wireless Headphones"
+              class="product-card__image"
+              loading="lazy"
+            >
+
+            <!-- Quick Actions -->
+            <div class="product-card__quick-actions">
+              <button class="quick-action-btn" aria-label="Quick view" title="Quick view">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </button>
+              <button class="quick-action-btn" aria-label="Add to wishlist" title="Add to wishlist">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10 17L3 10C1 8 1 5 3 3C5 1 8 1 10 3C12 1 15 1 17 3C19 5 19 8 17 10L10 17Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="product-card__content-enhanced">
+            <!-- Header -->
+            <div class="product-card__header">
+              <span class="product-card__category">Electronics</span>
+              <span class="product-card__sku">SKU: WH-001</span>
+            </div>
+
+            <!-- Title -->
+            <h2 class="product-card__title">Premium Wireless Headphones with Active Noise Cancellation</h2>
+
+            <!-- Description -->
+            <p class="product-card__description">
+              Experience crystal-clear audio with advanced noise cancellation technology.
+              Perfect for travel, work, or relaxation with 30-hour battery life.
+            </p>
+
+            <!-- Rating -->
+            <div class="product-card__rating-enhanced">
+              <div class="rating-stars">
+                <span class="rating-star">★</span>
+                <span class="rating-star">★</span>
+                <span class="rating-star">★</span>
+                <span class="rating-star">★</span>
+                <span class="rating-star rating-star--half">★</span>
+              </div>
+              <span class="rating-info">4.5 (124 reviews)</span>
+            </div>
+
+            <!-- Price -->
+            <div class="product-card__price-enhanced">
+              <span class="price-current">$129.99</span>
+              <span class="price-original">$199.99</span>
+              <span class="price-discount">Save 35%</span>
+            </div>
+
+            <!-- Shipping -->
+            <div class="product-card__shipping">
+              <svg class="shipping-icon" viewBox="0 0 12 12" fill="currentColor">
+                <path d="M1 6L4 3L7 6M4 3V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="9" cy="9" r="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              </svg>
+              Free shipping on orders over $50
+            </div>
+
+            <!-- Stock Status -->
+            <div class="product-card__stock">
+              <span class="stock-indicator stock-indicator--in-stock"></span>
+              <span>In Stock - Ships today</span>
+            </div>
+
+            <!-- Color Variations -->
+            <div class="product-card__variations">
+              <button class="variation-swatch variation-swatch--selected" style="background-color: #1a1a1a;" title="Midnight Black" aria-label="Midnight Black"></button>
+              <button class="variation-swatch" style="background-color: #e8e8e8;" title="Cloud White" aria-label="Cloud White"></button>
+              <button class="variation-swatch" style="background-color: #c0c0c0;" title="Silver" aria-label="Silver"></button>
+              <button class="variation-swatch variation-swatch--more" title="More colors">+2</button>
+            </div>
+
+            <!-- Actions -->
+            <div class="product-card__actions-enhanced">
+              <button class="btn-enhanced btn-enhanced--primary" onclick="addToCart(1)">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M2 2H4L5 10H13L15 4H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Add to Cart
+              </button>
+              <a href="product-display.html" class="btn-enhanced btn-enhanced--secondary" title="View details">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- More product cards would go here... -->
+        <!-- For brevity, I'll just add skeleton loading examples -->
+
+        <!-- Skeleton Loading Cards -->
+        <div class="product-skeleton" aria-hidden="true">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line skeleton-line--medium"></div>
+            <div class="skeleton-line skeleton-line--short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-line--tall"></div>
+            <div class="skeleton-line skeleton-line--short"></div>
+          </div>
+        </div>
+
+        <div class="product-skeleton" aria-hidden="true">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line skeleton-line--medium"></div>
+            <div class="skeleton-line skeleton-line--short"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-line--tall"></div>
+            <div class="skeleton-line skeleton-line--short"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div style="text-align: center; margin-top: var(--space-12);">
+        <button class="btn-enhanced btn-enhanced--primary" style="max-width: 300px; width: 100%;" onclick="loadMoreProducts()">
+          Load More Products
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script src="enhanced-catalog-integrated.js"></script>
+</body>
+</html>

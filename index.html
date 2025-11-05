@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trader - Modern Shop Experience</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <style>
+    /* Full Shop Layout */
+    body {
+      background: linear-gradient(to bottom, var(--color-neutral-0), var(--color-primary-50));
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Header Navigation */
+    .shop-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-neutral-200);
+      z-index: var(--z-sticky);
+      transition: all var(--transition-base);
+    }
+
+    .shop-header__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .shop-header__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--color-neutral-900);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-xl);
+    }
+
+    .shop-header__logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .shop-header__nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .shop-header__nav-link {
+      text-decoration: none;
+      color: var(--color-neutral-700);
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-sm);
+      transition: color var(--transition-base);
+      position: relative;
+    }
+
+    .shop-header__nav-link:hover {
+      color: var(--color-primary-600);
+    }
+
+    .shop-header__nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-primary-500);
+      transition: width var(--transition-base);
+    }
+
+    .shop-header__nav-link:hover::after {
+      width: 100%;
+    }
+
+    .shop-header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .shop-header__action-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--color-neutral-100);
+      border-radius: var(--radius-full);
+      color: var(--color-neutral-700);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shop-header__action-btn:hover {
+      background: var(--color-primary-100);
+      color: var(--color-primary-700);
+    }
+
+    .shop-header__cart-btn {
+      position: relative;
+    }
+
+    .shop-header__cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--color-accent-500);
+      color: white;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* Mobile Menu */
+    .shop-header__mobile-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shop-header__mobile-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--color-neutral-700);
+      transition: all var(--transition-base);
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-top: 72px;
+      padding: var(--space-20) 0;
+      background: linear-gradient(135deg, var(--color-primary-100) 0%, var(--color-neutral-0) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(circle, var(--color-accent-100) 0%, transparent 70%);
+      opacity: 0.5;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    .hero__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero__content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero__text {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-accent-100);
+      color: var(--color-accent-700);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero__title {
+      font-size: var(--font-size-5xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-4);
+      line-height: var(--line-height-tight);
+    }
+
+    .hero__subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-8);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: var(--space-3) var(--space-6);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      transition: all var(--transition-base);
+      cursor: pointer;
+      font-size: var(--font-size-base);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .btn--primary {
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn--secondary {
+      background: var(--color-neutral-0);
+      color: var(--color-neutral-900);
+      border: 2px solid var(--color-neutral-200);
+    }
+
+    .btn--secondary:hover {
+      background: var(--color-neutral-50);
+      border-color: var(--color-primary-300);
+    }
+
+    .hero__image {
+      position: relative;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero__image-placeholder {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, var(--color-primary-200), var(--color-accent-200));
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-700);
+      font-size: var(--font-size-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero__image-placeholder::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    /* Featured Products */
+    .featured-products {
+      padding: var(--space-16) 0;
+      background: var(--color-neutral-0);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .section-title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .section-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-neutral-600);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    .product-card {
+      background: var(--color-neutral-0);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      transition: all var(--transition-base);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .product-card:nth-child(1) { animation-delay: 0.1s; }
+    .product-card:nth-child(2) { animation-delay: 0.2s; }
+    .product-card:nth-child(3) { animation-delay: 0.3s; }
+    .product-card:nth-child(4) { animation-delay: 0.4s; }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--color-primary-300);
+    }
+
+    .product-card__image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--color-primary-100), var(--color-neutral-100));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-500);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card__badge {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      background: var(--color-accent-500);
+      color: white;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .product-card__content {
+      padding: var(--space-5);
+    }
+
+    .product-card__category {
+      font-size: var(--font-size-xs);
+      color: var(--color-primary-600);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: var(--space-2);
+    }
+
+    .product-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .product-card__description {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-4);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .product-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-card__price {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+    }
+
+    .product-card__action {
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-primary-500);
+      color: white;
+      border: none;
+      border-radius: var(--radius-base);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      font-size: var(--font-size-sm);
+    }
+
+    .product-card__action:hover {
+      background: var(--color-primary-600);
+      transform: scale(1.05);
+    }
+
+    /* Categories */
+    .categories {
+      padding: var(--space-16) 0;
+      background: var(--color-primary-50);
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .category-card {
+      background: var(--color-neutral-0);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      text-align: center;
+      text-decoration: none;
+      color: var(--color-neutral-900);
+      transition: all var(--transition-base);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.2s; }
+    .category-card:nth-child(3) { animation-delay: 0.3s; }
+    .category-card:nth-child(4) { animation-delay: 0.4s; }
+    .category-card:nth-child(5) { animation-delay: 0.5s; }
+    .category-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .category-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--color-primary-300);
+    }
+
+    .category-card__icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
+      border-radius: var(--radius-xl);
+      margin: 0 auto var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary-600);
+    }
+
+    .category-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin-bottom: var(--space-2);
+    }
+
+    .category-card__count {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+    }
+
+    /* Promotional Banners */
+    .promotions {
+      padding: var(--space-16) 0;
+      background: var(--color-neutral-0);
+    }
+
+    .promotions-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .promo-banner {
+      background: linear-gradient(135deg, var(--color-accent-100), var(--color-accent-50));
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .promo-banner--primary {
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      color: white;
+    }
+
+    .promo-banner--secondary {
+      background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-50));
+    }
+
+    .promo-banner__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .promo-banner__title {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-3);
+    }
+
+    .promo-banner__description {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-6);
+      opacity: 0.9;
+    }
+
+    .promo-banner__action {
+      background: white;
+      color: var(--color-primary-700);
+      padding: var(--space-3) var(--space-6);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .promo-banner__action:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Trust Signals */
+    .trust {
+      padding: var(--space-16) 0;
+      background: var(--color-neutral-50);
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    .trust-item {
+      text-align: center;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .trust-item:nth-child(1) { animation-delay: 0.1s; }
+    .trust-item:nth-child(2) { animation-delay: 0.2s; }
+    .trust-item:nth-child(3) { animation-delay: 0.3s; }
+    .trust-item:nth-child(4) { animation-delay: 0.4s; }
+
+    .trust-item__icon {
+      width: 48px;
+      height: 48px;
+      background: var(--color-primary-100);
+      border-radius: var(--radius-full);
+      margin: 0 auto var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary-600);
+    }
+
+    .trust-item__title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .trust-item__description {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: var(--space-16) 0;
+      background: var(--color-neutral-0);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .testimonial-card {
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+    .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+    .testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .testimonial-card__rating {
+      display: flex;
+      gap: var(--space-1);
+      margin-bottom: var(--space-4);
+    }
+
+    .testimonial-card__text {
+      font-size: var(--font-size-base);
+      color: var(--color-neutral-700);
+      margin-bottom: var(--space-4);
+      line-height: var(--line-height-relaxed);
+      font-style: italic;
+    }
+
+    .testimonial-card__author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .testimonial-card__avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary-200);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary-700);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .testimonial-card__info {
+      flex: 1;
+    }
+
+    .testimonial-card__name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+    }
+
+    .testimonial-card__role {
+      font-size: var(--font-size-xs);
+      color: var(--color-neutral-600);
+    }
+
+    /* Newsletter */
+    .newsletter {
+      padding: var(--space-16) 0;
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .newsletter__container {
+      max-width: var(--container-lg);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .newsletter__title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-3);
+    }
+
+    .newsletter__description {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-8);
+      opacity: 0.9;
+    }
+
+    .newsletter__form {
+      display: flex;
+      gap: var(--space-4);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .newsletter__input {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: var(--font-size-base);
+      transition: all var(--transition-base);
+    }
+
+    .newsletter__input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .newsletter__input:focus {
+      outline: none;
+      border-color: white;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .newsletter__button {
+      padding: var(--space-3) var(--space-6);
+      background: white;
+      color: var(--color-primary-700);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .newsletter__button:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Footer */
+    .shop-footer {
+      background: var(--color-neutral-900);
+      color: var(--color-neutral-300);
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .shop-footer__container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .shop-footer__content {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    .shop-footer__brand {
+      max-width: 300px;
+    }
+
+    .shop-footer__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+
+    .shop-footer__logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .shop-footer__logo-text {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: white;
+    }
+
+    .shop-footer__description {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--space-4);
+    }
+
+    .shop-footer__social {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    .shop-footer__social-link {
+      width: 40px;
+      height: 40px;
+      background: var(--color-neutral-800);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-400);
+      text-decoration: none;
+      transition: all var(--transition-base);
+    }
+
+    .shop-footer__social-link:hover {
+      background: var(--color-primary-500);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .shop-footer__column h4 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: white;
+      margin-bottom: var(--space-4);
+    }
+
+    .shop-footer__links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .shop-footer__link {
+      color: var(--color-neutral-400);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color var(--transition-base);
+    }
+
+    .shop-footer__link:hover {
+      color: var(--color-primary-400);
+    }
+
+    .shop-footer__bottom {
+      border-top: 1px solid var(--color-neutral-800);
+      padding-top: var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shop-footer__copyright {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-500);
+    }
+
+    .shop-footer__payments {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .shop-footer__payment {
+      width: 32px;
+      height: 20px;
+      background: var(--color-neutral-800);
+      border-radius: var(--radius-base);
+    }
+
+    /* Container */
+    .container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .shop-header__nav,
+      .shop-header__actions {
+        display: none;
+      }
+
+      .shop-header__mobile-toggle {
+        display: flex;
+      }
+
+      .hero__content {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+
+      .hero__title {
+        font-size: var(--font-size-3xl);
+      }
+
+      .hero__actions {
+        justify-content: center;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .promotions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .shop-footer__content {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+      }
+
+      .shop-footer__bottom {
+        flex-direction: column;
+        gap: var(--space-4);
+        text-align: center;
+      }
+
+      .newsletter__form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header class="shop-header">
+    <div class="shop-header__container">
+      <a href="#" class="shop-header__logo">
+        <div class="shop-header__logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span>Trader</span>
+      </a>
+
+      <nav class="shop-header__nav">
+        <a href="#featured" class="shop-header__nav-link">Featured</a>
+        <a href="#categories" class="shop-header__nav-link">Categories</a>
+        <a href="#promotions" class="shop-header__nav-link">Deals</a>
+        <a href="#about" class="shop-header__nav-link">About</a>
+      </nav>
+
+      <div class="shop-header__actions">
+        <a href="auth.html" class="shop-header__action-btn" title="Sign In">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </a>
+        <a href="checkout.html" class="shop-header__action-btn shop-header__cart-btn" title="View Cart">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="shop-header__cart-count">3</span>
+        </a>
+      </div>
+
+      <button class="shop-header__mobile-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero__container">
+      <div class="hero__content">
+        <div class="hero__text">
+          <div class="hero__badge">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z" fill="currentColor"/>
+            </svg>
+            New Collection 2024
+          </div>
+          <h1 class="hero__title">Discover Premium Quality Products</h1>
+          <p class="hero__subtitle">
+            Experience the perfect blend of craftsmanship and innovation. Curated selection for the discerning customer.
+          </p>
+          <div class="hero__actions">
+            <a href="catalog.html" class="btn btn--primary">
+              Shop Now
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="#featured" class="btn btn--secondary">
+              View Catalog
+            </a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <div class="hero__image-placeholder">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <rect x="20" y="20" width="40" height="40" rx="8" stroke="currentColor" stroke-width="2"/>
+              <circle cx="40" cy="40" r="12" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-products" id="featured">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <p class="section-subtitle">Handpicked items from our premium collection</p>
+      </div>
+      <div class="products-grid">
+        <article class="product-card">
+          <div class="product-card__image">
+            <span class="product-card__badge">Bestseller</span>
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <rect x="15" y="15" width="30" height="30" rx="6" stroke="currentColor" stroke-width="2"/>
+              <circle cx="30" cy="30" r="8" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__category">Electronics</div>
+            <h3 class="product-card__title">Premium Wireless Headphones</h3>
+            <p class="product-card__description">Crystal clear audio with active noise cancellation and 30-hour battery life.</p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$299</span>
+              <button class="product-card__action">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <div class="product-card__image">
+            <span class="product-card__badge">New</span>
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <path d="M30 15L35 25L45 27L37.5 35L40 45L30 40L20 45L22.5 35L15 27L25 25L30 15Z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__category">Home & Living</div>
+            <h3 class="product-card__title">Smart Home Hub</h3>
+            <p class="product-card__description">Control your entire home ecosystem with voice commands and automation.</p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$199</span>
+              <button class="product-card__action">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <div class="product-card__image">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <circle cx="30" cy="30" r="20" stroke="currentColor" stroke-width="2"/>
+              <path d="M30 20v20M20 30h20" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__category">Fashion</div>
+            <h3 class="product-card__title">Minimalist Watch Collection</h3>
+            <p class="product-card__description">Timeless design meets modern functionality in our signature timepieces.</p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$449</span>
+              <button class="product-card__action">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card">
+          <div class="product-card__image">
+            <span class="product-card__badge">Limited</span>
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <rect x="20" y="20" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="30" cy="30" r="6" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="product-card__content">
+            <div class="product-card__category">Wellness</div>
+            <h3 class="product-card__title">Yoga & Meditation Set</h3>
+            <p class="product-card__description">Premium yoga mat, blocks, and guided meditation for inner peace.</p>
+            <div class="product-card__footer">
+              <span class="product-card__price">$129</span>
+              <button class="product-card__action">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div style="text-align: center;">
+        <a href="catalog.html" class="btn btn--secondary">View All Products</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="categories" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+        <p class="section-subtitle">Find exactly what you're looking for</p>
+      </div>
+      <div class="categories-grid">
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="8" y="8" width="16" height="16" rx="4" stroke="currentColor" stroke-width="2"/>
+              <circle cx="16" cy="16" r="4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Electronics</h3>
+          <p class="category-card__count">245 products</p>
+        </a>
+
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M16 8l8 8-8 8-8-8 8-8z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Fashion</h3>
+          <p class="category-card__count">189 products</p>
+        </a>
+
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="6" y="12" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M10 12V8c0-3.3 2.7-6 6-6s6 2.7 6 6v4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Home & Living</h3>
+          <p class="category-card__count">367 products</p>
+        </a>
+
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 10v6l4 4" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Sports</h3>
+          <p class="category-card__count">156 products</p>
+        </a>
+
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M8 16h16M16 8v16" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Wellness</h3>
+          <p class="category-card__count">98 products</p>
+        </a>
+
+        <a href="catalog.html" class="category-card">
+          <div class="category-card__icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <rect x="10" y="10" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+              <circle cx="16" cy="16" r="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="category-card__title">Accessories</h3>
+          <p class="category-card__count">274 products</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promotional Banners -->
+  <section class="promotions" id="promotions">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Special Offers</h2>
+        <p class="section-subtitle">Limited time deals you don't want to miss</p>
+      </div>
+      <div class="promotions-grid">
+        <div class="promo-banner promo-banner--primary">
+          <div class="promo-banner__content">
+            <h3 class="promo-banner__title">Summer Sale Event</h3>
+            <p class="promo-banner__description">
+              Up to 50% off on selected items. Premium quality at unbeatable prices for a limited time.
+            </p>
+            <button class="promo-banner__action">Shop Sale</button>
+          </div>
+        </div>
+        <div class="promo-banner promo-banner--secondary">
+          <div class="promo-banner__content">
+            <h3 class="promo-banner__title">Free Shipping</h3>
+            <p class="promo-banner__description">
+              On all orders over $100. No code needed.
+            </p>
+            <button class="promo-banner__action">Learn More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Signals -->
+  <section class="trust">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose Trader</h2>
+        <p class="section-subtitle">Quality, service, and reliability you can trust</p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="trust-item__title">Secure Shopping</h3>
+          <p class="trust-item__description">Bank-level security for all transactions and data protection</p>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="trust-item__title">Expert Support</h3>
+          <p class="trust-item__description">Dedicated customer service team available 24/7</p>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="trust-item__title">Fast Delivery</h3>
+          <p class="trust-item__description">Quick shipping with real-time tracking updates</p>
+        </div>
+
+        <div class="trust-item">
+          <div class="trust-item__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3 class="trust-item__title">Easy Returns</h3>
+          <p class="trust-item__description">30-day return policy for your peace of mind</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <p class="section-subtitle">Real experiences from verified buyers</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-card__rating">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+          </div>
+          <p class="testimonial-card__text">
+            "Absolutely love the quality and attention to detail. The shipping was fast and the customer service team went above and beyond to help me with my order."
+          </p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">SJ</div>
+            <div class="testimonial-card__info">
+              <div class="testimonial-card__name">Sarah Johnson</div>
+              <div class="testimonial-card__role">Verified Buyer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-card__rating">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+          </div>
+          <p class="testimonial-card__text">
+            "The minimalist design philosophy really shines through in every product. It's refreshing to find a store that values simplicity and quality over flashy trends."
+          </p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">MC</div>
+            <div class="testimonial-card__info">
+              <div class="testimonial-card__name">Michael Chen</div>
+              <div class="testimonial-card__role">Regular Customer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-card__rating">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0l2.4 4.8L16 5.6l-3.2 3.2L13.6 16 8 12.4 2.4 16l.8-7.2L0 5.6l5.6-.8L8 0z"/>
+            </svg>
+          </div>
+          <p class="testimonial-card__text">
+            "I've been a customer for over a year now and the quality consistently exceeds expectations. The attention to packaging and the unboxing experience is unmatched."
+          </p>
+          <div class="testimonial-card__author">
+            <div class="testimonial-card__avatar">EP</div>
+            <div class="testimonial-card__info">
+              <div class="testimonial-card__name">Emma Parker</div>
+              <div class="testimonial-card__role">Premium Member</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="newsletter__container">
+      <h2 class="newsletter__title">Stay in the Loop</h2>
+      <p class="newsletter__description">
+        Get exclusive offers, new product announcements, and insider tips delivered to your inbox
+      </p>
+      <form class="newsletter__form" onsubmit="handleNewsletterSubmit(event)">
+        <input
+          type="email"
+          class="newsletter__input"
+          placeholder="Enter your email address"
+          required
+        >
+        <button type="submit" class="newsletter__button">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="shop-footer" id="about">
+    <div class="shop-footer__container">
+      <div class="shop-footer__content">
+        <div class="shop-footer__brand">
+          <div class="shop-footer__logo">
+            <div class="shop-footer__logo-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="shop-footer__logo-text">Trader</span>
+          </div>
+          <p class="shop-footer__description">
+            A modern ecommerce experience crafted with zen precision. Discover premium quality products with minimalist design philosophy.
+          </p>
+          <div class="shop-footer__social">
+            <a href="#" class="shop-footer__social-link">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </a>
+            <a href="#" class="shop-footer__social-link">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M19 3a7.5 7.5 0 01-2.1 1.1A4 4 0 0014.5 2a4 4 0 00-4 4v1A9.5 9.5 0 011 4.5S4 7 8 9.5a10 10 0 01-5-1.5 4 4 0 003.5 2.5 4 4 0 01-1.8.1 4 4 0 003.7 2.8A8 8 0 011 18a11.5 11.5 0 006.3 1.8" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </a>
+            <a href="#" class="shop-footer__social-link">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <rect x="2" y="2" width="16" height="16" rx="4" stroke="currentColor" stroke-width="2"/>
+                <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                <circle cx="15" cy="5" r="1" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="shop-footer__column">
+          <h4>Shop</h4>
+          <div class="shop-footer__links">
+            <a href="catalog.html" class="shop-footer__link">All Products</a>
+            <a href="#featured" class="shop-footer__link">Featured Items</a>
+            <a href="#promotions" class="shop-footer__link">Special Offers</a>
+            <a href="product-display.html" class="shop-footer__link">New Arrivals</a>
+          </div>
+        </div>
+
+        <div class="shop-footer__column">
+          <h4>Support</h4>
+          <div class="shop-footer__links">
+            <a href="#" class="shop-footer__link">Help Center</a>
+            <a href="#" class="shop-footer__link">Shipping Info</a>
+            <a href="#" class="shop-footer__link">Returns</a>
+            <a href="#" class="shop-footer__link">Contact Us</a>
+          </div>
+        </div>
+
+        <div class="shop-footer__column">
+          <h4>Company</h4>
+          <div class="shop-footer__links">
+            <a href="#" class="shop-footer__link">About Us</a>
+            <a href="#" class="shop-footer__link">Sustainability</a>
+            <a href="#" class="shop-footer__link">Careers</a>
+            <a href="admin-panel.html" class="shop-footer__link">Admin Portal</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="shop-footer__bottom">
+        <div class="shop-footer__copyright">
+          <p>&copy; 2024 Trader. Crafted with zen precision by Yuki "Interface". All rights reserved.</p>
+        </div>
+        <div class="shop-footer__payments">
+          <div class="shop-footer__payment"></div>
+          <div class="shop-footer__payment"></div>
+          <div class="shop-footer__payment"></div>
+          <div class="shop-footer__payment"></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script>
+    // Shop Landing Page Interactions
+    class ShopLandingInteractions {
+      constructor() {
+        this.initScrollEffects();
+        this.initProductInteractions();
+        this.initNavigation();
+        this.initAnimations();
+        this.initNewsletter();
+        this.initCart();
+        this.initSmoothScroll();
+      }
+
+      initScrollEffects() {
+        // Header scroll effect
+        let lastScrollY = window.scrollY;
+        const header = document.querySelector('.shop-header');
+
+        const handleScroll = () => {
+          const currentScrollY = window.scrollY;
+
+          if (currentScrollY > 100) {
+            header.style.background = 'rgba(255, 255, 255, 0.98)';
+            header.style.boxShadow = 'var(--shadow-md)';
+          } else {
+            header.style.background = 'rgba(255, 255, 255, 0.95)';
+            header.style.boxShadow = 'none';
+          }
+
+          lastScrollY = currentScrollY;
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+      }
+
+      initProductInteractions() {
+        // Product card hover effects
+        const productCards = document.querySelectorAll('.product-card');
+
+        productCards.forEach(card => {
+          const actionBtn = card.querySelector('.product-card__action');
+
+          card.addEventListener('mouseenter', () => {
+            actionBtn.style.transform = 'scale(1.05)';
+          });
+
+          card.addEventListener('mouseleave', () => {
+            actionBtn.style.transform = 'scale(1)';
+          });
+
+          actionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.addToCart(card);
+          });
+        });
+
+        // Category card effects
+        const categoryCards = document.querySelectorAll('.category-card');
+        categoryCards.forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            const icon = card.querySelector('.category-card__icon');
+            icon.style.transform = 'scale(1.1) rotate(5deg)';
+          });
+
+          card.addEventListener('mouseleave', () => {
+            const icon = card.querySelector('.category-card__icon');
+            icon.style.transform = 'scale(1) rotate(0deg)';
+          });
+        });
+      }
+
+      initNavigation() {
+        // Smooth scroll to sections
+        const navLinks = document.querySelectorAll('.shop-header__nav-link');
+        navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+
+            if (targetSection) {
+              const headerHeight = document.querySelector('.shop-header').offsetHeight;
+              const targetPosition = targetSection.offsetTop - headerHeight;
+
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          });
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.shop-header__mobile-toggle');
+        let isMenuOpen = false;
+
+        mobileToggle.addEventListener('click', () => {
+          isMenuOpen = !isMenuOpen;
+          // Mobile menu implementation would go here
+          console.log('Mobile menu toggled:', isMenuOpen);
+        });
+      }
+
+      initAnimations() {
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = '1';
+              entry.target.style.transform = 'translateY(0)';
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '50px'
+        });
+
+        // Observe all animated elements
+        document.querySelectorAll('.product-card, .category-card, .trust-item, .testimonial-card, .promo-banner').forEach(el => {
+          observer.observe(el);
+        });
+      }
+
+      initNewsletter() {
+        // Form submission is handled by inline handler
+        window.handleNewsletterSubmit = (e) => {
+          e.preventDefault();
+          const email = e.target.querySelector('input[type="email"]').value;
+
+          // Show success message
+          const form = e.target;
+          const originalContent = form.innerHTML;
+          form.innerHTML = `
+            <div style="padding: var(--space-4); background: rgba(255,255,255,0.2); border-radius: var(--radius-lg); color: white;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin: 0 auto var(--space-2); display: block;">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <div style="font-weight: var(--font-weight-semibold);">Thank you for subscribing!</div>
+              <div style="font-size: var(--font-size-sm); opacity: 0.9;">Check ${email} for confirmation</div>
+            </div>
+          `;
+
+          setTimeout(() => {
+            form.innerHTML = originalContent;
+            form.querySelector('input[type="email"]').value = '';
+          }, 5000);
+        };
+      }
+
+      initCart() {
+        // Cart functionality
+        let cartCount = 3; // Initial cart count
+
+        window.addToCart = (productCard) => {
+          const productName = productCard.querySelector('.product-card__title').textContent;
+          const button = productCard.querySelector('.product-card__action');
+
+          // Update button state
+          const originalText = button.textContent;
+          button.textContent = 'Added!';
+          button.style.background = 'var(--color-success)';
+
+          // Update cart count
+          cartCount++;
+          document.querySelector('.shop-header__cart-count').textContent = cartCount;
+
+          // Animate cart icon
+          const cartIcon = document.querySelector('.shop-header__cart-btn');
+          cartIcon.style.transform = 'scale(1.2)';
+          setTimeout(() => {
+            cartIcon.style.transform = 'scale(1)';
+          }, 300);
+
+          // Reset button after delay
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = '';
+          }, 2000);
+
+          console.log(`Added to cart: ${productName}`);
+        };
+      }
+
+      initSmoothScroll() {
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          });
+        });
+      }
+    }
+
+    // Initialize shop interactions
+    const shopLanding = new ShopLandingInteractions();
+
+    // Welcome message
+    console.log('%c🌸 Trader Shop Experience', 'font-size: 20px; color: #3c6357; font-weight: bold;');
+    console.log('%cModern ecommerce crafted with zen precision by Yuki "Interface"', 'font-style: italic; color: #666;');
+    console.log('%cShop landing page loaded with smooth interactions and animations', 'font-size: 12px; color: #999;');
+  </script>
+</body>
+</html>

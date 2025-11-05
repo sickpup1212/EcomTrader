@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Trader</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <style>
+    /* Auth Page - Digital Meditation Experience */
+    body {
+      background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-neutral-0) 50%, var(--color-secondary-50) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      font-family: var(--font-family-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle background elements like raked sand */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, var(--color-primary-100) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, var(--color-secondary-100) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, var(--color-accent-50) 0%, transparent 60%);
+      opacity: 0.4;
+      animation: breathe 8s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.02); }
+    }
+
+    /* Floating elements like cherry blossoms */
+    .floating-element {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--color-primary-200);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+    .floating-element:nth-child(2) { top: 60%; right: 15%; animation-delay: 3s; }
+    .floating-element:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 6s; }
+    .floating-element:nth-child(4) { top: 40%; right: 25%; animation-delay: 9s; }
+    .floating-element:nth-child(5) { bottom: 20%; right: 40%; animation-delay: 12s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(120deg); }
+      66% { transform: translateY(10px) rotate(240deg); }
+    }
+
+    /* Auth Container - A meditation space */
+    .auth-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-xl);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.8),
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px var(--color-primary-100);
+      width: 100%;
+      max-width: 480px;
+      padding: var(--space-12);
+      position: relative;
+      z-index: 1;
+      border: 1px solid var(--color-primary-100);
+    }
+
+    /* Logo Section - Center of harmony */
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--space-10);
+    }
+
+    .auth-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .auth-logo__icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(60, 99, 87, 0.2);
+    }
+
+    .auth-logo__text {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+    }
+
+    .auth-title {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+      line-height: var(--line-height-tight);
+    }
+
+    .auth-subtitle {
+      font-size: var(--font-size-base);
+      color: var(--color-neutral-600);
+      line-height: var(--line-height-relaxed);
+    }
+
+    /* Form Elements - Clean and purposeful */
+    .auth-form {
+      margin-bottom: var(--space-8);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-6);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-neutral-700);
+      margin-bottom: var(--space-2);
+      text-align: left;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      background: var(--color-neutral-0);
+      transition: all var(--transition-base);
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px var(--color-primary-100);
+      background: var(--color-neutral-0);
+    }
+
+    .form-input::placeholder {
+      color: var(--color-neutral-400);
+    }
+
+    /* Password input with show/hide */
+    .password-group {
+      position: relative;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: var(--space-4);
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--color-neutral-500);
+      cursor: pointer;
+      padding: var(--space-1);
+      border-radius: var(--radius-base);
+      transition: color var(--transition-base);
+    }
+
+    .password-toggle:hover {
+      color: var(--color-primary-600);
+    }
+
+    /* Remember me and forgot password */
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-8);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .checkbox-input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--color-primary-600);
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .forgot-link {
+      font-size: var(--font-size-sm);
+      color: var(--color-primary-600);
+      text-decoration: none;
+      transition: color var(--transition-base);
+    }
+
+    .forgot-link:hover {
+      color: var(--color-primary-700);
+      text-decoration: underline;
+    }
+
+    /* Submit Button - The action with purpose */
+    .auth-button {
+      width: 100%;
+      padding: var(--space-4) var(--space-6);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      color: white;
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      box-shadow: 0 4px 12px rgba(60, 99, 87, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(60, 99, 87, 0.4);
+    }
+
+    .auth-button:active {
+      transform: translateY(0);
+    }
+
+    /* Divider - Peaceful separation */
+    .auth-divider {
+      position: relative;
+      text-align: center;
+      margin: var(--space-8) 0;
+    }
+
+    .auth-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--color-neutral-200);
+    }
+
+    .auth-divider-text {
+      background: var(--color-neutral-0);
+      padding: 0 var(--space-4);
+      color: var(--color-neutral-500);
+      font-size: var(--font-size-sm);
+      position: relative;
+    }
+
+    /* Social Login - Gentle alternatives */
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+    }
+
+    .social-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-lg);
+      background: var(--color-neutral-0);
+      color: var(--color-neutral-700);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      text-decoration: none;
+    }
+
+    .social-button:hover {
+      background: var(--color-neutral-50);
+      border-color: var(--color-neutral-400);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+    }
+
+    /* Switch Mode - Gentle transition */
+    .auth-switch {
+      text-align: center;
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--color-neutral-100);
+    }
+
+    .auth-switch-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-2);
+    }
+
+    .auth-switch-link {
+      color: var(--color-primary-600);
+      text-decoration: none;
+      font-weight: var(--font-weight-medium);
+      transition: color var(--transition-base);
+    }
+
+    .auth-switch-link:hover {
+      color: var(--color-primary-700);
+      text-decoration: underline;
+    }
+
+    /* Back to shop - Gentle exit */
+    .auth-back {
+      text-align: center;
+      margin-top: var(--space-6);
+    }
+
+    .auth-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-neutral-500);
+      text-decoration: none;
+      font-size: var(--font-size-sm);
+      transition: color var(--transition-base);
+    }
+
+    .auth-back-link:hover {
+      color: var(--color-primary-600);
+    }
+
+    /* Form States */
+    .form-input.error {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-input.success {
+      border-color: var(--color-success);
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+    }
+
+    .form-message {
+      font-size: var(--font-size-sm);
+      margin-top: var(--space-2);
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .form-message.error {
+      color: var(--color-error);
+    }
+
+    .form-message.success {
+      color: var(--color-success);
+    }
+
+    /* Loading State */
+    .auth-button.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Success State */
+    .auth-success {
+      display: none;
+      text-align: center;
+      padding: var(--space-8);
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--color-success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+      color: white;
+    }
+
+    .success-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .success-message {
+      font-size: var(--font-size-base);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-6);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .auth-container {
+        padding: var(--space-8) var(--space-6);
+        margin: var(--space-4);
+      }
+
+      .auth-title {
+        font-size: var(--font-size-2xl);
+      }
+
+      .form-options {
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: flex-start;
+      }
+
+      .social-login {
+        gap: var(--space-2);
+      }
+    }
+
+    /* Respect user preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .floating-element {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating zen elements -->
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+  <div class="floating-element"></div>
+
+  <!-- Auth Container - A space for digital meditation -->
+  <main class="auth-container">
+    <!-- Login Form -->
+    <div class="auth-form-container" id="login-form">
+      <!-- Header -->
+      <header class="auth-header">
+        <div class="auth-logo">
+          <div class="auth-logo__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="auth-logo__text">Trader</span>
+        </div>
+
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">
+          Enter your space of tranquility to continue your shopping journey
+        </p>
+      </header>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form-element">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="name@example.com"
+            required
+            autocomplete="email"
+          >
+          <div class="form-message" id="email-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="password-group">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="password-toggle" id="password-toggle">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="form-message" id="password-message"></div>
+        </div>
+
+        <div class="form-options">
+          <div class="checkbox-group">
+            <input type="checkbox" id="remember" name="remember" class="checkbox-input">
+            <label for="remember" class="checkbox-label">Remember me</label>
+          </div>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="auth-button" id="login-button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Sign In
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="auth-divider">
+        <span class="auth-divider-text">or continue with</span>
+      </div>
+
+      <!-- Social Login -->
+      <div class="social-login">
+        <button type="button" class="social-button" id="google-login">
+          <svg class="social-icon" viewBox="0 0 20 20">
+            <path d="M10 4.75c-1.47 0-2.75.81-3.45 2h6.9c-.7-1.19-1.98-2-3.45-2z" fill="#EA4335"/>
+            <path d="M10 4.75v3.5h3.5c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5 1.57-3.5 3.5-3.5v-3.5c-3.86 0-7 3.14-7 7s3.14 7 7 7 7-3.14 7-7h-3.5z" fill="#4285F4"/>
+            <path d="M10 15.25c1.47 0 2.75-.81 3.45-2h-6.9c.7 1.19 1.98 2 3.45 2z" fill="#34A853"/>
+            <path d="M6.55 11.75h6.9c.2-.34.31-.73.31-1.25h-7.5c0 .52.11.91.31 1.25z" fill="#FBBC05"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <button type="button" class="social-button" id="apple-login">
+          <svg class="social-icon" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M14.94 10.28c0-1.26.69-2.31 1.82-2.84-1.15-1.67-2.93-2.65-4.93-2.65-.71 0-1.42.14-2.11.39-.68.25-1.33.6-1.94 1.04-.61.44-1.17.96-1.67 1.55-.5.59-.92 1.23-1.26 1.91-.34.68-.6 1.4-.78 2.13-.18.73-.27 1.48-.27 2.23v2.25c0 .41.34.75.75.75h1.5c.41 0 .75-.34.75-.75v-2.25c0-1.24.35-2.45 1.01-3.49.66-1.04 1.59-1.87 2.71-2.4.26-.13.42-.39.42-.68 0-.21-.08-.41-.23-.56-.15-.15-.35-.23-.56-.23zm-3.69 3.47c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h3c.41 0 .75.34.75.75s-.34.75-.75.75h-3z"/>
+          </svg>
+          Continue with Apple
+        </button>
+      </div>
+
+      <!-- Switch to Sign Up -->
+      <div class="auth-switch">
+        <p class="auth-switch-text">Don't have an account yet?</p>
+        <a href="#" class="auth-switch-link" id="switch-to-signup">Create an account</a>
+      </div>
+
+      <!-- Back to Shop -->
+      <div class="auth-back">
+        <a href="index.html" class="auth-back-link">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M14 8H2M2 8L6 4M2 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Shop
+        </a>
+      </div>
+    </div>
+
+    <!-- Sign Up Form (Hidden by default) -->
+    <div class="auth-form-container" id="signup-form" style="display: none;">
+      <!-- Header -->
+      <header class="auth-header">
+        <div class="auth-logo">
+          <div class="auth-logo__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="auth-logo__text">Trader</span>
+        </div>
+
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-subtitle">
+          Begin your journey of mindful shopping with us
+        </p>
+      </header>
+
+      <!-- Sign Up Form -->
+      <form class="auth-form" id="signup-form-element">
+        <div class="form-group">
+          <label for="signup-name" class="form-label">Full Name</label>
+          <input
+            type="text"
+            id="signup-name"
+            name="name"
+            class="form-input"
+            placeholder="Enter your full name"
+            required
+            autocomplete="name"
+          >
+          <div class="form-message" id="name-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            id="signup-email"
+            name="email"
+            class="form-input"
+            placeholder="name@example.com"
+            required
+            autocomplete="email"
+          >
+          <div class="form-message" id="signup-email-message"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password" class="form-label">Password</label>
+          <div class="password-group">
+            <input
+              type="password"
+              id="signup-password"
+              name="password"
+              class="form-input"
+              placeholder="Create a strong password"
+              required
+              autocomplete="new-password"
+            >
+            <button type="button" class="password-toggle" id="signup-password-toggle">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="form-message" id="signup-password-message"></div>
+        </div>
+
+        <div class="form-options">
+          <div class="checkbox-group">
+            <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
+            <label for="terms" class="checkbox-label">
+              I agree to the Terms of Service and Privacy Policy
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-button" id="signup-button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M8 12h4M10 8v4M10 3a7 7 0 100 14 7 7 0 000-14z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Create Account
+        </button>
+      </form>
+
+      <!-- Switch to Sign In -->
+      <div class="auth-switch">
+        <p class="auth-switch-text">Already have an account?</p>
+        <a href="#" class="auth-switch-link" id="switch-to-login">Sign in instead</a>
+      </div>
+
+      <!-- Back to Shop -->
+      <div class="auth-back">
+        <a href="index.html" class="auth-back-link">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M14 8H2M2 8L6 4M2 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Shop
+        </a>
+      </div>
+    </div>
+
+    <!-- Success State -->
+    <div class="auth-success" id="auth-success">
+      <div class="success-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <path d="M8 16L13 21L24 10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="success-title">Welcome to Trader</h2>
+      <p class="success-message">
+        Your account has been created successfully. You can now start your mindful shopping journey.
+      </p>
+      <a href="index.html" class="auth-button">
+        Continue Shopping
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script>
+    // Auth Page Interactions - A meditation in form handling
+    class AuthInteractions {
+      constructor() {
+        this.currentForm = 'login';
+        this.initFormSwitching();
+        this.initPasswordToggles();
+        this.initFormValidation();
+        this.initFormSubmission();
+        this.initSocialLogin();
+      }
+
+      initFormSwitching() {
+        const switchToSignup = document.getElementById('switch-to-signup');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+
+        switchToSignup.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.switchForm('signup');
+        });
+
+        switchToLogin.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.switchForm('login');
+        });
+      }
+
+      switchForm(form) {
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+
+        if (form === 'signup') {
+          loginForm.style.display = 'none';
+          signupForm.style.display = 'block';
+          this.currentForm = 'signup';
+        } else {
+          loginForm.style.display = 'block';
+          signupForm.style.display = 'none';
+          this.currentForm = 'login';
+        }
+
+        // Add transition effect
+        const activeForm = form === 'signup' ? signupForm : loginForm;
+        activeForm.style.opacity = '0';
+        activeForm.style.transform = 'translateY(20px)';
+
+        requestAnimationFrame(() => {
+          activeForm.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          activeForm.style.opacity = '1';
+          activeForm.style.transform = 'translateY(0)';
+        });
+      }
+
+      initPasswordToggles() {
+        const passwordToggles = document.querySelectorAll('.password-toggle');
+
+        passwordToggles.forEach(toggle => {
+          toggle.addEventListener('click', () => {
+            const input = toggle.previousElementSibling;
+            const isPassword = input.type === 'password';
+
+            input.type = isPassword ? 'text' : 'password';
+
+            // Update icon
+            toggle.innerHTML = isPassword ?
+              `<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M3.3 9.7c.2-.4.5-.7.7-1.1.8-.9 1.7-1.6 2.7-2.1.3-.2.6-.3.9-.4.6-.2 1.2-.3 1.8-.3s1.2.1 1.8.3c.3.1.6.2.9.4 1 .5 1.9 1.2 2.7 2.1.2.4.5.7.7 1.1.2.3.2.7 0 1-.2.4-.5.7-.7 1.1-.8.9-1.7 1.6-2.7 2.1-.3.2-.6.3-.9.4-.6.2-1.2.3-1.8.3s-1.2-.1-1.8-.3c-.3-.1-.6-.2-.9-.4-1-.5-1.9-1.2-2.7-2.1-.2-.4-.5-.7-.7-1.1-.2-.3-.2-.7 0-1z" stroke="currentColor" stroke-width="2"/>
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+              </svg>` :
+              `<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+              </svg>`;
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+              navigator.vibrate(10);
+            }
+          });
+        });
+      }
+
+      initFormValidation() {
+        // Email validation
+        const emailInputs = document.querySelectorAll('input[type="email"]');
+        emailInputs.forEach(input => {
+          input.addEventListener('blur', () => this.validateEmail(input));
+          input.addEventListener('input', () => this.clearValidation(input));
+        });
+
+        // Password validation
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+        passwordInputs.forEach(input => {
+          input.addEventListener('blur', () => this.validatePassword(input));
+          input.addEventListener('input', () => this.clearValidation(input));
+        });
+
+        // Name validation for signup
+        const nameInput = document.getElementById('signup-name');
+        if (nameInput) {
+          nameInput.addEventListener('blur', () => this.validateName(nameInput));
+          nameInput.addEventListener('input', () => this.clearValidation(nameInput));
+        }
+      }
+
+      validateEmail(input) {
+        const email = input.value.trim();
+        const messageElement = document.getElementById(input.id + '-message');
+
+        if (!email) {
+          this.showValidation(input, messageElement, 'Email is required', 'error');
+          return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          this.showValidation(input, messageElement, 'Please enter a valid email address', 'error');
+          return false;
+        }
+
+        this.showValidation(input, messageElement, 'Email looks good!', 'success');
+        return true;
+      }
+
+      validatePassword(input) {
+        const password = input.value;
+        const messageElement = document.getElementById(input.id.replace('password', 'password') + '-message');
+
+        if (!password) {
+          this.showValidation(input, messageElement, 'Password is required', 'error');
+          return false;
+        }
+
+        if (password.length < 8) {
+          this.showValidation(input, messageElement, 'Password must be at least 8 characters', 'error');
+          return false;
+        }
+
+        this.showValidation(input, messageElement, 'Strong password!', 'success');
+        return true;
+      }
+
+      validateName(input) {
+        const name = input.value.trim();
+        const messageElement = document.getElementById('name-message');
+
+        if (!name) {
+          this.showValidation(input, messageElement, 'Name is required', 'error');
+          return false;
+        }
+
+        if (name.length < 2) {
+          this.showValidation(input, messageElement, 'Name must be at least 2 characters', 'error');
+          return false;
+        }
+
+        this.showValidation(input, messageElement, 'Perfect!', 'success');
+        return true;
+      }
+
+      showValidation(input, messageElement, message, type) {
+        input.classList.remove('error', 'success');
+        input.classList.add(type);
+
+        if (messageElement) {
+          messageElement.textContent = message;
+          messageElement.classList.remove('error', 'success');
+          messageElement.classList.add(type);
+          messageElement.style.display = 'flex';
+        }
+      }
+
+      clearValidation(input) {
+        input.classList.remove('error', 'success');
+        const messageElement = document.getElementById(input.id + '-message');
+        if (messageElement) {
+          messageElement.style.display = 'none';
+        }
+      }
+
+      initFormSubmission() {
+        const loginForm = document.getElementById('login-form-element');
+        const signupForm = document.getElementById('signup-form-element');
+
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.handleLogin(e.target);
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.handleSignup(e.target);
+        });
+      }
+
+      async handleLogin(form) {
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const remember = form.remember.checked;
+        const button = document.getElementById('login-button');
+
+        // Validate
+        const emailValid = this.validateEmail(form.email);
+        const passwordValid = this.validatePassword(form.password);
+
+        if (!emailValid || !passwordValid) {
+          window.Voltage.toast.show('Please fix the validation errors', 'error');
+          return;
+        }
+
+        // Show loading state
+        button.classList.add('loading');
+        button.innerHTML = `
+          <div class="loading-spinner"></div>
+          Signing in...
+        `;
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Simulate successful login
+        button.classList.remove('loading');
+        button.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 10L7 13L16 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Welcome Back!
+        `;
+
+        window.Voltage.toast.show('Welcome back! Redirecting...', 'success');
+
+        // Store session
+        if (remember) {
+          localStorage.setItem('userEmail', email);
+        }
+        sessionStorage.setItem('userEmail', email);
+
+        // Redirect to shop
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      }
+
+      async handleSignup(form) {
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const terms = form.terms.checked;
+        const button = document.getElementById('signup-button');
+
+        // Validate
+        const nameValid = this.validateName(form.name);
+        const emailValid = this.validateEmail(form.email);
+        const passwordValid = this.validatePassword(form.password);
+
+        if (!nameValid || !emailValid || !passwordValid) {
+          window.Voltage.toast.show('Please fix the validation errors', 'error');
+          return;
+        }
+
+        if (!terms) {
+          window.Voltage.toast.show('Please accept the terms and conditions', 'error');
+          return;
+        }
+
+        // Show loading state
+        button.classList.add('loading');
+        button.innerHTML = `
+          <div class="loading-spinner"></div>
+          Creating account...
+        `;
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Show success state
+        button.classList.remove('loading');
+        document.getElementById('signup-form').style.display = 'none';
+        document.getElementById('auth-success').style.display = 'block';
+
+        // Store user data
+        localStorage.setItem('userName', name);
+        localStorage.setItem('userEmail', email);
+
+        window.Voltage.toast.show('Account created successfully!', 'success');
+      }
+
+      initSocialLogin() {
+        const googleLogin = document.getElementById('google-login');
+        const appleLogin = document.getElementById('apple-login');
+
+        googleLogin.addEventListener('click', () => {
+          window.Voltage.toast.show('Google login coming soon!', 'info');
+        });
+
+        appleLogin.addEventListener('click', () => {
+          window.Voltage.toast.show('Apple login coming soon!', 'info');
+        });
+      }
+    }
+
+    // Initialize auth interactions
+    const auth = new AuthInteractions();
+
+    // Welcome message
+    console.log('%c🌸 Welcome to Trader Auth', 'font-size: 20px; color: #3c6357; font-weight: bold;');
+    console.log('%cA moment of digital meditation for secure authentication', 'font-style: italic; color: #666;');
+    console.log('%cAuth system initialized with zen precision', 'font-size: 12px; color: #999;');
+  </script>
+</body>
+</html>

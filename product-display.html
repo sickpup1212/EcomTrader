@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireless Headphones - Trader</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <link rel="stylesheet" href="product-display.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav__container">
+      <a href="index.html" class="nav__logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16L15 19L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="nav__brand">Trader</span>
+      </a>
+
+      <div class="nav__menu">
+        <a href="catalog.html" class="nav__link">Shop</a>
+        <a href="#" class="nav__link">Categories</a>
+        <a href="#" class="nav__link">Deals</a>
+        <a href="#" class="nav__link">About</a>
+      </div>
+
+      <div class="nav__actions">
+        <a href="auth.html" class="nav__icon-button" aria-label="Sign In">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </a>
+        <button class="nav__icon-button" aria-label="Search">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+            <path d="M14 14L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="nav__icon-button" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17L3 10C1 8 1 5 3 3C5 1 8 1 10 3C12 1 15 1 17 3C19 5 19 8 17 10L10 17Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <a href="checkout.html" class="nav__icon-button" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="8" cy="17" r="1" fill="currentColor"/>
+            <circle cx="14" cy="17" r="1" fill="currentColor"/>
+          </svg>
+          <span class="nav__badge" id="cart-count">3</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="index.html" class="breadcrumb__link">Home</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__separator">/</span>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="catalog.html" class="breadcrumb__link">Electronics</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__separator">/</span>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">Wireless Headphones</span>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Product Section -->
+      <section class="product">
+        <div class="product__layout">
+          <!-- Gallery -->
+          <div class="gallery">
+            <div class="gallery__main" id="main-image">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" 
+                   alt="Wireless Headphones" 
+                   class="gallery__image"
+                   id="current-image">
+              <button class="gallery__zoom" aria-label="Zoom image" id="zoom-btn">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M14 14L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 6V12M6 9H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="gallery__thumbnails" id="thumbnails">
+              <button class="gallery__thumbnail gallery__thumbnail--active" data-image="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="View 1">
+              </button>
+              <button class="gallery__thumbnail" data-image="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop">
+                <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=200&h=200&fit=crop" alt="View 2">
+              </button>
+              <button class="gallery__thumbnail" data-image="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&h=800&fit=crop">
+                <img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=200&h=200&fit=crop" alt="View 3">
+              </button>
+              <button class="gallery__thumbnail" data-image="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=800&h=800&fit=crop">
+                <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=200&h=200&fit=crop" alt="View 4">
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="product__info">
+            <div class="product__header">
+              <div class="product__badges">
+                <span class="badge badge--success">In Stock</span>
+                <span class="badge badge--accent">Best Seller</span>
+              </div>
+
+              <h1 class="product__title">Premium Wireless Headphones</h1>
+
+              <div class="product__rating">
+                <div class="rating" id="product-rating">
+                  <svg class="rating__star rating__star--filled" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                  </svg>
+                  <svg class="rating__star rating__star--filled" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                  </svg>
+                  <svg class="rating__star rating__star--filled" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                  </svg>
+                  <svg class="rating__star rating__star--filled" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                  </svg>
+                  <svg class="rating__star rating__star--half" width="20" height="20" viewBox="0 0 20 20">
+                    <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor" opacity="0.3"/>
+                  </svg>
+                </div>
+                <span class="product__review-count">4.5 (124 reviews)</span>
+              </div>
+            </div>
+
+            <div class="product__price">
+              <div class="price">
+                <span class="price__current">$129.99</span>
+                <span class="price__original">$199.99</span>
+              </div>
+              <span class="product__savings">Save 35%</span>
+            </div>
+
+            <p class="product__description">
+              Experience premium sound quality with our flagship wireless headphones. 
+              Featuring active noise cancellation, 30-hour battery life, and premium 
+              comfort for all-day wear. Perfect for music lovers and professionals alike.
+            </p>
+
+            <!-- Product Options -->
+            <div class="product__options">
+              <!-- Color Selection -->
+              <div class="option-group">
+                <label class="option-group__label">
+                  Color
+                  <span class="option-group__selected" id="selected-color">Midnight Black</span>
+                </label>
+                <div class="color-selector" id="color-options">
+                  <button class="color-option color-option--active" 
+                          style="background-color: #1a1a1a;"
+                          data-color="Midnight Black"
+                          aria-label="Midnight Black"></button>
+                  <button class="color-option" 
+                          style="background-color: #e8e8e8;"
+                          data-color="Cloud White"
+                          aria-label="Cloud White"></button>
+                  <button class="color-option" 
+                          style="background-color: #c0c0c0;"
+                          data-color="Silver"
+                          aria-label="Silver"></button>
+                  <button class="color-option" 
+                          style="background-color: #8b4513;"
+                          data-color="Saddle Brown"
+                          aria-label="Saddle Brown"></button>
+                </div>
+              </div>
+
+              <!-- Quantity Selection -->
+              <div class="option-group">
+                <label class="option-group__label" for="quantity">Quantity</label>
+                <div class="quantity-selector">
+                  <button class="quantity-selector__button" id="qty-decrease" aria-label="Decrease quantity">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <input type="number" 
+                         class="quantity-selector__input" 
+                         id="quantity" 
+                         value="1" 
+                         min="1" 
+                         max="10"
+                         aria-label="Quantity">
+                  <button class="quantity-selector__button" id="qty-increase" aria-label="Increase quantity">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M8 4V12M4 8H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="product__actions">
+              <button class="button button--primary button--large" id="add-to-cart">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M3 3H5L6 13H16L18 6H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="8" cy="17" r="1" fill="currentColor"/>
+                  <circle cx="14" cy="17" r="1" fill="currentColor"/>
+                </svg>
+                Add to Cart
+              </button>
+              <button class="button button--secondary button--large" id="add-to-wishlist">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 17L3 10C1 8 1 5 3 3C5 1 8 1 10 3C12 1 15 1 17 3C19 5 19 8 17 10L10 17Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Features -->
+            <div class="product__features">
+              <div class="feature">
+                <svg class="feature__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                <div class="feature__content">
+                  <div class="feature__title">30-Hour Battery Life</div>
+                  <div class="feature__description">Extended playtime on a single charge</div>
+                </div>
+              </div>
+              <div class="feature">
+                <svg class="feature__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div class="feature__content">
+                  <div class="feature__title">2-Year Warranty</div>
+                  <div class="feature__description">Full coverage and support</div>
+                </div>
+              </div>
+              <div class="feature">
+                <svg class="feature__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                <div class="feature__content">
+                  <div class="feature__title">Free Shipping</div>
+                  <div class="feature__description">On orders over $50</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="product__details">
+          <div class="tabs" role="tablist">
+            <button class="tabs__tab tabs__tab--active" 
+                    role="tab" 
+                    aria-selected="true" 
+                    aria-controls="panel-details"
+                    id="tab-details">
+              Details
+            </button>
+            <button class="tabs__tab" 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="panel-specs"
+                    id="tab-specs">
+              Specifications
+            </button>
+            <button class="tabs__tab" 
+                    role="tab" 
+                    aria-selected="false" 
+                    aria-controls="panel-reviews"
+                    id="tab-reviews">
+              Reviews (124)
+            </button>
+          </div>
+
+          <div class="tabs__panels">
+            <div class="tabs__panel tabs__panel--active" 
+                 role="tabpanel" 
+                 id="panel-details"
+                 aria-labelledby="tab-details">
+              <div class="content-section">
+                <h2 class="content-section__title">Product Details</h2>
+                <p class="content-section__text">
+                  Immerse yourself in studio-quality sound with our Premium Wireless Headphones. 
+                  Engineered with precision and crafted for comfort, these headphones deliver 
+                  an unparalleled audio experience.
+                </p>
+                <p class="content-section__text">
+                  The advanced active noise cancellation technology adapts to your environment, 
+                  blocking out distractions so you can focus on what matters most. Whether you're 
+                  commuting, working, or relaxing, enjoy crystal-clear audio in any setting.
+                </p>
+                <p class="content-section__text">
+                  Premium materials and thoughtful design ensure all-day comfort. The memory foam 
+                  ear cushions and adjustable headband provide a perfect fit for extended listening 
+                  sessions.
+                </p>
+              </div>
+            </div>
+
+            <div class="tabs__panel" 
+                 role="tabpanel" 
+                 id="panel-specs"
+                 aria-labelledby="tab-specs">
+              <div class="content-section">
+                <h2 class="content-section__title">Technical Specifications</h2>
+                <dl class="spec-list">
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Driver Size</dt>
+                    <dd class="spec-list__detail">40mm dynamic drivers</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Frequency Response</dt>
+                    <dd class="spec-list__detail">20Hz - 20kHz</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Impedance</dt>
+                    <dd class="spec-list__detail">32 Ohms</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Bluetooth Version</dt>
+                    <dd class="spec-list__detail">5.2</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Battery Life</dt>
+                    <dd class="spec-list__detail">30 hours (ANC on), 40 hours (ANC off)</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Charging Time</dt>
+                    <dd class="spec-list__detail">2 hours (USB-C fast charging)</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Weight</dt>
+                    <dd class="spec-list__detail">250g</dd>
+                  </div>
+                  <div class="spec-list__item">
+                    <dt class="spec-list__term">Included Accessories</dt>
+                    <dd class="spec-list__detail">USB-C cable, 3.5mm audio cable, carrying case</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            <div class="tabs__panel" 
+                 role="tabpanel" 
+                 id="panel-reviews"
+                 aria-labelledby="tab-reviews">
+              <div class="content-section">
+                <h2 class="content-section__title">Customer Reviews</h2>
+                <div class="reviews">
+                  <article class="review">
+                    <div class="review__header">
+                      <span class="review__author">Sarah M.</span>
+                      <div class="rating rating--small">
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="review__text">
+                      Absolutely love these headphones! The sound quality is incredible and the 
+                      noise cancellation works perfectly. Battery life is exactly as advertised. 
+                      Worth every penny!
+                    </p>
+                    <time class="review__date">2 weeks ago</time>
+                  </article>
+
+                  <article class="review">
+                    <div class="review__header">
+                      <span class="review__author">James K.</span>
+                      <div class="rating rating--small">
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor" opacity="0.3"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="review__text">
+                      Great headphones for the price. Very comfortable for long wear. The only 
+                      minor issue is they're a bit bulky for travel, but the included case helps.
+                    </p>
+                    <time class="review__date">1 month ago</time>
+                  </article>
+
+                  <article class="review">
+                    <div class="review__header">
+                      <span class="review__author">Emily R.</span>
+                      <div class="rating rating--small">
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                        <svg class="rating__star rating__star--filled" width="16" height="16" viewBox="0 0 20 20">
+                          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" fill="currentColor"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <p class="review__text">
+                      Perfect for my daily commute! The ANC blocks out all the train noise. 
+                      Sound quality is amazing for both music and calls. Highly recommend!
+                    </p>
+                    <time class="review__date">3 weeks ago</time>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__text">
+        Crafted with zen precision by <strong>Yuki "Interface"</strong> • 
+        Powered by <strong>Vesper "Surge" Voltage</strong>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script src="product-display-integration.js"></script>
+  <script>
+    // Product Display Interactions
+    class ProductDisplay {
+      constructor() {
+        this.product = {
+          id: 1,
+          name: 'Wireless Headphones',
+          price: 129.99,
+          images: [
+            'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&h=600&fit=crop'
+          ]
+        };
+
+        this.currentImageIndex = 0;
+        this.selectedOptions = {};
+        this.quantity = 1;
+
+        this.init();
+      }
+
+      init() {
+        this.initImageGallery();
+        this.initProductOptions();
+        this.initQuantityControls();
+        this.initAddToCart();
+        this.initReviews();
+        this.initKeyboardControls();
+      }
+
+      initImageGallery() {
+        const mainImage = document.querySelector('.gallery__image img');
+        const thumbnails = document.querySelectorAll('.gallery__thumb');
+
+        if (mainImage && thumbnails.length > 0) {
+          // Thumbnail clicks
+          thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => {
+              this.selectImage(index);
+            });
+          });
+
+          // Previous/Next buttons
+          const prevBtn = document.querySelector('.gallery__prev');
+          const nextBtn = document.querySelector('.gallery__next');
+
+          if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+              this.navigateImage(-1);
+            });
+          }
+
+          if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+              this.navigateImage(1);
+            });
+          }
+
+          // Keyboard navigation for gallery
+          mainImage.parentElement.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.navigateImage(-1);
+            if (e.key === 'ArrowRight') this.navigateImage(1);
+          });
+        }
+      }
+
+      selectImage(index) {
+        const mainImage = document.querySelector('.gallery__image img');
+        const thumbnails = document.querySelectorAll('.gallery__thumb');
+
+        if (index >= 0 && index < this.product.images.length) {
+          this.currentImageIndex = index;
+
+          // Update main image
+          mainImage.style.opacity = '0';
+          setTimeout(() => {
+            mainImage.src = this.product.images[index];
+            mainImage.style.opacity = '1';
+          }, 200);
+
+          // Update thumbnail active states
+          thumbnails.forEach((thumb, i) => {
+            if (i === index) {
+              thumb.setAttribute('aria-selected', 'true');
+            } else {
+              thumb.setAttribute('aria-selected', 'false');
+            }
+          });
+        }
+      }
+
+      navigateImage(direction) {
+        const newIndex = this.currentImageIndex + direction;
+        const lastIndex = this.product.images.length - 1;
+        let targetIndex = newIndex;
+
+        if (newIndex < 0) targetIndex = lastIndex;
+        if (newIndex > lastIndex) targetIndex = 0;
+
+        this.selectImage(targetIndex);
+      }
+
+      initProductOptions() {
+        // Color selection
+        const colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+          option.addEventListener('click', () => {
+            colorOptions.forEach(opt => opt.setAttribute('aria-selected', 'false'));
+            option.setAttribute('aria-selected', 'true');
+            this.selectedOptions.color = option.dataset.color;
+            this.updatePrice();
+          });
+        });
+
+        // Size selection
+        const sizeOptions = document.querySelectorAll('.size-option');
+        sizeOptions.forEach(option => {
+          option.addEventListener('click', () => {
+            sizeOptions.forEach(opt => opt.setAttribute('aria-selected', 'false'));
+            option.setAttribute('aria-selected', 'true');
+            this.selectedOptions.size = option.dataset.size;
+            this.updatePrice();
+          });
+        });
+      }
+
+      initQuantityControls() {
+        const decreaseBtn = document.querySelector('.quantity__decrease');
+        const increaseBtn = document.querySelector('.quantity__increase');
+        const input = document.querySelector('.quantity__input');
+
+        if (decreaseBtn && increaseBtn && input) {
+          decreaseBtn.addEventListener('click', () => {
+            if (this.quantity > 1) {
+              this.quantity--;
+              input.value = this.quantity;
+              this.updatePrice();
+            }
+          });
+
+          increaseBtn.addEventListener('click', () => {
+            if (this.quantity < 10) {
+              this.quantity++;
+              input.value = this.quantity;
+              this.updatePrice();
+            }
+          });
+
+          input.addEventListener('change', (e) => {
+            const newQuantity = parseInt(e.target.value);
+            if (newQuantity >= 1 && newQuantity <= 10) {
+              this.quantity = newQuantity;
+              this.updatePrice();
+            } else {
+              e.target.value = this.quantity;
+            }
+          });
+        }
+      }
+
+      updatePrice() {
+        const priceDisplay = document.querySelector('.price-current');
+        const totalDisplay = document.querySelector('.price-total');
+
+        if (priceDisplay && totalDisplay) {
+          let price = this.product.price;
+
+          // Apply size-based pricing
+          if (this.selectedOptions.size === 'large') price += 20;
+          if (this.selectedOptions.size === 'xl') price += 30;
+
+          const total = price * this.quantity;
+
+          priceDisplay.textContent = `$${price.toFixed(2)}`;
+          totalDisplay.textContent = `$${total.toFixed(2)}`;
+        }
+      }
+
+      initAddToCart() {
+        const addToCartBtn = document.querySelector('.add-to-cart');
+
+        if (addToCartBtn) {
+          addToCartBtn.addEventListener('click', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const cartItem = {
+              id: this.product.id,
+              name: this.product.name,
+              price: this.product.price,
+              quantity: this.quantity,
+              options: { ...this.selectedOptions },
+              image: this.product.images[this.currentImageIndex]
+            };
+
+            // Check if item with same options already exists
+            const existingItemIndex = cart.findIndex(item =>
+              item.id === cartItem.id &&
+              JSON.stringify(item.options) === JSON.stringify(cartItem.options)
+            );
+
+            if (existingItemIndex >= 0) {
+              cart[existingItemIndex].quantity += this.quantity;
+            } else {
+              cart.push(cartItem);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Show success state
+            this.showAddToCartSuccess(addToCartBtn);
+          });
+        }
+      }
+
+      showAddToCartSuccess(button) {
+        const originalContent = button.innerHTML;
+
+        button.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M13 2L5 10L2 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Added to Cart!
+        `;
+
+        button.classList.add('btn--success');
+        button.disabled = true;
+
+        // Show toast notification
+        if (window.Voltage && window.Voltage.toast) {
+          window.Voltage.toast.show('Product added to cart!', 'success');
+        }
+
+        setTimeout(() => {
+          button.innerHTML = originalContent;
+          button.classList.remove('btn--success');
+          button.disabled = false;
+        }, 2000);
+      }
+
+      initReviews() {
+        // Helpful voting
+        const helpfulButtons = document.querySelectorAll('.review__helpful button');
+        helpfulButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            const wasHelpful = e.target.textContent === 'Yes';
+
+            // Disable all helpful buttons for this review
+            const reviewButtons = e.target.closest('.review__helpful').querySelectorAll('button');
+            reviewButtons.forEach(btn => btn.disabled = true);
+
+            // Show thank you message
+            const helpfulContainer = e.target.closest('.review__helpful');
+            helpfulContainer.innerHTML = `
+              <span style="color: var(--color-success-600); font-size: var(--font-size-sm);">
+                ${wasHelpful ? '👍 Thanks!' : '👍 Thanks for your feedback!'}
+              </span>
+            `;
+
+            // In a real app, this would send data to server
+            console.log('Review marked as helpful:', wasHelpful);
+          });
+        });
+
+        // Add review functionality
+        const addReviewBtn = document.querySelector('.add-review-btn');
+        if (addReviewBtn) {
+          addReviewBtn.addEventListener('click', () => {
+            this.showReviewForm();
+          });
+        }
+      }
+
+      showReviewForm() {
+        // Simple review form - in a real app this would be a modal
+        const reviewTitle = prompt('Review title:');
+        if (!reviewTitle) return;
+
+        const reviewText = prompt('Your review:');
+        if (!reviewText) return;
+
+        const rating = prompt('Rating (1-5):');
+        if (!rating || rating < 1 || rating > 5) return;
+
+        // Show success message
+        if (window.Voltage && window.Voltage.toast) {
+          window.Voltage.toast.show('Review submitted successfully!', 'success');
+        }
+
+        // In a real app, this would send data to server
+        console.log('Review submitted:', { title: reviewTitle, text: reviewText, rating: parseInt(rating) });
+      }
+
+      initKeyboardControls() {
+        document.addEventListener('keydown', (e) => {
+          // Quick add to cart with 'A' key
+          if (e.key === 'a' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+            e.preventDefault();
+            const addToCartBtn = document.querySelector('.add-to-cart');
+            if (addToCartBtn && !addToCartBtn.disabled) {
+              addToCartBtn.click();
+            }
+          }
+
+          // Go to cart with 'C' key
+          if (e.key === 'c' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+            e.preventDefault();
+            window.location.href = 'checkout.html';
+          }
+
+          // Go back with Escape
+          if (e.key === 'Escape') {
+            window.history.back();
+          }
+        });
+      }
+    }
+
+    // Add CSS transitions
+    const style = document.createElement('style');
+    style.textContent = `
+      .gallery__image img {
+        transition: opacity 0.3s ease;
+      }
+
+      .btn--success {
+        background: var(--color-success-600) !important;
+        border-color: var(--color-success-600) !important;
+      }
+
+      .quantity__input:focus,
+      .add-to-cart:focus {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+      }
+
+      .color-option[aria-selected="true"],
+      .size-option[aria-selected="true"] {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 3px var(--color-primary-200);
+      }
+
+      .gallery__thumb[aria-selected="true"] {
+        border-color: var(--color-primary-500);
+        transform: scale(1.05);
+      }
+
+      .review__helpful button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .add-to-cart:not(:disabled):hover {
+        animation: pulse 0.3s ease;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize the product display
+    const productDisplay = new ProductDisplay();
+
+    console.log('Product display initialized with interactive features');
+  </script>
+</body>
+</html>

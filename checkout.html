@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Trader</title>
+  <link rel="stylesheet" href="design-tokens.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family-base);
+      background: var(--color-neutral-50);
+      color: var(--color-neutral-900);
+      line-height: var(--line-height-normal);
+    }
+
+    /* Header - Simplified for checkout flow */
+    .header {
+      background: var(--color-neutral-0);
+      border-bottom: 1px solid var(--color-neutral-200);
+      padding: var(--space-6) 0;
+    }
+
+    .header__container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header__logo {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .header__back {
+      color: var(--color-neutral-600);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-sm);
+      transition: color var(--transition-base);
+    }
+
+    .header__back:hover {
+      color: var(--color-primary-600);
+    }
+
+    /* Progress Steps - Visual journey */
+    .progress {
+      background: var(--color-neutral-0);
+      padding: var(--space-8) 0;
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .progress__container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    .progress__steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress__steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-neutral-200);
+      z-index: 0;
+    }
+
+    .progress__step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .progress__step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: var(--color-neutral-0);
+      border: 2px solid var(--color-neutral-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-500);
+      transition: all var(--transition-base);
+    }
+
+    .progress__step--active .progress__step-circle {
+      background: var(--color-primary-600);
+      border-color: var(--color-primary-600);
+      color: var(--color-neutral-0);
+    }
+
+    .progress__step--complete .progress__step-circle {
+      background: var(--color-success-600);
+      border-color: var(--color-success-600);
+      color: var(--color-neutral-0);
+    }
+
+    .progress__step-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      text-align: center;
+    }
+
+    .progress__step--active .progress__step-label {
+      color: var(--color-primary-700);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6);
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    /* Cart Items Section */
+    .cart {
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      border: 1px solid var(--color-neutral-200);
+    }
+
+    .cart__header {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .cart__title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .cart__count {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+    }
+
+    .cart__items {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    /* Cart Item */
+    .cart-item {
+      display: flex;
+      gap: var(--space-4);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--color-neutral-100);
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .cart-item__image {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-lg);
+      background: var(--color-neutral-100);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cart-item__image svg {
+      width: 48px;
+      height: 48px;
+      color: var(--color-neutral-400);
+    }
+
+    .cart-item__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .cart-item__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: var(--space-4);
+    }
+
+    .cart-item__title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+      line-height: var(--line-height-snug);
+    }
+
+    .cart-item__remove {
+      background: none;
+      border: none;
+      color: var(--color-neutral-500);
+      cursor: pointer;
+      padding: var(--space-1);
+      transition: color var(--transition-base);
+    }
+
+    .cart-item__remove:hover {
+      color: var(--color-error-600);
+    }
+
+    .cart-item__category {
+      font-size: var(--font-size-xs);
+      color: var(--color-neutral-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cart-item__footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: var(--space-2);
+    }
+
+    .cart-item__quantity {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-base);
+      padding: var(--space-1);
+    }
+
+    .cart-item__quantity-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-neutral-700);
+      transition: all var(--transition-base);
+    }
+
+    .cart-item__quantity-btn:hover {
+      background: var(--color-neutral-200);
+      color: var(--color-neutral-900);
+    }
+
+    .cart-item__quantity-value {
+      min-width: 32px;
+      text-align: center;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-sm);
+    }
+
+    .cart-item__price {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+    }
+
+    /* Summary Section - Sticky sidebar */
+    .summary {
+      position: sticky;
+      top: var(--space-6);
+      background: var(--color-neutral-0);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      border: 1px solid var(--color-neutral-200);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .summary__title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-6);
+    }
+
+    .summary__rows {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+
+    .summary__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-base);
+    }
+
+    .summary__row-label {
+      color: var(--color-neutral-600);
+    }
+
+    .summary__row-value {
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-neutral-900);
+    }
+
+    .summary__divider {
+      height: 1px;
+      background: var(--color-neutral-200);
+      margin: var(--space-6) 0;
+    }
+
+    .summary__total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-6);
+    }
+
+    .summary__total-label {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+    }
+
+    .summary__total-value {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-primary-700);
+    }
+
+    .summary__promo {
+      margin-bottom: var(--space-6);
+    }
+
+    .summary__promo-input {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .summary__promo-field {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-sm);
+      transition: all var(--transition-base);
+    }
+
+    .summary__promo-field:focus {
+      outline: none;
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px var(--color-primary-100);
+    }
+
+    .summary__promo-btn {
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-neutral-100);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-base);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .summary__promo-btn:hover {
+      background: var(--color-neutral-200);
+      border-color: var(--color-neutral-400);
+    }
+
+    .summary__checkout {
+      width: 100%;
+      padding: var(--space-4) var(--space-6);
+      background: var(--color-primary-600);
+      color: var(--color-neutral-0);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+
+    .summary__checkout:hover {
+      background: var(--color-primary-700);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .summary__security {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+      font-size: var(--font-size-xs);
+      color: var(--color-neutral-500);
+    }
+
+    .summary__security svg {
+      color: var(--color-success-600);
+    }
+
+    /* Payment Methods Preview */
+    .payment-methods {
+      margin-top: var(--space-6);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    .payment-methods__title {
+      font-size: var(--font-size-sm);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-3);
+      text-align: center;
+    }
+
+    .payment-methods__icons {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    .payment-icon {
+      width: 48px;
+      height: 32px;
+      background: var(--color-neutral-100);
+      border: 1px solid var(--color-neutral-300);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-600);
+    }
+
+    /* Empty Cart State */
+    .empty-cart {
+      text-align: center;
+      padding: var(--space-12) var(--space-6);
+    }
+
+    .empty-cart__icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-6);
+      color: var(--color-neutral-300);
+    }
+
+    .empty-cart__title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-neutral-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .empty-cart__text {
+      font-size: var(--font-size-base);
+      color: var(--color-neutral-600);
+      margin-bottom: var(--space-6);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .empty-cart__button {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-6);
+      background: var(--color-primary-600);
+      color: var(--color-neutral-0);
+      text-decoration: none;
+      border-radius: var(--radius-lg);
+      font-weight: var(--font-weight-semibold);
+      transition: all var(--transition-base);
+    }
+
+    .empty-cart__button:hover {
+      background: var(--color-primary-700);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        position: static;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .progress__steps {
+        gap: var(--space-2);
+      }
+
+      .progress__step-label {
+        font-size: var(--font-size-xs);
+      }
+
+      .progress__step-circle {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-xs);
+      }
+
+      .cart-item {
+        flex-direction: column;
+      }
+
+      .cart-item__image {
+        width: 100%;
+        height: 200px;
+      }
+
+      .cart-item__header {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__container">
+      <a href="index.html" class="header__logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16L15 19L20 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Trader
+      </a>
+      <a href="catalog.html" class="header__back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Continue Shopping
+      </a>
+    </div>
+  </header>
+
+  <!-- Progress Steps -->
+  <div class="progress">
+    <div class="progress__container">
+      <div class="progress__steps">
+        <div class="progress__step progress__step--complete">
+          <div class="progress__step-circle">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 10L8 13L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="progress__step-label">Cart</span>
+        </div>
+        <div class="progress__step progress__step--active">
+          <div class="progress__step-circle">2</div>
+          <span class="progress__step-label">Review</span>
+        </div>
+        <div class="progress__step">
+          <div class="progress__step-circle">3</div>
+          <span class="progress__step-label">Payment</span>
+        </div>
+        <div class="progress__step">
+          <div class="progress__step-circle">4</div>
+          <span class="progress__step-label">Confirm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Cart Items -->
+    <section class="cart">
+      <div class="cart__header">
+        <h1 class="cart__title">Shopping Cart</h1>
+        <p class="cart__count">3 items in your cart</p>
+      </div>
+
+      <div class="cart__items">
+        <!-- Cart Item 1 -->
+        <article class="cart-item">
+          <div class="cart-item__image">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="12" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+              <circle cx="18" cy="21" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 30L15 23L21 29L33 17L40 24V36H8V30Z" fill="currentColor" opacity="0.2"/>
+            </svg>
+          </div>
+          <div class="cart-item__content">
+            <div class="cart-item__header">
+              <div>
+                <h2 class="cart-item__title">Wireless Headphones</h2>
+                <p class="cart-item__category">Electronics</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Remove item" onclick="removeItem(1)">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 5L15 15M5 15L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="cart-item__footer">
+              <div class="cart-item__quantity">
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(1, -1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <span class="cart-item__quantity-value" id="qty-1">1</span>
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(1, 1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="cart-item__price" id="price-1">$129.99</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Cart Item 2 -->
+        <article class="cart-item">
+          <div class="cart-item__image">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect x="14" y="10" width="20" height="28" rx="2" stroke="currentColor" stroke-width="2"/>
+              <line x1="18" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="18" y1="22" x2="30" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="18" y1="28" x2="26" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="cart-item__content">
+            <div class="cart-item__header">
+              <div>
+                <h2 class="cart-item__title">Design Principles Guide</h2>
+                <p class="cart-item__category">Books</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Remove item" onclick="removeItem(2)">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 5L15 15M5 15L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="cart-item__footer">
+              <div class="cart-item__quantity">
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(2, -1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <span class="cart-item__quantity-value" id="qty-2">1</span>
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(2, 1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="cart-item__price" id="price-2">$24.99</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Cart Item 3 -->
+        <article class="cart-item">
+          <div class="cart-item__image">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M24 10L30 22H18L24 10Z" stroke="currentColor" stroke-width="2" fill="currentColor" opacity="0.2"/>
+              <rect x="16" y="22" width="16" height="14" stroke="currentColor" stroke-width="2" fill="currentColor" opacity="0.1"/>
+              <line x1="24" y1="36" x2="24" y2="40" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="cart-item__content">
+            <div class="cart-item__header">
+              <div>
+                <h2 class="cart-item__title">Minimalist Desk Lamp</h2>
+                <p class="cart-item__category">Home & Garden</p>
+              </div>
+              <button class="cart-item__remove" aria-label="Remove item" onclick="removeItem(3)">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 5L15 15M5 15L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="cart-item__footer">
+              <div class="cart-item__quantity">
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(3, -1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+                <span class="cart-item__quantity-value" id="qty-3">1</span>
+                <button class="cart-item__quantity-btn" onclick="updateQuantity(3, 1)">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="cart-item__price" id="price-3">$79.99</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Order Summary -->
+    <aside class="summary">
+      <h2 class="summary__title">Order Summary</h2>
+      
+      <div class="summary__rows">
+        <div class="summary__row">
+          <span class="summary__row-label">Subtotal</span>
+          <span class="summary__row-value" id="subtotal">$234.97</span>
+        </div>
+        <div class="summary__row">
+          <span class="summary__row-label">Shipping</span>
+          <span class="summary__row-value">$9.99</span>
+        </div>
+        <div class="summary__row">
+          <span class="summary__row-label">Tax (8%)</span>
+          <span class="summary__row-value" id="tax">$18.80</span>
+        </div>
+      </div>
+
+      <div class="summary__divider"></div>
+
+      <div class="summary__total">
+        <span class="summary__total-label">Total</span>
+        <span class="summary__total-value" id="total">$263.76</span>
+      </div>
+
+      <div class="summary__promo">
+        <div class="summary__promo-input">
+          <input 
+            type="text" 
+            class="summary__promo-field" 
+            placeholder="Promo code"
+            aria-label="Promo code"
+          >
+          <button class="summary__promo-btn">Apply</button>
+        </div>
+      </div>
+
+      <button class="summary__checkout" onclick="proceedToPayment()">
+        Proceed to Payment
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="summary__security">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L3 4V7C3 10.5 5.5 13.5 8 14C10.5 13.5 13 10.5 13 7V4L8 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M6 8L7.5 9.5L10 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Secure checkout
+      </div>
+
+      <div class="payment-methods">
+        <div class="payment-methods__title">We accept</div>
+        <div class="payment-methods__icons">
+          <div class="payment-icon">VISA</div>
+          <div class="payment-icon">MC</div>
+          <div class="payment-icon">AMEX</div>
+          <div class="payment-icon">PAY</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Interaction System -->
+  <script src="interactions.js"></script>
+  <script>
+    // Cart state (UI only)
+    const itemPrices = {
+      1: 129.99,
+      2: 24.99,
+      3: 79.99
+    };
+
+    const itemQuantities = {
+      1: 1,
+      2: 1,
+      3: 1
+    };
+
+    function updateQuantity(itemId, change) {
+      const qtyElement = document.getElementById(`qty-${itemId}`);
+      const priceElement = document.getElementById(`price-${itemId}`);
+      
+      let newQty = itemQuantities[itemId] + change;
+      if (newQty < 1) newQty = 1;
+      if (newQty > 99) newQty = 99;
+      
+      itemQuantities[itemId] = newQty;
+      qtyElement.textContent = newQty;
+      priceElement.textContent = `${(itemPrices[itemId] * newQty).toFixed(2)}`;
+      
+      updateTotals();
+
+      // Haptic feedback
+      if (navigator.vibrate) {
+        navigator.vibrate(5);
+      }
+    }
+
+    function removeItem(itemId) {
+      const items = document.querySelectorAll('.cart-item');
+      const item = items[itemId - 1];
+      
+      // Slide out animation
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-20px)';
+      
+      setTimeout(() => {
+        item.remove();
+        delete itemQuantities[itemId];
+        updateTotals();
+        
+        // Update cart count
+        const remainingItems = Object.keys(itemQuantities).length;
+        document.querySelector('.cart__count').textContent = 
+          `${remainingItems} item${remainingItems !== 1 ? 's' : ''} in your cart`;
+        
+        // Toast notification
+        if (window.Voltage && window.Voltage.toast) {
+          window.Voltage.toast.show('Item removed from cart', 'info');
+        }
+      }, 300);
+    }
+
+    function updateTotals() {
+      let subtotal = 0;
+      for (const [itemId, qty] of Object.entries(itemQuantities)) {
+        subtotal += itemPrices[itemId] * qty;
+      }
+      
+      const shipping = 9.99;
+      const taxRate = 0.08;
+      const tax = subtotal * taxRate;
+      const total = subtotal + shipping + tax;
+      
+      document.getElementById('subtotal').textContent = `${subtotal.toFixed(2)}`;
+      document.getElementById('tax').textContent = `${tax.toFixed(2)}`;
+      document.getElementById('total').textContent = `${total.toFixed(2)}`;
+    }
+
+    function proceedToPayment() {
+      if (window.Voltage && window.Voltage.toast) {
+        window.Voltage.toast.show('Proceeding to payment...', 'success');
+      }
+      setTimeout(() => {
+        window.location.href = '#payment';
+      }, 1000);
+    }
+
+    // Add transition styles
+    document.querySelectorAll('.cart-item').forEach(item => {
+      item.style.transition = 'all 0.3s ease';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+
+# Database
+database/*.db
+database/*.db-journal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+API-SPECIFICATION.md        
+API_DOCUMENTATION.md           
+INTEGRATION_DOCUMENTATION.md   
+INTERACTION-GUIDE.md           
+PRODUCT_SYSTEM_SETUP.md         
+QUICKSTART.md 
+
+test-admin-panel.html
+test-api.js
+test-integration.html
+
+./backend/API-DOCUMENTATION.md
+./backend/README.md
+./backend./SETUP-INSTRUCTIONS.md
+./backend/test-api.sh
+./backend/setup.sh
