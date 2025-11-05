@@ -266,4 +266,22 @@ class Product {
   }
 }
 
+  static async getStats() {
+    return new Promise((resolve, reject) => {
+      db.get(`
+        SELECT
+          COUNT(*) as total_products,
+          SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) as active_products,
+          SUM(CASE WHEN stock_status = 'low_stock' THEN 1 ELSE 0 END) as low_stock_products,
+          SUM(CASE WHEN stock_status = 'out_of_stock' THEN 1 ELSE 0 END) as out_of_stock_products,
+          (SELECT COUNT(*) FROM categories) as total_categories
+        FROM products
+      `, (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
+  }
+}
+
 module.exports = Product;

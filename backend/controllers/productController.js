@@ -16,7 +16,6 @@ const { parsePagination, sanitizeSearch, slugify } = require('../utils/helpers')
  * GET /api/products
  */
 exports.getProducts = async (req, res, next) => {
-  console.log(req.query);
   try {
     const {
       page = 1,
