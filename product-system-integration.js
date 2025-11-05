@@ -54,15 +54,19 @@ class ProductSystemIntegration {
             // Update category filter dropdown
             const categoryFilter = document.querySelector('.filter-select[aria-label="Category filter"]');
             if (categoryFilter) {
-                // Clear existing options except "All Categories"
-                categoryFilter.innerHTML = '<option>All Categories</option>';
+                // Clear existing dynamic options
+                Array.from(categoryFilter.options).forEach(option => {
+                    if (option.value) { // Keep "All Categories" which has no value
+                        option.remove();
+                    }
+                });
 
                 if (Array.isArray(categories)) {
                     categories.forEach(category => {
                         const option = document.createElement('option');
                         const categoryName = String(category.name || 'Unknown Category');
                         const productCount = String(category.product_count || 0);
-                        option.value = categoryName;
+                        option.value = category.id;
                         option.textContent = `${categoryName} (${productCount})`;
                         categoryFilter.appendChild(option);
                     });
@@ -85,15 +89,8 @@ class ProductSystemIntegration {
             const queryString = new URLSearchParams(filters).toString();
             const response = await this.request(`/products?${queryString}`);
 
-            // Handle different response structures
-            let products = [];
-            if (response && response.data) {
-                if (Array.isArray(response.data)) {
-                    products = response.data;
-                } else if (response.data.products && Array.isArray(response.data.products)) {
-                    products = response.data.products;
-                }
-            }
+            // The API returns an object with a 'products' array
+            let products = response.products || [];
 
             console.log('Loaded products:', products); // Debug log
 
@@ -312,25 +309,9 @@ class ProductSystemIntegration {
 
             // Add to existing cart system
             if (window.cart) {
-                window.cart.addItem(productId, product.name, product.price, quantity);
+                window.cart.add(productId, quantity);
             } else {
-                // Fallback to localStorage
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                const existingItem = cart.find(item => item.id === productId);
-
-                if (existingItem) {
-                    existingItem.quantity += quantity;
-                } else {
-                    cart.push({
-                        id: productId,
-                        name: product.name,
-                        price: product.price,
-                        quantity: quantity
-                    });
-                }
-
-                localStorage.setItem('cart', JSON.stringify(cart));
-                this.updateCartBadge();
+                console.error('Cart not initialized');
             }
 
             this.showSuccess(`${product.name} added to cart!`);
@@ -382,7 +363,7 @@ class ProductSystemIntegration {
         document.addEventListener('click', (e) => {
             if (e.target.closest('.add-to-cart-btn[data-product-id]')) {
                 const button = e.target.closest('.add-to-cart-btn[data-product-id]');
-                const productId = parseInt(button.dataset.productId);
+                const productId = button.dataset.productId;
 
                 // Prevent clicking disabled buttons
                 if (button.disabled) {
@@ -422,20 +403,24 @@ class ProductSystemIntegration {
 
         // Category filter
         const categoryFilter = document.querySelector('.filter-select[aria-label="Category filter"]');
-        if (categoryFilter && categoryFilter.value !== 'All Categories') {
+        if (categoryFilter && categoryFilter.value) {
             filters.category = categoryFilter.value;
         }
 
         // Price filter
         const priceFilter = document.querySelector('.filter-select[aria-label="Price range filter"]');
-        if (priceFilter && priceFilter.value !== 'All Prices') {
-            filters.price_range = priceFilter.value;
+        if (priceFilter && priceFilter.value) {
+            const [minPrice, maxPrice] = priceFilter.value.split('-');
+            if (minPrice) filters.minPrice = minPrice;
+            if (maxPrice) filters.maxPrice = maxPrice;
         }
 
         // Sort filter
         const sortFilter = document.querySelector('.filter-select[aria-label="Sort by"]');
-        if (sortFilter && sortFilter.value !== 'Sort by: Featured') {
-            filters.sort = sortFilter.value;
+        if (sortFilter && sortFilter.value) {
+            const [sort, order] = sortFilter.value.split('-');
+            filters.sort = sort;
+            filters.order = order;
         }
 
         return filters;
@@ -447,9 +432,9 @@ class ProductSystemIntegration {
     initializeCart() {
         // Update cart badge if cart exists
         if (window.cart) {
-            window.cart.updateBadge();
-        } else {
-            this.updateCartBadge();
+            window.cart.load().then(() => {
+                this.updateCartBadge();
+            });
         }
     }
 

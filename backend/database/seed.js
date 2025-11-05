@@ -14,37 +14,40 @@ console.log('🌊 Starting database seed...\n');
 initializeSchema();
 
 // Clear existing data
-console.log('Clearing existing data...');
-db.exec(`DELETE FROM product_specifications`);
-db.exec(`DELETE FROM product_features`);
-db.exec(`DELETE FROM product_variants`);
-db.exec(`DELETE FROM product_images`);
-db.exec(`DELETE FROM reviews`);
-db.exec(`DELETE FROM cart_items`);
-db.exec(`DELETE FROM wishlist_items`);
-db.exec(`DELETE FROM products`);
-db.exec(`DELETE FROM categories`);
+db.serialize(() => {
+  console.log('Clearing existing data...');
+  db.run(`DELETE FROM product_specifications`);
+  db.run(`DELETE FROM product_features`);
+  db.run(`DELETE FROM product_variants`);
+  db.run(`DELETE FROM product_images`);
+  db.run(`DELETE FROM reviews`);
+  db.run(`DELETE FROM cart_items`);
+  db.run(`DELETE FROM wishlist_items`);
+  db.run(`DELETE FROM products`);
+  db.run(`DELETE FROM categories`);
 
-// Seed Categories
-console.log('Seeding categories...');
-const categories = [
-  { id: 'cat_electronics', name: 'Electronics', slug: 'electronics', description: 'Electronic devices and accessories' },
-  { id: 'cat_clothing', name: 'Clothing', slug: 'clothing', description: 'Fashion and apparel' },
-  { id: 'cat_home', name: 'Home & Garden', slug: 'home-garden', description: 'Home improvement and garden supplies' },
-  { id: 'cat_sports', name: 'Sports & Outdoors', slug: 'sports-outdoors', description: 'Sports equipment and outdoor gear' },
-  { id: 'cat_books', name: 'Books', slug: 'books', description: 'Books and reading materials' }
-];
+  // Seed Categories
+  console.log('Seeding categories...');
+  const categories = [
+    { id: 'cat_electronics', name: 'Electronics', slug: 'electronics', description: 'Electronic devices and accessories' },
+    { id: 'cat_clothing', name: 'Clothing', slug: 'clothing', description: 'Fashion and apparel' },
+    { id: 'cat_home', name: 'Home & Garden', slug: 'home-garden', description: 'Home improvement and garden supplies' },
+    { id: 'cat_sports', name: 'Sports & Outdoors', slug: 'sports-outdoors', description: 'Sports equipment and outdoor gear' },
+    { id: 'cat_books', name: 'Books', slug: 'books', description: 'Books and reading materials' }
+  ];
 
-const insertCategory = db.prepare(`
-  INSERT INTO categories (id, name, slug, description)
-  VALUES (?, ?, ?, ?)
-`);
+  const insertCategory = db.prepare(`
+    INSERT INTO categories (id, name, slug, description)
+    VALUES (?, ?, ?, ?)
+  `);
 
-categories.forEach(cat => {
-  insertCategory.run(cat.id, cat.name, cat.slug, cat.description);
+  categories.forEach(cat => {
+    insertCategory.run(cat.id, cat.name, cat.slug, cat.description);
+  });
+  insertCategory.finalize();
+
+  console.log(`✓ Seeded ${categories.length} categories`);
 });
-
-console.log(`✓ Seeded ${categories.length} categories`);
 
 // Seed Products
 console.log('Seeding products...');
@@ -454,94 +457,102 @@ const products = [
   }
 ];
 
-// Prepare insert statements
-const insertProduct = db.prepare(`
-  INSERT INTO products (
-    id, sku, name, slug, description, short_description, category_id,
-    price_amount, price_currency, price_original_amount, discount_percentage, discount_amount,
-    stock_quantity, stock_status, stock_low_threshold,
-    rating_average, rating_count, is_active, is_featured
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
+db.serialize(() => {
+  // Prepare insert statements
+  const insertProduct = db.prepare(`
+    INSERT INTO products (
+      id, sku, name, slug, description, short_description, category_id,
+      price_amount, price_currency, price_original_amount, discount_percentage, discount_amount,
+      stock_quantity, stock_status, stock_low_threshold,
+      rating_average, rating_count, is_active, is_featured
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `);
 
-const insertImage = db.prepare(`
-  INSERT INTO product_images (id, product_id, url, alt, display_order)
-  VALUES (?, ?, ?, ?, ?)
-`);
+  const insertImage = db.prepare(`
+    INSERT INTO product_images (id, product_id, url, alt, display_order)
+    VALUES (?, ?, ?, ?, ?)
+  `);
 
-const insertVariant = db.prepare(`
-  INSERT INTO product_variants (id, product_id, type, name, value, metadata)
-  VALUES (?, ?, ?, ?, ?, ?)
-`);
+  const insertVariant = db.prepare(`
+    INSERT INTO product_variants (id, product_id, type, name, value, metadata)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
 
-const insertFeature = db.prepare(`
-  INSERT INTO product_features (id, product_id, icon, title, description, display_order)
-  VALUES (?, ?, ?, ?, ?, ?)
-`);
+  const insertFeature = db.prepare(`
+    INSERT INTO product_features (id, product_id, icon, title, description, display_order)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
 
-const insertSpec = db.prepare(`
-  INSERT INTO product_specifications (id, product_id, spec_key, spec_value)
-  VALUES (?, ?, ?, ?)
-`);
+  const insertSpec = db.prepare(`
+    INSERT INTO product_specifications (id, product_id, spec_key, spec_value)
+    VALUES (?, ?, ?, ?)
+  `);
 
-// Insert products with all related data
-products.forEach(product => {
-  // Insert product
-  insertProduct.run(
-    product.id,
-    product.sku,
-    product.name,
-    product.slug,
-    product.description,
-    product.shortDescription,
-    product.categoryId,
-    product.price,
-    'USD',
-    product.originalPrice,
-    product.discountPercentage,
-    product.discountAmount,
-    product.stock,
-    product.stockStatus,
-    product.lowStockThreshold,
-    product.ratingAverage,
-    product.ratingCount,
-    product.isActive,
-    product.isFeatured
-  );
-
-  // Insert images
-  product.images.forEach(img => {
-    insertImage.run(uuidv4(), product.id, img.url, img.alt, img.order);
-  });
-
-  // Insert variants
-  product.variants.forEach(variant => {
-    insertVariant.run(
-      uuidv4(),
+  // Insert products with all related data
+  products.forEach(product => {
+    // Insert product
+    insertProduct.run(
       product.id,
-      variant.type,
-      variant.name,
-      variant.value,
-      JSON.stringify(variant.metadata)
+      product.sku,
+      product.name,
+      product.slug,
+      product.description,
+      product.shortDescription,
+      product.categoryId,
+      product.price,
+      'USD',
+      product.originalPrice,
+      product.discountPercentage,
+      product.discountAmount,
+      product.stock,
+      product.stockStatus,
+      product.lowStockThreshold,
+      product.ratingAverage,
+      product.ratingCount,
+      product.isActive,
+      product.isFeatured
     );
+
+    // Insert images
+    product.images.forEach(img => {
+      insertImage.run(uuidv4(), product.id, img.url, img.alt, img.order);
+    });
+
+    // Insert variants
+    product.variants.forEach(variant => {
+      insertVariant.run(
+        uuidv4(),
+        product.id,
+        variant.type,
+        variant.name,
+        variant.value,
+        JSON.stringify(variant.metadata)
+      );
+    });
+
+    // Insert features
+    product.features.forEach((feature, index) => {
+      insertFeature.run(
+        uuidv4(),
+        product.id,
+        feature.icon,
+        feature.title,
+        feature.description,
+        index
+      );
+    });
+
+    // Insert specifications
+    Object.entries(product.specifications).forEach(([key, value]) => {
+      insertSpec.run(uuidv4(), product.id, key, value);
+    });
   });
 
-  // Insert features
-  product.features.forEach((feature, index) => {
-    insertFeature.run(
-      uuidv4(),
-      product.id,
-      feature.icon,
-      feature.title,
-      feature.description,
-      index
-    );
-  });
-
-  // Insert specifications
-  Object.entries(product.specifications).forEach(([key, value]) => {
-    insertSpec.run(uuidv4(), product.id, key, value);
-  });
+  insertProduct.finalize();
+  insertImage.finalize();
+  insertVariant.finalize();
+  insertFeature.finalize();
+  insertSpec.finalize();
 });
 
 console.log(`✓ Seeded ${products.length} products with all related data`);
@@ -597,31 +608,38 @@ const reviews = [
   }
 ];
 
-const insertReview = db.prepare(`
-  INSERT INTO reviews (id, product_id, author_name, author_verified, rating, title, content, helpful_count)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-`);
+db.serialize(() => {
+  const insertReview = db.prepare(`
+    INSERT INTO reviews (id, product_id, author_name, author_verified, rating, title, content, helpful_count)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `);
 
-reviews.forEach(review => {
-  insertReview.run(
-    uuidv4(),
-    review.productId,
-    review.authorName,
-    review.verified,
-    review.rating,
-    review.title,
-    review.content,
-    review.helpful
-  );
+  reviews.forEach(review => {
+    insertReview.run(
+      uuidv4(),
+      review.productId,
+      review.authorName,
+      review.verified,
+      review.rating,
+      review.title,
+      review.content,
+      review.helpful
+    );
+  });
+
+  insertReview.finalize((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log(`✓ Seeded ${reviews.length} reviews`);
+
+    console.log('\n✅ Database seeding completed successfully!\n');
+    console.log('Summary:');
+    console.log(`  • 5 categories`);
+    console.log(`  • 10 products`);
+    console.log(`  • 5 reviews`);
+    console.log(`  • Product images, variants, features, and specifications\n`);
+
+    db.close();
+  });
 });
-
-console.log(`✓ Seeded ${reviews.length} reviews`);
-
-console.log('\n✅ Database seeding completed successfully!\n');
-console.log('Summary:');
-console.log(`  • ${categories.length} categories`);
-console.log(`  • ${products.length} products`);
-console.log(`  • ${reviews.length} reviews`);
-console.log(`  • Product images, variants, features, and specifications\n`);
-
-process.exit(0);

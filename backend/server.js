@@ -41,10 +41,16 @@ const PORT = process.env.PORT || 3000;
 initializeSchema();
 
 // Initialize cache system
-setTimeout(() => {
-  warmupCache();
-  startCacheMaintenance();
-}, 2000); // Start cache systems after 2 seconds
+(async () => {
+  try {
+    console.log('Attempting to warm up cache...');
+    await warmupCache();
+    console.log('Cache warmup successful.');
+    startCacheMaintenance();
+  } catch (err) {
+    console.error('[CACHE] Critical error during cache warmup, server might not function optimally:', err);
+  }
+})();
 
 // Security middleware - First line of defense
 app.use(helmet({

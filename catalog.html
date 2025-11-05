@@ -470,12 +470,11 @@
         >
       </div>
 
-      <a href="auth.html" class="header__auth" title="Sign In">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" stroke="currentColor" stroke-width="2"/>
-          <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2"/>
+      <a href="mailto:support@trader.com" class="header__auth" title="Contact Us">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7L8.5 10.5L17 7M4 17H16C16.5523 17 17 16.5523 17 16V4C17 3.44772 16.5523 3 16 3H4C3.44772 3 3 3.44772 3 4V16C3 16.5523 3.44772 17 4 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Sign In
+        Contact Us
       </a>
 
       <a href="checkout.html" class="header__cart">
@@ -505,41 +504,28 @@
       <span class="filter-label">Filter by:</span>
       
       <select class="filter-select" aria-label="Category filter">
-        <option>All Categories</option>
-        <option>Electronics</option>
-        <option>Clothing</option>
-        <option>Home & Garden</option>
-        <option>Books</option>
-        <option>Sports</option>
+        <option value="">All Categories</option>
       </select>
 
       <select class="filter-select" aria-label="Price range filter">
-        <option>All Prices</option>
-        <option>Under $25</option>
-        <option>$25 - $50</option>
-        <option>$50 - $100</option>
-        <option>Over $100</option>
+        <option value="">All Prices</option>
+        <option value="0-25">Under $25</option>
+        <option value="25-50">$25 - $50</option>
+        <option value="50-100">$50 - $100</option>
+        <option value="100-">$100 and over</option>
       </select>
 
       <select class="filter-select" aria-label="Sort by">
-        <option>Sort by: Featured</option>
-        <option>Price: Low to High</option>
-        <option>Price: High to Low</option>
-        <option>Newest First</option>
-        <option>Best Rating</option>
+        <option value="">Sort by: Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="date-desc">Newest First</option>
+        <option value="rating-desc">Best Rating</option>
       </select>
     </div>
 
     <!-- Product Grid - Will be dynamically populated -->
-    <div class="product-grid" id="product-grid">
-      <!-- Loading state while products are being fetched -->
-      <div class="loading-state" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" style="margin: 0 auto 20px; animation: spin 1s linear infinite;">
-          <circle cx="30" cy="30" r="25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="150 50"/>
-        </svg>
-        <p style="color: var(--color-neutral-600);">Loading products...</p>
-      </div>
-    </div>
+    <div class="product-grid" id="product-grid"></div>
   </main>
 
   <!-- Interaction System -->
@@ -580,126 +566,7 @@
       }
     });
 
-    // Search functionality
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-      searchInput.addEventListener('input', Voltage.debounce((e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const productCards = document.querySelectorAll('.product-card');
-
-        productCards.forEach(card => {
-          const title = card.querySelector('.product-card__title').textContent.toLowerCase();
-          const description = card.querySelector('.product-card__description').textContent.toLowerCase();
-          const category = card.querySelector('.product-card__category').textContent.toLowerCase();
-
-          const matches = title.includes(searchTerm) ||
-                         description.includes(searchTerm) ||
-                         category.includes(searchTerm);
-
-          card.style.display = matches ? 'block' : 'none';
-        });
-      }));
-    }
-
-    // Filter functionality
-    const filterSelects = document.querySelectorAll('.filter-select');
-    filterSelects.forEach(select => {
-      select.addEventListener('change', () => {
-        applyFilters();
-      });
-    });
-
-    function applyFilters() {
-      const categoryFilter = document.querySelector('.filter-select[aria-label="Category filter"]').value;
-      const priceFilter = document.querySelector('.filter-select[aria-label="Price range filter"]').value;
-      const sortFilter = document.querySelector('.filter-select[aria-label="Sort by"]').value;
-
-      const productCards = Array.from(document.querySelectorAll('.product-card'));
-
-      // Filter products
-      let visibleProducts = productCards.filter(card => {
-        const category = card.querySelector('.product-card__category').textContent;
-        const priceText = card.querySelector('.product-card__price-current').textContent;
-        const price = parseFloat(priceText.replace('$', ''));
-
-        // Category filter
-        if (categoryFilter !== 'All Categories' && category !== categoryFilter) {
-          return false;
-        }
-
-        // Price filter
-        if (priceFilter !== 'All Prices') {
-          if (priceFilter === 'Under $25' && price >= 25) return false;
-          if (priceFilter === '$25 - $50' && (price < 25 || price > 50)) return false;
-          if (priceFilter === '$50 - $100' && (price < 50 || price > 100)) return false;
-          if (priceFilter === 'Over $100' && price <= 100) return false;
-        }
-
-        return true;
-      });
-
-      // Sort products
-      visibleProducts.sort((a, b) => {
-        const aPrice = parseFloat(a.querySelector('.product-card__price-current').textContent.replace('$', ''));
-        const bPrice = parseFloat(b.querySelector('.product-card__price-current').textContent.replace('$', ''));
-
-        switch (sortFilter) {
-          case 'Price: Low to High':
-            return aPrice - bPrice;
-          case 'Price: High to Low':
-            return bPrice - aPrice;
-          case 'Best Rating':
-            const aRating = parseInt(a.querySelector('.product-card__rating span:last-child').textContent.replace(/[()]/g, ''));
-            const bRating = parseInt(b.querySelector('.product-card__rating span:last-child').textContent.replace(/[()]/g, ''));
-            return bRating - aRating;
-          default:
-            return 0; // Keep original order for "Featured" and "Newest First"
-        }
-      });
-
-      // Hide all products first
-      productCards.forEach(card => {
-        card.style.display = 'none';
-      });
-
-      // Show filtered and sorted products
-      visibleProducts.forEach(card => {
-        card.style.display = 'block';
-      });
-
-      // Show no results message if needed
-      if (visibleProducts.length === 0) {
-        showNoResults();
-      } else {
-        hideNoResults();
-      }
-    }
-
-    function showNoResults() {
-      let noResultsMsg = document.querySelector('.no-results');
-      if (!noResultsMsg) {
-        noResultsMsg = document.createElement('div');
-        noResultsMsg.className = 'no-results';
-        noResultsMsg.innerHTML = `
-          <div style="text-align: center; padding: 60px 20px; grid-column: 1 / -1;">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin: 0 auto 20px; opacity: 0.3;">
-              <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="2"/>
-              <path d="M30 30L50 50M50 30L30 50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <h3 style="color: var(--color-neutral-600); margin-bottom: 8px;">No products found</h3>
-            <p style="color: var(--color-neutral-500);">Try adjusting your filters or search terms</p>
-          </div>
-        `;
-        document.querySelector('.product-grid').appendChild(noResultsMsg);
-      }
-    }
-
-    function hideNoResults() {
-      const noResultsMsg = document.querySelector('.no-results');
-      if (noResultsMsg) {
-        noResultsMsg.remove();
-      }
-    }
+    // All search and filter functionality is now handled by product-system-integration.js
 
     // Add to cart animations
     document.addEventListener('click', (e) => {

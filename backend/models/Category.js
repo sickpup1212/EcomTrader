@@ -10,23 +10,28 @@ class Category {
   /**
    * Get all categories as flat list
    */
-  static getAll() {
-    return db.prepare(`
-      SELECT
-        c.*,
-        parent.name as parent_name,
-        parent.slug as parent_slug
-      FROM categories c
-      LEFT JOIN categories parent ON c.parent_id = parent.id
-      ORDER BY c.display_order ASC, c.name ASC
-    `).all();
+  static async getAll() {
+    return new Promise((resolve, reject) => {
+      db.all(`
+        SELECT
+          c.*,
+          parent.name as parent_name,
+          parent.slug as parent_slug
+        FROM categories c
+        LEFT JOIN categories parent ON c.parent_id = parent.id
+        ORDER BY c.display_order ASC, c.name ASC
+      `, (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
+    });
   }
 
   /**
    * Get category tree (hierarchical structure)
    */
-  static getTree() {
-    const categories = this.getAll();
+  static async getTree() {
+    const categories = await this.getAll();
     const categoryMap = {};
     const roots = [];
 
@@ -50,35 +55,50 @@ class Category {
   /**
    * Get category by ID with full details
    */
-  static getById(id) {
-    const category = db.prepare(`
-      SELECT
-        c.*,
-        parent.name as parent_name,
-        parent.slug as parent_slug
-      FROM categories c
-      LEFT JOIN categories parent ON c.parent_id = parent.id
-      WHERE c.id = ?
-    `).get(id);
+  static async getById(id) {
+    const category = await new Promise((resolve, reject) => {
+      db.get(`
+        SELECT
+          c.*,
+          parent.name as parent_name,
+          parent.slug as parent_slug
+        FROM categories c
+        LEFT JOIN categories parent ON c.parent_id = parent.id
+        WHERE c.id = ?
+      `, [id], (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
 
     if (!category) return null;
 
     // Get children
-    const children = db.prepare(`
-      SELECT id, name, slug, description, display_order
-      FROM categories
-      WHERE parent_id = ? AND is_active = 1
-      ORDER BY display_order ASC, name ASC
-    `).all(id);
+    const children = await new Promise((resolve, reject) => {
+      db.all(`
+        SELECT id, name, slug, description, display_order
+        FROM categories
+        WHERE parent_id = ? AND is_active = 1
+        ORDER BY display_order ASC, name ASC
+      `, [id], (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
+    });
 
     // Get product count
-    const productCount = db.prepare(`
-      SELECT COUNT(*) as count
-      FROM products
-      WHERE category_id = ? OR category_id IN (
-        SELECT id FROM categories WHERE parent_id = ?
-      )
-    `).get(id, id);
+    const productCount = await new Promise((resolve, reject) => {
+      db.get(`
+        SELECT COUNT(*) as count
+        FROM products
+        WHERE category_id = ? OR category_id IN (
+          SELECT id FROM categories WHERE parent_id = ?
+        )
+      `, [id, id], (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
 
     return {
       ...category,
@@ -90,56 +110,69 @@ class Category {
   /**
    * Get categories with product counts
    */
-  static getWithCounts() {
-    return db.prepare(`
-      SELECT
-        c.*,
-        parent.name as parent_name,
-        parent.slug as parent_slug,
-        COUNT(p.id) as product_count
-      FROM categories c
-      LEFT JOIN categories parent ON c.parent_id = parent.id
-      LEFT JOIN products p ON c.id = p.category_id AND p.status = 'active'
-      GROUP BY c.id
-      ORDER BY c.display_order ASC, c.name ASC
-    `).all();
+  static async getWithCounts() {
+    return new Promise((resolve, reject) => {
+      db.all(`
+        SELECT
+          c.*,
+          parent.name as parent_name,
+          parent.slug as parent_slug,
+          COUNT(p.id) as product_count
+        FROM categories c
+        LEFT JOIN categories parent ON c.parent_id = parent.id
+        LEFT JOIN products p ON c.id = p.category_id AND p.status = 'active'
+        GROUP BY c.id
+        ORDER BY c.display_order ASC, c.name ASC
+      `, (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
+    });
   }
 
   /**
    * Create new category
    */
-  static create(data) {
+  static async create(data) {
     const id = generateId('cat');
     const slug = slugify(data.name);
 
     // Get next display order if not provided
     let displayOrder = data.displayOrder;
     if (displayOrder === undefined) {
-      const maxOrder = db.prepare(`
-        SELECT MAX(display_order) as max_order
-        FROM categories
-        WHERE parent_id = ?
-      `).get(data.parentId || null);
+      const maxOrder = await new Promise((resolve, reject) => {
+        db.get(`
+          SELECT MAX(display_order) as max_order
+          FROM categories
+          WHERE parent_id = ?
+        `, [data.parentId || null], (err, row) => {
+          if (err) return reject(err);
+          resolve(row);
+        });
+      });
       displayOrder = (maxOrder?.max_order || 0) + 1;
     }
 
-    const stmt = db.prepare(`
-      INSERT INTO categories (
-        id, name, slug, description, parent_id, image_url,
-        display_order, is_active
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    stmt.run(
-      id,
-      data.name,
-      slug,
-      data.description || null,
-      data.parentId || null,
-      data.imageUrl || null,
-      displayOrder,
-      data.isActive !== false ? 1 : 0
-    );
+    await new Promise((resolve, reject) => {
+      db.run(`
+        INSERT INTO categories (
+          id, name, slug, description, parent_id, image_url,
+          display_order, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        id,
+        data.name,
+        slug,
+        data.description || null,
+        data.parentId || null,
+        data.imageUrl || null,
+        displayOrder,
+        data.isActive !== false ? 1 : 0
+      ], function(err) {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
 
     return this.getById(id);
   }
@@ -147,7 +180,7 @@ class Category {
   /**
    * Update category
    */
-  static update(id, data) {
+  static async update(id, data) {
     const updates = [];
     const params = [];
 
@@ -180,12 +213,16 @@ class Category {
       updates.push('updated_at = datetime(\'now\')');
       params.push(id);
 
-      const stmt = db.prepare(`
-        UPDATE categories
-        SET ${updates.join(', ')}
-        WHERE id = ?
-      `);
-      stmt.run(...params);
+      await new Promise((resolve, reject) => {
+        db.run(`
+          UPDATE categories
+          SET ${updates.join(', ')}
+          WHERE id = ?
+        `, params, function(err) {
+          if (err) return reject(err);
+          resolve();
+        });
+      });
     }
 
     return this.getById(id);
@@ -194,47 +231,67 @@ class Category {
   /**
    * Delete category (only if no products and no children)
    */
-  static delete(id) {
+  static async delete(id) {
     // Check if category has products
-    const productCount = db.prepare(`
-      SELECT COUNT(*) as count
-      FROM products
-      WHERE category_id = ? OR category_id IN (
-        SELECT id FROM categories WHERE parent_id = ?
-      )
-    `).get(id, id);
+    const productCount = await new Promise((resolve, reject) => {
+      db.get(`
+        SELECT COUNT(*) as count
+        FROM products
+        WHERE category_id = ? OR category_id IN (
+          SELECT id FROM categories WHERE parent_id = ?
+        )
+      `, [id, id], (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
 
     if (productCount.count > 0) {
       throw new Error('Cannot delete category with products');
     }
 
     // Check if category has children
-    const childCount = db.prepare(`
-      SELECT COUNT(*) as count FROM categories WHERE parent_id = ?
-    `).get(id);
+    const childCount = await new Promise((resolve, reject) => {
+      db.get(`
+        SELECT COUNT(*) as count FROM categories WHERE parent_id = ?
+      `, [id], (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
 
     if (childCount.count > 0) {
       throw new Error('Cannot delete category with subcategories');
     }
 
-    const stmt = db.prepare('DELETE FROM categories WHERE id = ?');
-    const result = stmt.run(id);
+    const result = await new Promise((resolve, reject) => {
+      db.run('DELETE FROM categories WHERE id = ?', [id], function(err) {
+        if (err) return reject(err);
+        resolve({ changes: this.changes });
+      });
+    });
+
     return result.changes > 0;
   }
 
   /**
    * Get category breadcrumbs for a given category ID
    */
-  static getBreadcrumbs(categoryId) {
+  static async getBreadcrumbs(categoryId) {
     const breadcrumbs = [];
     let currentId = categoryId;
 
     while (currentId) {
-      const category = db.prepare(`
-        SELECT id, name, slug, parent_id
-        FROM categories
-        WHERE id = ?
-      `).get(currentId);
+      const category = await new Promise((resolve, reject) => {
+        db.get(`
+          SELECT id, name, slug, parent_id
+          FROM categories
+          WHERE id = ?
+        `, [currentId], (err, row) => {
+          if (err) return reject(err);
+          resolve(row);
+        });
+      });
 
       if (!category) break;
 
@@ -253,12 +310,12 @@ class Category {
   /**
    * Get products in category and its children
    */
-  static getProducts(categoryId, filters = {}) {
+  static async getProducts(categoryId, filters = {}) {
     const { page = 1, limit = 25, search, sort = 'name', order = 'ASC' } = filters;
     const offset = (page - 1) * limit;
 
     // Get all category IDs (including children)
-    const allCategoryIds = this.getAllCategoryIds(categoryId);
+    const allCategoryIds = await this.getAllCategoryIds(categoryId);
 
     let whereClause = `WHERE category_id IN (${allCategoryIds.map(() => '?').join(',')}) AND status = 'active'`;
     const params = allCategoryIds;
@@ -271,8 +328,12 @@ class Category {
     }
 
     // Get total count
-    const countQuery = `SELECT COUNT(*) as total FROM products ${whereClause}`;
-    const { total } = db.prepare(countQuery).get(...params);
+    const { total } = await new Promise((resolve, reject) => {
+      db.get(`SELECT COUNT(*) as total FROM products ${whereClause}`, params, (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
 
     // Get products
     const sortField = sort === 'price' ? 'price_amount' : sort === 'date' ? 'created_at' : 'name';
@@ -284,7 +345,12 @@ class Category {
       LIMIT ? OFFSET ?
     `;
 
-    const products = db.prepare(query).all(...params, limit, offset);
+    const products = await new Promise((resolve, reject) => {
+      db.all(query, [...params, limit, offset], (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
+    });
 
     return {
       products: products.map(p => Product.formatProductSummary(p)),
@@ -295,15 +361,21 @@ class Category {
   /**
    * Recursively get all category IDs including children
    */
-  static getAllCategoryIds(categoryId) {
+  static async getAllCategoryIds(categoryId) {
     const categoryIds = [categoryId];
-    const children = db.prepare(`
-      SELECT id FROM categories WHERE parent_id = ?
-    `).all(categoryId);
-
-    children.forEach(child => {
-      categoryIds.push(...this.getAllCategoryIds(child.id));
+    const children = await new Promise((resolve, reject) => {
+      db.all(`
+        SELECT id FROM categories WHERE parent_id = ?
+      `, [categoryId], (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      });
     });
+
+    for (const child of children) {
+      const childIds = await this.getAllCategoryIds(child.id);
+      categoryIds.push(...childIds);
+    }
 
     return categoryIds;
   }
@@ -311,33 +383,47 @@ class Category {
   /**
    * Reorder categories
    */
-  static reorder(reorderData) {
-    const transaction = db.transaction(() => {
-      reorderData.forEach(({ categoryId, displayOrder }) => {
-        db.prepare(`
-          UPDATE categories
-          SET display_order = ?, updated_at = datetime('now')
-          WHERE id = ?
-        `).run(displayOrder, categoryId);
+  static async reorder(reorderData) {
+    return new Promise((resolve, reject) => {
+      db.serialize(() => {
+        db.run('BEGIN TRANSACTION');
+        reorderData.forEach(({ categoryId, displayOrder }) => {
+          db.run(`
+            UPDATE categories
+            SET display_order = ?, updated_at = datetime('now')
+            WHERE id = ?
+          `, [displayOrder, categoryId], (err) => {
+            if (err) {
+              db.run('ROLLBACK');
+              reject(err);
+            }
+          });
+        });
+        db.run('COMMIT', (err) => {
+          if (err) reject(err);
+          resolve(true);
+        });
       });
     });
-
-    transaction();
-    return true;
   }
 
   /**
    * Get category statistics
    */
-  static getStats() {
-    return db.prepare(`
-      SELECT
-        COUNT(*) as total_categories,
-        SUM(CASE WHEN parent_id IS NULL THEN 1 ELSE 0 END) as root_categories,
-        SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active_categories,
-        (SELECT COUNT(*) FROM products WHERE status = 'active') as total_products
-      FROM categories
-    `).get();
+  static async getStats() {
+    return new Promise((resolve, reject) => {
+      db.get(`
+        SELECT
+          COUNT(*) as total_categories,
+          SUM(CASE WHEN parent_id IS NULL THEN 1 ELSE 0 END) as root_categories,
+          SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active_categories,
+          (SELECT COUNT(*) FROM products WHERE status = 'active') as total_products
+        FROM categories
+      `, (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
+      });
+    });
   }
 }
 

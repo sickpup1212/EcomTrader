@@ -12,7 +12,7 @@ const { success } = require('../utils/response');
  */
 exports.getCart = async (req, res, next) => {
   try {
-    const cart = Cart.getBySessionId(req.sessionId);
+    const cart = await Cart.getBySessionId(req.sessionId);
     return success(res, { cart });
   } catch (err) {
     next(err);
@@ -25,7 +25,7 @@ exports.getCart = async (req, res, next) => {
  */
 exports.addItem = async (req, res, next) => {
   try {
-    const cart = Cart.addItem(req.sessionId, req.body);
+    const cart = await Cart.addItem(req.sessionId, req.body);
     return success(res, { cart }, 'Product added to cart');
   } catch (err) {
     next(err);
@@ -38,7 +38,7 @@ exports.addItem = async (req, res, next) => {
  */
 exports.updateItem = async (req, res, next) => {
   try {
-    const cart = Cart.updateItem(req.sessionId, req.params.id, req.body.quantity);
+    const cart = await Cart.updateItem(req.sessionId, req.params.id, req.body.quantity);
     return success(res, { cart }, 'Cart updated');
   } catch (err) {
     next(err);
@@ -51,7 +51,7 @@ exports.updateItem = async (req, res, next) => {
  */
 exports.removeItem = async (req, res, next) => {
   try {
-    const cart = Cart.removeItem(req.sessionId, req.params.id);
+    const cart = await Cart.removeItem(req.sessionId, req.params.id);
     return success(res, { cart }, 'Item removed from cart');
   } catch (err) {
     next(err);
@@ -64,7 +64,7 @@ exports.removeItem = async (req, res, next) => {
  */
 exports.clearCart = async (req, res, next) => {
   try {
-    const cart = Cart.clear(req.sessionId);
+    const cart = await Cart.clear(req.sessionId);
     return success(res, { cart }, 'Cart cleared');
   } catch (err) {
     next(err);

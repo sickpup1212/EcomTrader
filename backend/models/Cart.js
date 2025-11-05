@@ -12,111 +12,125 @@ class Cart {
    * Get cart for session
    */
   static getBySessionId(sessionId) {
-    const items = db.prepare(`
-      SELECT 
-        ci.id,
-        ci.product_id as productId,
-        ci.quantity,
-        ci.selected_variants as selectedVariants,
-        ci.created_at as addedAt
-      FROM cart_items ci
-      WHERE ci.session_id = ?
-    `).all(sessionId);
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT
+          ci.id,
+          ci.product_id as productId,
+          ci.quantity,
+          ci.selected_variants as selectedVariants,
+          ci.created_at as addedAt
+        FROM cart_items ci
+        WHERE ci.session_id = ?
+      `;
+      db.all(query, [sessionId], (err, items) => {
+        if (err) {
+          return reject(err);
+        }
 
-    // Get full product data for each item
-    const cartItems = items.map(item => {
-      const product = Product.getById(item.productId);
-      return {
-        ...item,
-        product,
-        selectedVariants: item.selectedVariants ? JSON.parse(item.selectedVariants) : undefined
-      };
+        Promise.all(items.map(async (item) => {
+          const product = await Product.getById(item.productId);
+          return {
+            ...item,
+            product,
+            selectedVariants: item.selectedVariants ? JSON.parse(item.selectedVariants) : undefined
+          };
+        })).then(cartItems => {
+          const subtotal = cartItems.reduce((sum, item) => {
+            return sum + (item.product.price.amount * item.quantity);
+          }, 0);
+
+          resolve({
+            id: `cart_${sessionId}`,
+            items: cartItems,
+            subtotal,
+            total: subtotal,
+            itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0)
+          });
+        }).catch(reject);
+      });
     });
-
-    // Calculate totals
-    const subtotal = cartItems.reduce((sum, item) => {
-      return sum + (item.product.price.amount * item.quantity);
-    }, 0);
-
-    return {
-      id: `cart_${sessionId}`,
-      items: cartItems,
-      subtotal,
-      total: subtotal,
-      itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0)
-    };
   }
 
   /**
    * Add item to cart
    */
   static addItem(sessionId, data) {
-    // Check if item already exists
-    const existing = db.prepare(`
-      SELECT id, quantity FROM cart_items
-      WHERE session_id = ? AND product_id = ?
-    `).get(sessionId, data.productId);
+    return new Promise((resolve, reject) => {
+      const query = `SELECT id, quantity FROM cart_items WHERE session_id = ? AND product_id = ?`;
+      db.get(query, [sessionId, data.productId], (err, existing) => {
+        if (err) {
+          return reject(err);
+        }
 
-    if (existing) {
-      // Update quantity
-      db.prepare(`
-        UPDATE cart_items
-        SET quantity = quantity + ?, updated_at = datetime('now')
-        WHERE id = ?
-      `).run(data.quantity || 1, existing.id);
-    } else {
-      // Insert new item
-      const id = generateId('item');
-      db.prepare(`
-        INSERT INTO cart_items (id, session_id, product_id, quantity, selected_variants)
-        VALUES (?, ?, ?, ?, ?)
-      `).run(
-        id,
-        sessionId,
-        data.productId,
-        data.quantity || 1,
-        data.variants ? JSON.stringify(data.variants) : null
-      );
-    }
-
-    return this.getBySessionId(sessionId);
+        if (existing) {
+          const updateQuery = `UPDATE cart_items SET quantity = quantity + ?, updated_at = datetime('now') WHERE id = ?`;
+          db.run(updateQuery, [data.quantity || 1, existing.id], (err) => {
+            if (err) {
+              return reject(err);
+            }
+            this.getBySessionId(sessionId).then(resolve).catch(reject);
+          });
+        } else {
+          const id = generateId('item');
+          const insertQuery = `INSERT INTO cart_items (id, session_id, product_id, quantity, selected_variants) VALUES (?, ?, ?, ?, ?)`;
+          db.run(insertQuery, [id, sessionId, data.productId, data.quantity || 1, data.variants ? JSON.stringify(data.variants) : null], (err) => {
+            if (err) {
+              return reject(err);
+            }
+            this.getBySessionId(sessionId).then(resolve).catch(reject);
+          });
+        }
+      });
+    });
   }
 
   /**
    * Update cart item quantity
    */
   static updateItem(sessionId, itemId, quantity) {
-    if (quantity <= 0) {
-      return this.removeItem(sessionId, itemId);
-    }
-
-    db.prepare(`
-      UPDATE cart_items
-      SET quantity = ?, updated_at = datetime('now')
-      WHERE id = ? AND session_id = ?
-    `).run(quantity, itemId, sessionId);
-
-    return this.getBySessionId(sessionId);
+    return new Promise((resolve, reject) => {
+      if (quantity <= 0) {
+        return this.removeItem(sessionId, itemId).then(resolve).catch(reject);
+      }
+      const query = `UPDATE cart_items SET quantity = ?, updated_at = datetime('now') WHERE id = ? AND session_id = ?`;
+      db.run(query, [quantity, itemId, sessionId], (err) => {
+        if (err) {
+          return reject(err);
+        }
+        this.getBySessionId(sessionId).then(resolve).catch(reject);
+      });
+    });
   }
 
   /**
    * Remove item from cart
    */
   static removeItem(sessionId, itemId) {
-    db.prepare(`
-      DELETE FROM cart_items
-      WHERE id = ? AND session_id = ?
-    `).run(itemId, sessionId);
-
-    return this.getBySessionId(sessionId);
+    return new Promise((resolve, reject) => {
+      const query = `DELETE FROM cart_items WHERE id = ? AND session_id = ?`;
+      db.run(query, [itemId, sessionId], (err) => {
+        if (err) {
+          return reject(err);
+        }
+        this.getBySessionId(sessionId).then(resolve).catch(reject);
+      });
+    });
   }
 
   /**
    * Clear cart
    */
   static clear(sessionId) {
-    db.prepare('DELETE FROM cart_items WHERE session_id = ?').run(sessionId);
-    return this.getBySessionId(sessionId);
+    return new Promise((resolve, reject) => {
+      const query = `DELETE FROM cart_items WHERE session_id = ?`;
+      db.run(query, [sessionId], (err) => {
+        if (err) {
+          return reject(err);
+        }
+        this.getBySessionId(sessionId).then(resolve).catch(reject);
+      });
+    });
   }
 }
 

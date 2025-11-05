@@ -31,9 +31,7 @@ router.get('/', [
     .isLength({ min: 1 })
     .withMessage('Search query cannot be empty'),
   query('category')
-    .optional()
-    .isUUID()
-    .withMessage('Invalid category ID format'),
+    .optional(),
   query('status')
     .optional()
     .isIn(['active', 'inactive'])

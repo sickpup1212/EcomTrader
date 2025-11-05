@@ -16,6 +16,7 @@ const { parsePagination, sanitizeSearch, slugify } = require('../utils/helpers')
  * GET /api/products
  */
 exports.getProducts = async (req, res, next) => {
+  console.log(req.query);
   try {
     const {
       page = 1,
@@ -56,10 +57,12 @@ exports.getProducts = async (req, res, next) => {
       return validationError(res, 'Order must be ASC or DESC');
     }
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
+
+    const formattedProducts = await Promise.all(products.map(p => Product.formatProductSummary(p)));
 
     return success(res, {
-      products: products.map(p => Product.formatProductSummary(p)),
+      products: formattedProducts.filter(p => p),
       pagination: {
         page: filters.page,
         limit: filters.limit,
@@ -88,7 +91,7 @@ exports.getProducts = async (req, res, next) => {
  */
 exports.getProduct = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -99,7 +102,7 @@ exports.getProduct = async (req, res, next) => {
       return notFound(res, 'Product');
     }
 
-    return success(res, product);
+    return success(res, { product });
   } catch (err) {
     next(err);
   }
@@ -111,7 +114,7 @@ exports.getProduct = async (req, res, next) => {
  */
 exports.getProductBySku = async (req, res, next) => {
   try {
-    const product = Product.getBySku(req.params.sku);
+    const product = await Product.getBySku(req.params.sku);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -135,13 +138,13 @@ exports.getProductBySku = async (req, res, next) => {
 exports.getProductBySlug = async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const { products } = Product.getAll({ search: slug, limit: 1 });
+    const { products } = await Product.getAll({ search: slug, limit: 1 });
 
     if (!products || products.length === 0) {
       return notFound(res, 'Product');
     }
 
-    const product = Product.getById(products[0].id);
+    const product = await Product.getById(products[0].id);
 
     if (!product || product.status !== 'active' || !product.metadata.isActive) {
       return notFound(res, 'Product');
@@ -171,10 +174,10 @@ exports.getFeaturedProducts = async (req, res, next) => {
       order: 'ASC'
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     return success(res, {
-      products: products.map(p => Product.formatProductSummary(p)),
+      products: await Promise.all(products.map(p => Product.formatProductSummary(p))),
       count: products.length,
       category
     });
@@ -189,7 +192,7 @@ exports.getFeaturedProducts = async (req, res, next) => {
  */
 exports.getRelatedProducts = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -206,7 +209,7 @@ exports.getRelatedProducts = async (req, res, next) => {
       order: 'ASC'
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     // Exclude the current product from related products
     const relatedProducts = products
@@ -214,7 +217,7 @@ exports.getRelatedProducts = async (req, res, next) => {
       .slice(0, parseInt(limit));
 
     return success(res, {
-      products: relatedProducts.map(p => Product.formatProductSummary(p)),
+      products: await Promise.all(relatedProducts.map(p => Product.formatProductSummary(p))),
       count: relatedProducts.length
     });
   } catch (err) {
@@ -228,7 +231,7 @@ exports.getRelatedProducts = async (req, res, next) => {
  */
 exports.getProductInventory = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -292,11 +295,11 @@ exports.searchProducts = async (req, res, next) => {
       order
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     return success(res, {
       query,
-      products: products.map(p => Product.formatProductSummary(p)),
+      products: await Promise.all(products.map(p => Product.formatProductSummary(p))),
       pagination: {
         page: filters.page,
         limit: filters.limit,
@@ -319,7 +322,7 @@ exports.getProductsByCategory = async (req, res, next) => {
     const { page = 1, limit = 25, sort = 'name', order = 'ASC' } = req.query;
 
     // Validate category exists
-    const category = Category.getById(categoryId);
+    const category = await Category.getById(categoryId);
     if (!category) {
       return notFound(res, 'Category');
     }
@@ -332,7 +335,7 @@ exports.getProductsByCategory = async (req, res, next) => {
       includeSubcategories: req.query.includeSubcategories !== 'false'
     };
 
-    const result = Category.getProducts(categoryId, filters);
+    const result = await Category.getProducts(categoryId, filters);
 
     return success(res, {
       category: {
@@ -360,7 +363,7 @@ exports.getProductsByCategory = async (req, res, next) => {
 exports.getProductReviews = async (req, res, next) => {
   try {
     const { page = 1, limit = 10, sort = 'date', order = 'DESC' } = req.query;
-    const { reviews, total } = Review.getByProductId(
+    const { reviews, total } = await Review.getByProductId(
       req.params.id,
       parseInt(page),
       parseInt(limit),
@@ -389,7 +392,7 @@ exports.getProductReviews = async (req, res, next) => {
 exports.createReview = async (req, res, next) => {
   try {
     // Validate product exists and is active
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
     if (!product) {
       return notFound(res, 'Product');
     }
@@ -409,7 +412,7 @@ exports.createReview = async (req, res, next) => {
       return validationError(res, 'Rating must be between 1 and 5');
     }
 
-    const reviewId = Review.create({
+    const reviewId = await Review.create({
       productId: req.params.id,
       rating: parseInt(rating),
       title,
@@ -431,7 +434,7 @@ exports.getProductCategories = async (req, res, next) => {
   try {
     const { includeEmpty = false } = req.query;
 
-    const categories = Category.getWithCounts();
+    const categories = await Category.getWithCounts();
 
     const filteredCategories = includeEmpty === 'true'
       ? categories
@@ -462,24 +465,26 @@ exports.getProductCategories = async (req, res, next) => {
  */
 exports.getProductCategoriesTree = async (req, res, next) => {
   try {
-    const tree = Category.getTree();
+    const tree = await Category.getTree();
 
-    const enrichTreeWithCounts = (nodes) => {
-      return nodes.map(node => {
-        const categoryWithCount = Category.getWithCounts().find(cat => cat.id === node.id);
-        return {
-          id: node.id,
-          name: node.name,
-          slug: node.slug,
-          description: node.description,
-          imageUrl: node.image_url,
-          productCount: categoryWithCount?.product_count || 0,
-          children: node.children.length > 0 ? enrichTreeWithCounts(node.children) : undefined
-        };
-      });
+    const enrichTreeWithCounts = async (nodes) => {
+        const categoriesWithCounts = await Category.getWithCounts();
+        return Promise.all(nodes.map(async (node) => {
+            const categoryWithCount = categoriesWithCounts.find(cat => cat.id === node.id);
+            const children = node.children.length > 0 ? await enrichTreeWithCounts(node.children) : undefined;
+            return {
+                id: node.id,
+                name: node.name,
+                slug: node.slug,
+                description: node.description,
+                imageUrl: node.image_url,
+                productCount: categoryWithCount?.product_count || 0,
+                children
+            };
+        }));
     };
 
-    const enrichedTree = enrichTreeWithCounts(tree);
+    const enrichedTree = await enrichTreeWithCounts(tree);
 
     return success(res, {
       categories: enrichedTree

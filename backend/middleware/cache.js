@@ -199,15 +199,15 @@ function getCacheStats() {
 /**
  * Cache warming function for common data
  */
-function warmupCache() {
+async function warmupCache() {
   console.log('[CACHE] Starting cache warmup...');
 
   // Warm up categories (most frequently accessed)
   try {
     const Category = require('../models/Category');
-    const categories = Category.getAll();
-    const categoryTree = Category.getTree();
-    const categoriesWithCounts = Category.getWithCounts();
+    const categories = await Category.getAll();
+    const categoryTree = await Category.getTree();
+    const categoriesWithCounts = await Category.getWithCounts();
 
     const cacheKey = 'categories:all';
     categoryCache.set(cacheKey, categories, 600);
@@ -226,7 +226,7 @@ function warmupCache() {
   // Warm up featured products
   try {
     const Product = require('../models/Product');
-    const { products } = Product.getAll({ featured: true, limit: 12 });
+    const { products } = await Product.getAll({ featured: true, limit: 12 });
 
     const featuredKey = 'products:featured';
     productCache.set(featuredKey, { success: true, data: { products } }, 300);

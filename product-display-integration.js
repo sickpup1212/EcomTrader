@@ -55,7 +55,7 @@ class ProductDisplayIntegration {
     async loadProduct() {
         try {
             const response = await this.request(`/products/${this.productId}`);
-            this.product = response.data;
+            this.product = response.product;
             this.updateProductDisplay();
         } catch (error) {
             console.error('Failed to load product:', error);
