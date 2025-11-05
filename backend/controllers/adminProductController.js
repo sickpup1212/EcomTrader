@@ -30,7 +30,7 @@ exports.getProducts = async (req, res, next) => {
     const { products, total } = await Product.getAll(filters);
 
     return success(res, {
-      products,
+      products: products,
       pagination: {
         page: filters.page,
         limit: filters.limit,

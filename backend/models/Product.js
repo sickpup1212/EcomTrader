@@ -147,7 +147,7 @@ class Product {
       stmt.run(
         id, data.name, slug, sku, data.description, data.shortDescription, data.categoryId,
         data.price.amount, data.price.currency, data.price.originalAmount,
-        data.stock.quantity, data.stock.status,
+        data.stock.quantity, data.stock.status || 'in_stock',
         JSON.stringify(data.images), data.isFeatured ? 1 : 0, data.status
       , function(err) {
         if (err) return reject(err);
