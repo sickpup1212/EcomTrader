@@ -1552,15 +1552,36 @@
       });
     });
 
-    // Action buttons
-    document.querySelectorAll('.icon-button').forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.stopPropagation();
+    // Action buttons - use event delegation for dynamically added buttons
+    document.addEventListener('click', (e) => {
+      const button = e.target.closest('.icon-button');
+      if (!button) return;
+
+      e.stopPropagation();
+      const action = button.getAttribute('data-action');
+      const productId = button.getAttribute('data-product-id');
+
+      if (action && productId) {
+        switch (action) {
+          case 'edit':
+            editProduct(productId);
+            break;
+          case 'delete':
+            deleteProduct(productId);
+            break;
+          default:
+            const title = button.getAttribute('title');
+            if (title) {
+              showToast(`${title} feature coming soon!`, 'info');
+            }
+        }
+      } else {
+        // Fallback for other icon buttons without data-action
         const title = button.getAttribute('title');
         if (title) {
           showToast(`${title} feature coming soon!`, 'info');
         }
-      });
+      }
     });
 
     // Pagination
@@ -1706,6 +1727,11 @@
      * Complete admin panel product management functionality
      */
 
+    // API Configuration
+    const API_BASE_URL = window.location.hostname === 'localhost'
+      ? 'http://localhost:3000'
+      : '';
+
     // Global state
     let productManagement = {
       categories: [],
@@ -1745,7 +1771,7 @@
      */
     async function loadCategories() {
       try {
-        const response = await fetch('/api/admin/categories');
+        const response = await fetch(`${API_BASE_URL}/api/admin/categories`);
         const result = await response.json();
 
         if (result.success) {
@@ -1790,7 +1816,7 @@
      */
     async function loadProducts() {
       try {
-        const response = await fetch('/api/admin/products');
+        const response = await fetch(`${API_BASE_URL}/api/admin/products`);
         const result = await response.json();
 
         if (result.success) {
@@ -1853,18 +1879,12 @@
           <td><span class="status-badge ${getStatusClass(product.status)}">${formatStatus(product.status)}</span></td>
           <td>
             <div class="action-buttons">
-              <button class="icon-button" onclick="editProduct('${product.id}')" title="Edit">
+              <button class="icon-button" data-action="edit" data-product-id="${product.id}" title="Edit">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M11 2L14 5L5 14H2V11L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
                 </svg>
               </button>
-              <button class="icon-button" onclick="viewProduct('${product.id}')" title="View">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-              </button>
-              <button class="icon-button icon-button--danger" onclick="deleteProduct('${product.id}')" title="Delete">
+              <button class="icon-button icon-button--danger" data-action="delete" data-product-id="${product.id}" title="Delete">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 4H13M5 4V3C5 2.5 5.5 2 6 2H10C10.5 2 11 2.5 11 3V4M6 7V11M10 7V11M4 4L5 13C5 13.5 5.5 14 6 14H10C10.5 14 11 13.5 11 13L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -2082,8 +2102,8 @@
 
         const isEditing = productManagement.editingProductId !== null;
         const url = isEditing
-          ? `/api/admin/products/${productManagement.editingProductId}`
-          : '/api/admin/products';
+          ? `${API_BASE_URL}/api/admin/products/${productManagement.editingProductId}`
+          : `${API_BASE_URL}/api/admin/products`;
         const method = isEditing ? 'PUT' : 'POST';
 
         const response = await fetch(url, {
@@ -2130,7 +2150,7 @@
      */
     async function loadProductForEdit(productId) {
       try {
-        const response = await fetch(`/api/admin/products/${productId}`);
+        const response = await fetch(`${API_BASE_URL}/api/admin/products/${productId}`);
         const result = await response.json();
 
         if (result.success) {
@@ -2180,10 +2200,7 @@
     /**
      * View product
      */
-    function viewProduct(productId) {
-      window.open(`/product/${productId}`, '_blank');
-    }
-
+    
     /**
      * Delete product
      */
@@ -2193,7 +2210,7 @@
       }
 
       try {
-        const response = await fetch(`/api/admin/products/${productId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/admin/products/${productId}`, {
           method: 'DELETE'
         });
 

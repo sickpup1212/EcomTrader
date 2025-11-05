@@ -89,8 +89,8 @@ class ProductSystemIntegration {
             const queryString = new URLSearchParams(filters).toString();
             const response = await this.request(`/products?${queryString}`);
 
-            // The API returns an object with a 'products' array
-            let products = response.products || [];
+            // The API returns data in response.data.products
+            let products = response.data?.products || [];
 
             console.log('Loaded products:', products); // Debug log
 

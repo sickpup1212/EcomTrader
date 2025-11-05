@@ -130,6 +130,20 @@ class Product {
    * Create new product
    */
   static async create(data) {
+    // Validate category exists
+    if (data.categoryId) {
+      const categoryExists = await new Promise((resolve, reject) => {
+        db.get('SELECT id FROM categories WHERE id = ?', [data.categoryId], (err, row) => {
+          if (err) return reject(err);
+          resolve(!!row);
+        });
+      });
+
+      if (!categoryExists) {
+        throw new Error(`Category with ID '${data.categoryId}' does not exist`);
+      }
+    }
+
     const id = generateId('prod');
     const slug = slugify(data.name);
     const sku = data.sku || `${slug.toUpperCase()}-${Math.random().toString(36).substr(2, 4)}`;
@@ -165,11 +179,66 @@ class Product {
     let updates = [];
     let params = [];
 
+    // Flatten nested objects and map camelCase fields to snake_case database columns
+    const fieldMapping = {
+      shortDescription: 'short_description',
+      categoryId: 'category_id',
+      isFeatured: 'is_featured',
+      isActive: 'is_active'
+    };
+
+    // Handle nested price object
+    if (data.price) {
+      if (data.price.amount !== undefined) {
+        updates.push('price_amount = ?');
+        params.push(data.price.amount);
+      }
+      if (data.price.currency) {
+        updates.push('price_currency = ?');
+        params.push(data.price.currency);
+      }
+      if (data.price.originalAmount !== undefined) {
+        updates.push('price_original_amount = ?');
+        params.push(data.price.originalAmount);
+      }
+    }
+
+    // Handle nested stock object
+    if (data.stock) {
+      if (data.stock.quantity !== undefined) {
+        updates.push('stock_quantity = ?');
+        params.push(data.stock.quantity);
+      }
+      if (data.stock.lowStockThreshold !== undefined) {
+        updates.push('stock_low_threshold = ?');
+        params.push(data.stock.lowStockThreshold);
+      }
+      if (data.stock.reorderLevel !== undefined) {
+        updates.push('reorder_level = ?');
+        params.push(data.stock.reorderLevel);
+      }
+    }
+
+    // Handle images field (convert array to JSON string)
+    if (data.images !== undefined) {
+      updates.push('images = ?');
+      params.push(JSON.stringify(data.images));
+    }
+
+    // Handle other top-level fields
     for (const key in data) {
-      if (key === 'id') continue;
-      updates.push(`${key} = ?`);
+      if (key === 'id' || key === 'price' || key === 'stock' || key === 'images') continue;
+
+      // Use mapped field name or original key
+      const fieldName = fieldMapping[key] || key;
+      updates.push(`${fieldName} = ?`);
       params.push(data[key]);
     }
+
+    if (updates.length === 0) {
+      throw new Error('No valid fields to update');
+    }
+
     params.push(id);
 
     const stmt = db.prepare(`UPDATE products SET ${updates.join(', ')} WHERE id = ?`);

@@ -536,7 +536,20 @@
     let cart = null;
 
     // Wait for DOM to be fully loaded and interactions.js to be available
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize product system
+      if (typeof ProductSystemIntegration !== 'undefined') {
+        window.productSystem = new ProductSystemIntegration();
+        try {
+          await window.productSystem.initialize();
+          console.log('✓ Product system initialized successfully');
+        } catch (error) {
+          console.error('Failed to initialize product system:', error);
+        }
+      } else {
+        console.warn('ProductSystemIntegration class not available');
+      }
+
       // Check if ShoppingCart is available from interactions.js
       if (typeof window.ShoppingCart !== 'undefined') {
         cart = new window.ShoppingCart();

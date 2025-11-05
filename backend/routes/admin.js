@@ -71,6 +71,12 @@ router.post(
 );
 
 /**
+ * Get all categories
+ * GET /api/admin/categories
+ */
+router.get('/categories', adminController.getCategories);
+
+/**
  * Get settings
  * GET /api/admin/settings
  */

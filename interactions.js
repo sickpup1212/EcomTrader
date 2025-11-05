@@ -850,7 +850,7 @@ class ShoppingCart {
         method: 'POST',
         body: JSON.stringify({ productId, quantity }),
       });
-      this.items = response.cart.items;
+      this.items = response.data.cart.items;
       this.updateCartBadge();
       this.showAddToCartFeedback();
     } catch (error) {
@@ -864,7 +864,7 @@ class ShoppingCart {
       const response = await this.request(`/cart/items/${productId}`, {
         method: 'DELETE',
       });
-      this.items = response.cart.items;
+      this.items = response.data.cart.items;
       this.updateCartBadge();
     } catch (error) {
       console.error('Failed to remove item from cart:', error);
@@ -878,7 +878,7 @@ class ShoppingCart {
         method: 'PUT',
         body: JSON.stringify({ quantity }),
       });
-      this.items = response.cart.items;
+      this.items = response.data.cart.items;
       this.updateCartBadge();
     } catch (error) {
       console.error('Failed to update item quantity:', error);
@@ -905,7 +905,7 @@ class ShoppingCart {
   async load() {
     try {
       const response = await this.request('/cart');
-      this.items = response.cart.items;
+      this.items = response.data.cart.items;
       this.updateCartBadge();
     } catch (error) {
       console.error('Failed to load cart from API:', error);
