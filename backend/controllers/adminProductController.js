@@ -27,7 +27,7 @@ exports.getProducts = async (req, res, next) => {
       order: req.query.order || 'ASC'
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     return success(res, {
       products,
@@ -49,7 +49,7 @@ exports.getProducts = async (req, res, next) => {
  */
 exports.getProduct = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -76,12 +76,12 @@ exports.createProduct = async (req, res, next) => {
     }
 
     // Check if SKU already exists
-    const existingProduct = Product.getBySku(req.body.sku);
+    const existingProduct = await Product.getBySku(req.body.sku);
     if (existingProduct) {
       return validationError(res, 'SKU already exists');
     }
 
-    const product = Product.create(req.body);
+    const product = await Product.create(req.body);
 
     return success(res, product, 'Product created successfully', 201);
   } catch (err) {
@@ -95,7 +95,7 @@ exports.createProduct = async (req, res, next) => {
  */
 exports.updateProduct = async (req, res, next) => {
   try {
-    const existingProduct = Product.getById(req.params.id);
+    const existingProduct = await Product.getById(req.params.id);
 
     if (!existingProduct) {
       return notFound(res, 'Product');
@@ -103,13 +103,13 @@ exports.updateProduct = async (req, res, next) => {
 
     // If updating SKU, check if it already exists
     if (req.body.sku && req.body.sku !== existingProduct.sku) {
-      const existingSku = Product.getBySku(req.body.sku);
+      const existingSku = await Product.getBySku(req.body.sku);
       if (existingSku) {
         return validationError(res, 'SKU already exists');
       }
     }
 
-    const product = Product.update(req.params.id, req.body);
+    const product = await Product.update(req.params.id, req.body);
 
     return success(res, product, 'Product updated successfully');
   } catch (err) {
@@ -123,13 +123,13 @@ exports.updateProduct = async (req, res, next) => {
  */
 exports.deleteProduct = async (req, res, next) => {
   try {
-    const existingProduct = Product.getById(req.params.id);
+    const existingProduct = await Product.getById(req.params.id);
 
     if (!existingProduct) {
       return notFound(res, 'Product');
     }
 
-    const deleted = Product.delete(req.params.id);
+    const deleted = await Product.delete(req.params.id);
 
     if (!deleted) {
       return error(res, 'Failed to delete product', 500);
@@ -153,7 +153,7 @@ exports.bulkDeleteProducts = async (req, res, next) => {
       return validationError(res, 'Product IDs array is required');
     }
 
-    const deletedCount = Product.bulkDelete(productIds);
+    const deletedCount = await Product.bulkDelete(productIds);
 
     return success(res, {
       deletedCount,
@@ -180,7 +180,7 @@ exports.bulkUpdateProducts = async (req, res, next) => {
 
     for (const update of updates) {
       try {
-        const product = Product.update(update.id, update.data);
+        const product = await Product.update(update.id, update.data);
         results.push({ id: update.id, success: true, product });
       } catch (err) {
         results.push({ id: update.id, success: false, error: err.message });
@@ -199,7 +199,7 @@ exports.bulkUpdateProducts = async (req, res, next) => {
  */
 exports.duplicateProduct = async (req, res, next) => {
   try {
-    const originalProduct = Product.getById(req.params.id);
+    const originalProduct = await Product.getById(req.params.id);
 
     if (!originalProduct) {
       return notFound(res, 'Product');
@@ -221,7 +221,7 @@ exports.duplicateProduct = async (req, res, next) => {
     delete duplicateData.slug;
     delete duplicateData.metadata;
 
-    const duplicatedProduct = Product.create(duplicateData);
+    const duplicatedProduct = await Product.create(duplicateData);
 
     return success(res, duplicatedProduct, 'Product duplicated successfully', 201);
   } catch (err) {
@@ -250,7 +250,7 @@ exports.getProductsByStatus = async (req, res, next) => {
       order: req.query.order || 'ASC'
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     return success(res, {
       products,
@@ -273,7 +273,7 @@ exports.getProductsByStatus = async (req, res, next) => {
  */
 exports.getLowStockProducts = async (req, res, next) => {
   try {
-    const products = Inventory.getLowStockProducts();
+    const products = await Inventory.getLowStockProducts();
 
     return success(res, {
       products,
@@ -290,7 +290,7 @@ exports.getLowStockProducts = async (req, res, next) => {
  */
 exports.getReorderProducts = async (req, res, next) => {
   try {
-    const products = Inventory.getReorderProducts();
+    const products = await Inventory.getReorderProducts();
 
     return success(res, {
       products,
@@ -307,8 +307,8 @@ exports.getReorderProducts = async (req, res, next) => {
  */
 exports.getProductStats = async (req, res, next) => {
   try {
-    const stats = Product.getStats();
-    const inventoryStats = Inventory.getInventoryStats();
+    const stats = await Product.getStats();
+    const inventoryStats = await Inventory.getInventoryStats();
 
     return success(res, {
       products: stats,
@@ -360,7 +360,7 @@ exports.searchProducts = async (req, res, next) => {
       order
     };
 
-    const { products, total } = Product.getAll(filters);
+    const { products, total } = await Product.getAll(filters);
 
     return success(res, {
       products,
@@ -392,7 +392,7 @@ exports.exportProducts = async (req, res, next) => {
       limit: 10000
     };
 
-    const { products } = Product.getAll(filters);
+    const { products } = await Product.getAll(filters);
 
     if (format === 'csv') {
       // Convert to CSV format
@@ -425,13 +425,13 @@ exports.exportProducts = async (req, res, next) => {
  */
 exports.getProductInventory = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
     }
 
-    const inventory = Inventory.getProductInventory(req.params.id);
+    const inventory = await Inventory.getProductInventory(req.params.id);
 
     return success(res, inventory);
   } catch (err) {
@@ -445,7 +445,7 @@ exports.getProductInventory = async (req, res, next) => {
  */
 exports.updateProductInventory = async (req, res, next) => {
   try {
-    const product = Product.getById(req.params.id);
+    const product = await Product.getById(req.params.id);
 
     if (!product) {
       return notFound(res, 'Product');
@@ -457,7 +457,7 @@ exports.updateProductInventory = async (req, res, next) => {
       return validationError(res, 'Type, quantity, and reason are required');
     }
 
-    const adjustmentId = Inventory.createAdjustment({
+    const adjustmentId = await Inventory.createAdjustment({
       productId: req.params.id,
       type,
       quantity: parseInt(quantity),
@@ -466,7 +466,7 @@ exports.updateProductInventory = async (req, res, next) => {
       createdBy: req.user?.id || 'admin'
     });
 
-    const updatedInventory = Inventory.getProductInventory(req.params.id);
+    const updatedInventory = await Inventory.getProductInventory(req.params.id);
 
     return success(res, {
       adjustmentId,

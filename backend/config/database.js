@@ -70,6 +70,7 @@ function initializeSchema() {
         status TEXT NOT NULL DEFAULT 'active',
         is_active INTEGER DEFAULT 1,
         is_featured INTEGER DEFAULT 0,
+        images TEXT,
 
         -- Ratings
         rating_average REAL DEFAULT 0,
